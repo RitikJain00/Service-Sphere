@@ -7,20 +7,28 @@ import Navlinks from './Navlinks';
 
 const Header = () => {
     return(
-      <div className="w-full h-24 bg-mine-shaft-950 flex justify-between items-center p-6 text-cyan-50 font-['poppins']">
+      <div className="w-full h-24 px-6  bg-mine-shaft-950 flex justify-between items-center  text-cyan-50 ">
+
+        {/* Logo */}
          <div className='flex gap-3 items-center text-amber-400'>
          <IconPlant2 stroke={1.8} className='h-10 w-10'/>
           <div className='text-2xl font-semibold'>Service Sphere</div>
           </div>
-          <div className='flex gap-8'>
+
+          {/* Navbar */}
+          <div className='flex gap-8 text-mine-shaft-300 h-full  items-center'>
           <Navlinks></Navlinks>
           </div>
 
-          <div className=' flex gap-3 p-2 w-48 h-8 rounded items-center cursor-pointer '>
+
+          {/* Location */}
+          <div className=' flex gap-3 p-2 w-48 h-8 rounded items-center cursor-pointer text-mine-shaft-300 '>
           <IconMapPin stroke={2} />
           <div>Location</div>
             </div>
 
+
+          {/* Profile, setting, notification */}
           <div className='flex gap-4 items-center'>
                <Avatar src="avatar-9.png" alt="it's me" />
 
