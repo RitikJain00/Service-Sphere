@@ -17,7 +17,7 @@ const Hero = () => {
           Home Services At Your <span className='text-bright-sun-500'> Doorstep </span>
           </div>
 
-        <div className="text-white text-center text-lg">
+        <div className="text-mine-shaft-100 text-center text-lg">
           Your home's trusted ally. Expert solutions in electrical, plumbing, carpentry, and more. Transparent pricing, skilled professionals, hassle-free bookings. We're here to make your house a home, ensuring every service call brings peace of mind
         
           </div>
