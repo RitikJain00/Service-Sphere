@@ -1,6 +1,9 @@
 import CitySlider from "../components/CitySlider";
 import Header from "../components/Header";
 import Hero from '../components/Hero'
+import Services from "../components/Services";
+
+
 
 
 const Home = () => {
@@ -9,6 +12,8 @@ const Home = () => {
            <Header></Header>
            <Hero></Hero>
            <CitySlider></CitySlider>
+           <Services></Services>
+          
       </div>
        
   

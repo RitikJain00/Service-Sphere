@@ -27,8 +27,7 @@ const Hero = () => {
          <Button 
             fullWidth
             size='md'
-            variant="gradient"
-            gradient={{ from: 'orange', to: 'orange', deg: 90 }}
+            variant="filled" color="orange"
             
             >
            Explore Services
