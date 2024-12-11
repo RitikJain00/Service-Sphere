@@ -3,6 +3,7 @@ import Features from "../components/Features";
 import Header from "../components/Header";
 import Hero from '../components/Hero'
 import Services from "../components/Services";
+import Working from "../components/Working";
 
 
 
@@ -15,6 +16,7 @@ const Home = () => {
            <CitySlider></CitySlider>
            <Services></Services>
            <Features></Features>
+           <Working></Working>
 
           
       </div>
