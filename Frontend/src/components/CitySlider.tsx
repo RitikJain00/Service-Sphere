@@ -11,7 +11,7 @@ const CitySlider = () => {
 
     <Marquee pauseOnHover= {true}>
 
-      {cities.map((city, index) => <div key={index} className="mx-8 mt-2 px-2 py-2 hover:scale-110 transform transition-transform duration-300">
+      {cities.map((city, index) => <div key={index} className="mx-8 mt-2 px-2 py-2 hover:scale-110 transform transition-transform duration-300 ">
       <img className="w-32 h-32 " src={`Cities/${city}.png`} alt="city" />
       <div className="text-xl mt-2 text-center text-amber-300">{city}</div>
 

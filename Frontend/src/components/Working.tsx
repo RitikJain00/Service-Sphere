@@ -7,7 +7,7 @@ const Working = () => {
   Your go-to solution for household services: quick selection, flexible scheduling, and instant confirmation
   </div>
 
-    <div className="mt-10 flex gap-20 ">
+    <div className="flex gap-20 ">
 
       {/* Left Section */}
       <div className="items-center hover:scale-110 transition duration-300">

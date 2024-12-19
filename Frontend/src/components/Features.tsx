@@ -1,4 +1,4 @@
-// Discover what makes us </Unique>
+// Discover what makes us Unique section
 
 
 import { Grid } from '@mantine/core';

@@ -1,6 +1,7 @@
 import { Button } from '@mantine/core';
 
 
+
 const Hero = () => {
     return  <div className="flex  px-20 ">
 

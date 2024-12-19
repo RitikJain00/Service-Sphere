@@ -1,7 +1,7 @@
-const Review = () => {
+const Footer = () => {
   return <div>
     Hello People
   </div>
 }
 
-export default Review
+export default Footer
