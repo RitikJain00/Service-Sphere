@@ -104,7 +104,7 @@ const Footer = () => {
               <img className='w-6 h-6' src="Social/facebook.png" alt="" />
               </a>
 
-              <a className='w-10 h-10 bg-mine-shaft-50 hover:bg-bright-sun-400  rounded-full flex justify-center items-center'>
+              <a className='w-10 h-10 bg-mine-shaft-50 hover:bg-bright-sun-400  rounded-full flex justify-center items-center' href='https://www.instagram.com/__ritikjainn/'>
               <img className='w-6 h-6' src="Social/instagram.png" alt="" />
               </a>
 
@@ -112,7 +112,7 @@ const Footer = () => {
               <img className='w-6 h-6' src="Social/twitter.png" alt="" />
               </a>
 
-              <a className='w-10 h-10 bg-mine-shaft-50 hover:bg-bright-sun-400 rounded-full flex justify-center items-center'>
+              <a className='w-10 h-10 bg-mine-shaft-50 hover:bg-bright-sun-400 rounded-full flex justify-center items-center' href='https://www.linkedin.com/in/ritikjain00/'>
               <img className='w-6 h-6' src="Social/linkedin.png" alt="" />
               </a>
             </div>
