@@ -30,7 +30,7 @@ const Header = () => {
 
           {/* Profile, setting, notification */}
           <div className='flex gap-4 items-center'>
-               <Avatar src="avatar-9.png" alt="it's me" />
+               <Avatar src="Home/avatar-9.png" alt="it's me" />
 
                <Indicator inline processing color="red"  offset={6} size={8}>
                <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>  

@@ -5,6 +5,7 @@ import Hero from '../components/Hero'
 import Services from "../components/Services";
 import Working from "../components/Working";
 import Testimonial from "../components/Testimonial";
+import Footer from "../components/Footer";
 
 
 
@@ -18,7 +19,8 @@ const Home = () => {
            <Services></Services>
            <Features></Features>
            <Working></Working>
-           <Testimonial></Testimonial>          
+           <Testimonial></Testimonial> 
+           <Footer></Footer>         
       </div>
        
   

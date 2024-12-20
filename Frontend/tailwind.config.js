@@ -6,6 +6,15 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        moving: 'moving 1.5s linear infinite',
+      },
+      keyframes: {
+        moving: {
+          '0%': { left: '-20px' },
+          '100%': { left: '100%' },
+        },
+      },
       colors: {
         'mine-shaft': {
           '50': '#f6f6f6',
@@ -34,8 +43,8 @@ export default {
         '900': '#7a330d',
         '950': '#461902',
     },
-    
       }
+
     },
   },
   plugins: [],

@@ -38,7 +38,7 @@ const Hero = () => {
         <div className="flex gap-16 mt-4 text-lg">
           <div className="flex gap-6">
             <div>
-              <img src="starIcon.png" alt="" />
+              <img src="Home/starIcon.png" alt="" />
             </div>
             <div className='flex flex-col justify-center text-white '>
               <div className='text-center'>4.7</div>
@@ -48,7 +48,7 @@ const Hero = () => {
           
           <div className="flex gap-6">
             <div>
-              <img src="group-users.png" alt="" />
+              <img src="Home/group-users.png" alt="" />
             </div>
             <div className='flex flex-col justify-center text-white'>
               <div className='text-center'>5M+</div>
@@ -60,7 +60,7 @@ const Hero = () => {
 
       {/* Image Section */}
       <div className="w-1/2">
-        <img src="Electritian.png" alt="" />
+        <img src="Home/Electritian.png" alt="" />
       </div>
     </div>
 }
