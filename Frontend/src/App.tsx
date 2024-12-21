@@ -15,6 +15,9 @@ import PestControl from './pages/PestControl';
 import HouseKeeping from './pages/HouseKeeping';
 import Contractor from './pages/Contractor';
 import Technician from './pages/Technician';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
+import Refund from './pages/Refund';
 
 export default function App() {
   return (   
@@ -33,6 +36,10 @@ export default function App() {
           <Route path='/HouseKeeping' element={<HouseKeeping/>}></Route>
           <Route path='/Contractor' element={<Contractor/>}></Route>
           <Route path='/Technician' element={<Technician/>}></Route>
+          <Route path='/PrivacyPolicy' element={<Privacy/>}></Route>
+          <Route path='/Terms&Conditions' element={<Terms/>}></Route>
+          <Route path='/Refund&Cancellation' element={<Refund/>}></Route>
+
 
 
         </Routes>
