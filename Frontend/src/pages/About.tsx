@@ -9,9 +9,15 @@ const About = () => {
          <Header></Header>
 
 
-          <div className="mt-16 mx-32">
+          <div className="mt-12 mx-32">
 
-          <div className="text-4xl font-bold text-mine-shaft-100  mb-6">Who <span className="text-bright-sun-500">We</span> Are </div>
+          <div className="text-5xl font-bold text-mine-shaft-100 text-center  mb-3"> <span className="text-bright-sun-500">About </span> Us</div>
+
+          <div className="text-md text-mine-shaft-400 text-center w-7/12 mx-auto">
+            Effective Date:     21st December 2024
+          </div>
+
+          <div className="text-4xl font-bold text-mine-shaft-100 mt-12 mb-6">Who <span className="text-bright-sun-500">We</span> Are </div>
 
           <div className=" flex flex-col gap-8 ">
             <div className="text-2xl text-mine-shaft-100">Welcome to Service Sphere, your trusted partner for all household services!</div>
