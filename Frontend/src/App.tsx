@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home'
 import About from './pages/About';
 import Contact from './pages/Contact';
-import Partner from './pages/Partner';
+import Professional from './pages/Professional';
 import Electrician from './pages/Electrician';
 import Carpenter from './pages/Carpenter';
 import Painter from './pages/Painter';
@@ -18,6 +18,7 @@ import Technician from './pages/Technician';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Refund from './pages/Refund';
+import CustomerSign from './pages/CustomerSign';
 
 export default function App() {
   return (   
@@ -27,7 +28,7 @@ export default function App() {
           <Route path='*' element={<Home/>}></Route>
           <Route path='/about' element={<About/>}></Route>
           <Route path='/contact' element={<Contact/>}></Route>
-          <Route path='/partner' element={<Partner/>}></Route>
+          <Route path='/professional' element={<Professional/>}></Route>
           <Route path='/Electrician' element={<Electrician/>}></Route>
           <Route path='/Carpenter' element={<Carpenter/>}></Route>
           <Route path='/Painter' element={<Painter/>}></Route>
@@ -39,7 +40,11 @@ export default function App() {
           <Route path='/PrivacyPolicy' element={<Privacy/>}></Route>
           <Route path='/Terms&Conditions' element={<Terms/>}></Route>
           <Route path='/Refund&Cancellation' element={<Refund/>}></Route>
-
+          <Route path='/CustomerSignup' element={<CustomerSign/>}></Route>
+          <Route path='/CustomerLogin' element={<CustomerSign/>}></Route>
+          <Route path='/ProfessionalSignup' element={<Professional/>}></Route>
+          <Route path='/ProfessionalLogin' element={<Professional/>}></Route>
+          
 
 
         </Routes>

@@ -4,9 +4,10 @@ const Navlinks = () => {
 
     const links = [
         {name: 'Home', url: '/home'},
-        {name: 'Partner', url: '/partner'},
+        {name: 'Professional', url: '/ProfessionalLogin'},
         {name: 'Contact', url: '/contact'},
-        {name: 'About Us', url: '/about'}
+        {name: 'About Us', url: '/about'},
+        // {name: 'Customer', url: '/CustomerLogin'}
     ]
 
     const location = useLocation(); 
