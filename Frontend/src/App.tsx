@@ -1,6 +1,6 @@
 
 import '@mantine/core/styles.css';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider} from '@mantine/core';
 import '@mantine/carousel/styles.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home'
@@ -19,10 +19,14 @@ import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Refund from './pages/Refund';
 import CustomerSign from './pages/CustomerSign';
+import CustomerProfile from './pages/CustomerProfile';
 
 export default function App() {
+
+  
+
   return (   
-      <MantineProvider>
+      <MantineProvider defaultColorScheme="dark">
         <BrowserRouter>
         <Routes>
           <Route path='*' element={<Home/>}></Route>
@@ -44,6 +48,8 @@ export default function App() {
           <Route path='/CustomerLogin' element={<CustomerSign/>}></Route>
           <Route path='/ProfessionalSignup' element={<Professional/>}></Route>
           <Route path='/ProfessionalLogin' element={<Professional/>}></Route>
+          <Route path='/CustomerProfile' element={<CustomerProfile/>}></Route>
+
           
 
 

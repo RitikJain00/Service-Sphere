@@ -1,10 +1,10 @@
-import CitySlider from "../components/CitySlider";
-import Features from "../components/Features";
-import Header from "../components/Header";
-import Hero from '../components/Hero'
-import Services from "../components/Services";
-import Working from "../components/Working";
-import Testimonial from "../components/Testimonial";
+import CitySlider from "../components/HomeScreen/CitySlider";
+import Features from "../components/HomeScreen/Features";
+import Header from "../components/Header/Header";
+import Hero from '../components/HomeScreen/Hero'
+import Services from "../components/HomeScreen/Services";
+import Working from "../components/HomeScreen/Working";
+import Testimonial from "../components/HomeScreen/Testimonial";
 import Footer from "../components/Footer";
 
 

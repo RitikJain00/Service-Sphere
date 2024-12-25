@@ -1,9 +1,10 @@
-import { IconPlant2 } from '@tabler/icons-react';
+import { IconPlant2, IconShoppingCart } from '@tabler/icons-react';
 import { IconBellRinging } from '@tabler/icons-react';
 import { IconSettings } from '@tabler/icons-react';
 import { IconMapPin } from '@tabler/icons-react';
-import { Indicator, Avatar } from '@mantine/core';
+import { Indicator } from '@mantine/core';
 import Navlinks from './Navlinks';
+import MenuItem from './MenuItem';
 
 const Header = () => {
     return(
@@ -30,7 +31,7 @@ const Header = () => {
 
           {/* Profile, setting, notification */}
           <div className='flex gap-4 items-center'>
-               <Avatar src="Home/avatar-9.png" alt="it's me" />
+              <MenuItem></MenuItem>
 
                <Indicator inline processing color="red"  offset={6} size={8}>
                <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>  
@@ -38,9 +39,12 @@ const Header = () => {
                </div>
                </Indicator>
 
+               <Indicator label="0" size={12} color="red" offset={6}>
                    <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
-                     <IconSettings stroke={2} />
+                   <IconShoppingCart stroke={2} />
+                   
                    </div>
+                  </Indicator>
          
             
             </div>

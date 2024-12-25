@@ -1,5 +1,5 @@
 import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 
 const Refund = () => {
   return <div className="min-h-[100vh] bg-mine-shaft-950">
