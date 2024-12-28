@@ -1,6 +1,8 @@
+
 import { Menu, Text, rem } from '@mantine/core';
 import { Avatar } from '@mantine/core';
 import { Link } from 'react-router-dom';
+import { useDisclosure } from '@mantine/hooks';
 import {
  
   IconSearch,
@@ -13,10 +15,19 @@ import {
   IconHeart,
   IconShoppingCart
 } from '@tabler/icons-react';
+import Feedback from './Feedback';
+
 
 const MenuItem = () =>  {
-  return (
-    <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} >
+  
+
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return ( 
+   
+    <div>
+     
+        <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} >
       <Menu.Target>
       <Avatar src="Home/avatar-9.png" alt="it's me" />
       </Menu.Target>
@@ -56,10 +67,14 @@ const MenuItem = () =>  {
         <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
           Settings
         </Menu.Item>
+        
 
-        <Menu.Item leftSection={<IconInfoSquare style={{ width: rem(14), height: rem(14) }} />}>
+      
+        <Menu.Item  onClick={open}  leftSection={<IconInfoSquare style={{ width: rem(14), height: rem(14) }} />}>
           Send Feedback
         </Menu.Item>
+
+        
        
 
         <Menu.Divider />
@@ -74,6 +89,12 @@ const MenuItem = () =>  {
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
+
+    { <Feedback opened={opened} close={close} /> }
+    </div>
+    
+
+    
   );
 }
 

@@ -1,12 +1,16 @@
 import { IconPlant2, IconShoppingCart } from '@tabler/icons-react';
 import { IconBellRinging } from '@tabler/icons-react';
-import { IconSettings } from '@tabler/icons-react';
+
 import { IconMapPin } from '@tabler/icons-react';
 import { Indicator } from '@mantine/core';
 import Navlinks from './Navlinks';
 import MenuItem from './MenuItem';
 
+
+
 const Header = () => {
+  
+
     return(
       <div className="w-full h-24 px-6  bg-mine-shaft-950 flex justify-between items-center  text-cyan-50 ">
 
@@ -28,8 +32,12 @@ const Header = () => {
           <div>Location</div>
             </div>
 
+            
+          
+            
 
-          {/* Profile, setting, notification */}
+
+          {/* Profile, cart, notification */}
           <div className='flex gap-4 items-center'>
               <MenuItem></MenuItem>
 

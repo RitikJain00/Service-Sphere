@@ -18,17 +18,17 @@ const Contact = () => {
 
 
                     <div className="flex flex-col gap-2 mt-2">
-                     <label className="text-mine-shaft-100" htmlFor="name">Your Name</label>
+                     <label className="text-mine-shaft-100" htmlFor="name">Your Name <span className='text-red-500'>*</span></label>
                      <input className="bg-mine-shaft-800 p-1 pl-2 border-0 outline-none text-mine-shaft-200" name='name' type="text"  placeholder="Ritik Jain"/>
                       </div>
 
                        <div className="flex flex-col gap-2">
-                         <label className="text-mine-shaft-100" htmlFor="email">Your Email</label>
+                         <label className="text-mine-shaft-100" htmlFor="email">Your Email <span className='text-red-500'>*</span></label>
                          <input className="bg-mine-shaft-800 p-1 pl-2 border-0 outline-none text-mine-shaft-200" name='email' type="email"  placeholder="ritikjain123@gmail.com"/>
                        </div>
 
                        <div className="flex flex-col gap-2">
-                         <label className="text-mine-shaft-100"  htmlFor="message">Your Message</label>
+                         <label className="text-mine-shaft-100"  htmlFor="message">Your Message <span className='text-red-500'>*</span></label>
                          <textarea className="bg-mine-shaft-800 w-96 h-40 p-1 pl-2 s border-0 outline-none text-mine-shaft-200" name="message"   id=""  placeholder="Enter Your Message"></textarea>
                        </div>
 
