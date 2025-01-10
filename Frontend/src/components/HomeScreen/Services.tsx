@@ -76,7 +76,7 @@ const Services = () => {
       <div className=" flex flex-col items-center justify-around border-bright-sun-300 rounded-xl hover:cursor-pointer hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300  border-2 w-80 mx-8 my-4 mt-12 gap-2 p-4  ">
         
       <div className='rounded-full bg-bright-sun-500'>
-      <img className="w-28 h-28  " src={`Services/${service.name}.png`} alt="services" />
+      <img className="w-28 h-28  " src={`ServicesCards/${service.name}.png`} alt="services" />
         </div>
       <div className="text-xl font-semibold  text-center text-amber-300">{service.name}</div>
 

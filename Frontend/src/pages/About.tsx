@@ -132,7 +132,7 @@ const About = () => {
           <div className="mt-32 w-full flex justify-center">
               <div className="flex flex-col items-center justify-center gap-4 ">
                     <div >
-                      <img className="rounded-full w-64 h-64" src="profile.jpg" alt="" />
+                      <img className="rounded-full w-64 h-64" src="/Profile/profile.jpg" alt="" />
                     </div>
 
                     <div className=" flex flex-col items-center justify-center text-mine-shaft-200 text-2xl">

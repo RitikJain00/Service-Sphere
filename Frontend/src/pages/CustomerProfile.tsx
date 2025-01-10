@@ -16,7 +16,7 @@ const CustomerProfile = () => {
       {/*   Image Section */}
 
         <div  className="w-full relative">
-          <img className='rounded-t-2xl w-full ' src="ServiceSphereBanner.png" alt="" />
+          <img className='rounded-t-2xl w-full ' src="/Profile/ServiceSphereBanner.png" alt="" />
           <img className="w-48 h-48 rounded-full absolute -bottom-24 left-4 border-mine-shaft-900 border-8" src="/Home/avatar-9.png" alt="" />
         </div>
 
