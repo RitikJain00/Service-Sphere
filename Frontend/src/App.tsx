@@ -3,6 +3,7 @@ import '@mantine/core/styles.css';
 import {createTheme, MantineProvider} from '@mantine/core';
 import '@mantine/carousel/styles.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CartProvider } from './Context/CartContext';
 import Home from './pages/Home'
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -20,6 +21,8 @@ import Terms from './pages/Terms';
 import Refund from './pages/Refund';
 import CustomerSign from './pages/CustomerSign';
 import CustomerProfile from './pages/CustomerProfile';
+import ScrollToTop from "./components/Scroll";
+import CartPage from './pages/CartPage';
 
 export default function App() {
 
@@ -58,7 +61,10 @@ export default function App() {
   return (   
       <MantineProvider defaultColorScheme="dark" theme={theme}>
         <BrowserRouter>
+        <ScrollToTop />
+        <CartProvider>
         <Routes>
+       
           <Route path='*' element={<Home/>}></Route>
           <Route path='/about' element={<About/>}></Route>
           <Route path='/contact' element={<Contact/>}></Route>
@@ -79,11 +85,11 @@ export default function App() {
           <Route path='/ProfessionalSignup' element={<Professional/>}></Route>
           <Route path='/ProfessionalLogin' element={<Professional/>}></Route>
           <Route path='/CustomerProfile' element={<CustomerProfile/>}></Route>
+          <Route path='/Cart' element={<CartPage/>}></Route>
 
-          
-
-
+         
         </Routes>
+        </CartProvider>
         </BrowserRouter>
 
       </MantineProvider>

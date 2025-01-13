@@ -5,12 +5,14 @@ import { IconMapPin } from '@tabler/icons-react';
 import { Indicator } from '@mantine/core';
 import Navlinks from './Navlinks';
 import MenuItem from './MenuItem';
-
+import { useCart } from '../../Context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const Header = () => {
   
-
+  const  { cart }  = useCart();
+  const navigate = useNavigate();
     return(
       <div className="w-full h-24 px-6  bg-mine-shaft-950 flex justify-between items-center  text-cyan-50 ">
 
@@ -47,10 +49,10 @@ const Header = () => {
                </div>
                </Indicator>
 
-               <Indicator label="0" size={12} color="red" offset={6}>
-                   <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
+               <Indicator label={cart.length} size={20} color="bright-sun.7" offset={6}>
+                   <div onClick={() => navigate('/Cart')} className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
                    <IconShoppingCart stroke={2} />
-                   
+                  
                    </div>
                   </Indicator>
          

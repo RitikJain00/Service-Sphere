@@ -7,7 +7,12 @@ import Offer from "../components/Services/Others/Offers"
 import Promise from "../components/Services/Others/OurPromise"
 import Jobs from "../components/Services/JobCards/Jobs"
 
+
+
 const Painter = () => {
+ 
+
+
   return <div className="min-h-[100vh] bg-mine-shaft-950">
    <Header></Header>
     <Divider mx="md" mb='xl' />
@@ -20,13 +25,13 @@ const Painter = () => {
 
         {/* Services */}
         <div className="w-1/2 ">
-          <Jobs></Jobs>
+          <Jobs ></Jobs>
         </div>
 
 
         {/* Cart & offers */}
-        <div className="w-1/3 sticky top-[100px] h-[calc(100vh-100px)]">
-            <Cart></Cart> 
+        <div className="w-1/3 sticky top-[100px] h-[calc(100vh-100px)] overflow-scroll">
+            <Cart ></Cart> 
             <Offer></Offer>
             <Promise></Promise>
         </div>

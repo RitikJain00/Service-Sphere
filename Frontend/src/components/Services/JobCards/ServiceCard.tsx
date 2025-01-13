@@ -2,8 +2,12 @@ import { IconHeart } from '@tabler/icons-react';
 import { Button } from '@mantine/core';
 import { Divider } from "@mantine/core"
 import { IconMapPin,  IconRecharging,IconBriefcase, IconClock } from "@tabler/icons-react";
+import { useCart } from "../../../Context/CartContext";
 
-const ServiceCard = ( job : any ) => {
+const ServiceCard = (   {job }  : any) => {
+  const { addToCart} = useCart();
+
+
   return <div className='w-full mt-8  p-4  bg-mine-shaft-900 rounded-xl hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300'>
 
     <div className='flex flex-col gap-4'>
@@ -43,7 +47,7 @@ const ServiceCard = ( job : any ) => {
 
         <div className='flex flex-col justify-center items-center'>
            <div><img className='w-32 h-32' src="/ServicePages/carpenter.png" alt="" /></div>
-           <Button variant="light" color="yellow" radius="md">Add</Button>
+           <Button variant="light" color="yellow" radius="md" onClick={() => addToCart(job)}>Add</Button>
         </div>
        </div>
   

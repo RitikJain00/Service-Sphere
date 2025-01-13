@@ -24,7 +24,7 @@ const PestControl = () => {
 
 
         {/* Cart & offers */}
-        <div className="w-1/3 sticky top-[100px] h-[calc(100vh-100px)]">
+        <div className="w-1/3 sticky top-[100px] h-[calc(100vh-100px)] overflow-scroll">
             <Cart></Cart> 
             <Offer></Offer>
             <Promise></Promise>

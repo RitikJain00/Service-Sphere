@@ -1,12 +1,56 @@
 import Relevance from "../Fiters/Relevance";
 import ServiceCard from "./ServiceCard";
+import { useLocation } from "react-router-dom";
+
+
 
 const Jobs = () => {
+
+
+  const location = useLocation();
+  const ServiceType = location.pathname.slice(1);
 
   const Data = [
     {
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
+      ServiceType: ServiceType,
+      Expirence: '5+ Years',
+      Location: 'Bangalore',
+      Bookings: '1k+ Bookings',
+      Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
+      Price: '2200',
+      Time: '12 days Ago'
+    },
+
+    {
+      ServiceName: 'Table Chair Service',
+      CompanyName: 'Jain Carpentry',
+      ServiceType: ServiceType,
+      Expirence: '5+ Years',
+      Location: 'Bangalore',
+      Bookings: '1k+ Bookings',
+      Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
+      Price: '500',
+      Time: '12 days Ago'
+    },
+
+    {
+      ServiceName: 'Bed Dinnig Service',
+      CompanyName: 'Jain Carpentry',
+      ServiceType: ServiceType,
+      Expirence: '5+ Years',
+      Location: 'Bangalore',
+      Bookings: '1k+ Bookings',
+      Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
+      Price: '5000',
+      Time: '12 days Ago'
+    },
+
+    {
+      ServiceName: 'Almirah Cubord Service',
+      CompanyName: 'Jain Carpentry',
+      ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',
       Bookings: '1k+ Bookings',
@@ -18,39 +62,7 @@ const Jobs = () => {
     {
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
-      Expirence: '5+ Years',
-      Location: 'Bangalore',
-      Bookings: '1k+ Bookings',
-      Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
-      Price: '2200',
-      Time: '12 days Ago'
-    },
-
-    {
-      ServiceName: 'Almirah Cubord Service',
-      CompanyName: 'Jain Carpentry',
-      Expirence: '5+ Years',
-      Location: 'Bangalore',
-      Bookings: '1k+ Bookings',
-      Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
-      Price: '2200',
-      Time: '12 days Ago'
-    },
-
-    {
-      ServiceName: 'Almirah Cubord Service',
-      CompanyName: 'Jain Carpentry',
-      Expirence: '5+ Years',
-      Location: 'Bangalore',
-      Bookings: '1k+ Bookings',
-      Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
-      Price: '2200',
-      Time: '12 days Ago'
-    },
-
-    {
-      ServiceName: 'Almirah Cubord Service',
-      CompanyName: 'Jain Carpentry',
+      ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',
       Bookings: '1k+ Bookings',
@@ -67,7 +79,7 @@ const Jobs = () => {
 
     {/* All the Services */}
     <div className="px-8">
-      {Data.map((job,index) => <ServiceCard key={index} {...job}></ServiceCard>) }
+      {Data.map((job,index) => <ServiceCard key={index} job={job} ></ServiceCard>) }
     </div>
    
     

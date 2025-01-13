@@ -14,7 +14,7 @@ const HouseKeeping = () => {
 
       {/* Filters */}
       <div className="flex mx-16 ">
-        <div className="w-1/3 mt-4 sticky top-[100px] h-[calc(100vh-100px)]">
+        <div className="w-1/3 mt-4 sticky top-[100px] h-[calc(100vh-100px)] overflow-scroll">
           <SearchBox></SearchBox>
         </div>
 
