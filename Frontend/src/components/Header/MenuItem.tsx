@@ -1,17 +1,15 @@
 
-import { Menu, Text, rem } from '@mantine/core';
+import { Menu,  rem } from '@mantine/core';
 import { Avatar } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import {
  
-  IconSearch,
-  
-  IconMessageCircle,
+
   IconInfoSquare,
   IconLogout2,
   IconUserCircle,
-  IconSettings,
+ 
   IconHeart,
   IconShoppingCart
 } from '@tabler/icons-react';
@@ -41,34 +39,18 @@ const MenuItem = () =>  {
         </Link>
               
         
-        <Menu.Item
-          leftSection={<IconSearch style={{ width: rem(14), height: rem(14) }} />}
-          rightSection={
-            <Text size="xs" c="dimmed">
-              ⌘K
-            </Text>
-          }
-        >
-          Search
-        </Menu.Item>
-
-        <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
-          Messages
-        </Menu.Item>
-
+  
+        <Link to={'/Favorate'}>
         <Menu.Item leftSection={<IconHeart style={{ width: rem(14), height: rem(14) }} />}>
         Favorites
         </Menu.Item>
+        </Link>
 
         <Menu.Item leftSection={<IconShoppingCart style={{ width: rem(14), height: rem(14) }} />}>
         My Orders
         </Menu.Item>
 
-        <Menu.Item leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}>
-          Settings
-        </Menu.Item>
-        
-
+   
       
         <Menu.Item  onClick={open}  leftSection={<IconInfoSquare style={{ width: rem(14), height: rem(14) }} />}>
           Send Feedback

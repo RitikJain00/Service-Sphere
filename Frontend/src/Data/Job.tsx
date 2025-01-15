@@ -1,5 +1,6 @@
 
 export interface Job {
+  Id: String,
   ServiceName: string;
   CompanyName: string;
   Expirence: string;

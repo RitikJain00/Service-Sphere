@@ -12,6 +12,7 @@ const Jobs = () => {
 
   const Data = [
     {
+      Id: '000001',
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
       ServiceType: ServiceType,
@@ -24,6 +25,7 @@ const Jobs = () => {
     },
 
     {
+      Id: '000002',
       ServiceName: 'Table Chair Service',
       CompanyName: 'Jain Carpentry',
       ServiceType: ServiceType,
@@ -36,6 +38,7 @@ const Jobs = () => {
     },
 
     {
+      Id: '000003',
       ServiceName: 'Bed Dinnig Service',
       CompanyName: 'Jain Carpentry',
       ServiceType: ServiceType,
@@ -48,6 +51,7 @@ const Jobs = () => {
     },
 
     {
+      Id: '000004',
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
       ServiceType: ServiceType,
@@ -60,6 +64,7 @@ const Jobs = () => {
     },
 
     {
+      Id: '000005',
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
       ServiceType: ServiceType,
@@ -67,7 +72,7 @@ const Jobs = () => {
       Location: 'Bangalore',
       Bookings: '1k+ Bookings',
       Brief: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum architecto enim corporis iure iusto, quas ad, minima a fugit quibusdam nostrum nesciunt nemo adipisci saepe ullam provident cum optio molestias!',
-      Price: '2200',
+      Price: '1000',
       Time: '12 days Ago'
     }
   ]

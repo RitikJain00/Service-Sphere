@@ -1,7 +1,9 @@
 
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import {createTheme, MantineProvider} from '@mantine/core';
 import '@mantine/carousel/styles.css';
+import { Notifications } from '@mantine/notifications';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './Context/CartContext';
 import Home from './pages/Home'
@@ -23,6 +25,8 @@ import CustomerSign from './pages/CustomerSign';
 import CustomerProfile from './pages/CustomerProfile';
 import ScrollToTop from "./components/Scroll";
 import CartPage from './pages/CartPage';
+import Favorate from './pages/Favorates';
+
 
 export default function App() {
 
@@ -63,6 +67,7 @@ export default function App() {
         <BrowserRouter>
         <ScrollToTop />
         <CartProvider>
+        <Notifications />
         <Routes>
        
           <Route path='*' element={<Home/>}></Route>
@@ -86,6 +91,7 @@ export default function App() {
           <Route path='/ProfessionalLogin' element={<Professional/>}></Route>
           <Route path='/CustomerProfile' element={<CustomerProfile/>}></Route>
           <Route path='/Cart' element={<CartPage/>}></Route>
+          <Route path='/Favorate' element={<Favorate/>}></Route>
 
          
         </Routes>
