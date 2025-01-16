@@ -12,9 +12,10 @@ const Jobs = () => {
 
   const Data = [
     {
-      Id: '000001',
+      Id: 1,
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
+      image: '/ServicePages/carpenter.png',
       ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',
@@ -25,9 +26,10 @@ const Jobs = () => {
     },
 
     {
-      Id: '000002',
+      Id: 2,
       ServiceName: 'Table Chair Service',
       CompanyName: 'Jain Carpentry',
+      image: '/ServicePages/carpenter.png',
       ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',
@@ -38,9 +40,10 @@ const Jobs = () => {
     },
 
     {
-      Id: '000003',
+      Id: 3,
       ServiceName: 'Bed Dinnig Service',
       CompanyName: 'Jain Carpentry',
+      image: '/ServicePages/carpenter.png',
       ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',
@@ -51,9 +54,10 @@ const Jobs = () => {
     },
 
     {
-      Id: '000004',
+      Id: 4,
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
+      image: '/ServicePages/carpenter.png',
       ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',
@@ -64,9 +68,10 @@ const Jobs = () => {
     },
 
     {
-      Id: '000005',
+      Id: 5,
       ServiceName: 'Almirah Cubord Service',
       CompanyName: 'Jain Carpentry',
+      image: '/ServicePages/carpenter.png',
       ServiceType: ServiceType,
       Expirence: '5+ Years',
       Location: 'Bangalore',

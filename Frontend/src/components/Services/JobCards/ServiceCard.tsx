@@ -65,9 +65,9 @@ const ServiceCard = (   {job }  : any) => {
           <div className='w-2/3'>{job.Brief}
           </div>
 
-        <div className='flex flex-col justify-center items-center'>
-           <div><img className='w-32 h-32' src="/ServicePages/carpenter.png" alt="" /></div>
-           <Button variant="light" color="yellow" radius="md" onClick={() => addToCart(job)}>Add</Button>
+        <div className='flex flex-col gap-2 justify-center items-center'>
+           <div><img className='w-32 h-32' src={job.image} alt="" /></div>
+           <Button variant="light" color="yellow" radius="md" fullWidth onClick={() => addToCart(job)}>Add</Button>
         </div>
        </div>
   

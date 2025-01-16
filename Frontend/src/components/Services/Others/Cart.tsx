@@ -18,7 +18,7 @@ const Cart = () => {
       : 
       (
         <div className='w-full flex flex-col gap-2 items-center'>
-          {cart.map((job : any, index : number) => (
+          {cart.map((job , index ) => (
             <div key={index} className=" w-full flex justify-between items-center mt-2 text-sm">
               <div className='w-1/2'>{job.ServiceName}  </div>
               <div> &#8377; {job.Price}</div>
