@@ -5,7 +5,6 @@ import { showNotification } from '@mantine/notifications';
 import { IconX, IconCheck } from '@tabler/icons-react';
 
 
-
 interface CartContextType {
   Favorate : Job[],
   cart : Job[],
@@ -28,6 +27,7 @@ interface CartContextType {
     const [cart, setCart] = useState<Job[]>([]);
     const [Favorate, setFavorate] = useState<Job[]>([]);
     const [total, setTotal] = useState<number>(0);
+   
 
     const addToCart = (job: Job) => {
       setCart((prevCart) => {

@@ -1,6 +1,6 @@
 import CitySlider from "../components/HomeScreen/CitySlider";
 import Features from "../components/HomeScreen/Features";
-import Header from "../components/Header/Header";
+import Header from "../components/Customer/Header/Header";
 import Hero from '../components/HomeScreen/Hero'
 import Services from "../components/HomeScreen/Services";
 import Working from "../components/HomeScreen/Working";
@@ -14,6 +14,7 @@ const Home = () => {
     return (
       <div className="min-h-[100vh] bg-mine-shaft-950 text-base">
            <Header></Header>
+           
            <Hero></Hero>
            <CitySlider></CitySlider>
            <Services></Services>

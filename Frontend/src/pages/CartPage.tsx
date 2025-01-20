@@ -1,14 +1,22 @@
-import Header from "../components/Header/Header";
+import Header from "../components/Customer/Header/Header";
 import Footer from "../components/Footer";
 import { Divider } from "@mantine/core"
 import { useCart } from "../Context/CartContext"
 import { Table } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { Button } from '@mantine/core';
+import CheckOut from "../Booking/Checkout";
+
+
 
 const CartPage = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
   const { cart ,total, removeFromCart } = useCart();
   const gst = 18/100 * total;
   const discount = 20/100 * (total + gst);
+
+
 
   return <div  className=" flex flex-col min-h-[100vh] bg-mine-shaft-950">
     <Header></Header>
@@ -89,13 +97,15 @@ const CartPage = () => {
       </div>
 
       
-      <Button className='mt-2 ' variant="filled" color="lime" fullWidth><span className="text-lg font-bold">Check Out</span></Button>
+      <Button
+      onClick={open}
+       className='mt-2 ' variant="filled" color="lime" fullWidth><span className="text-lg font-bold">Check Out</span></Button>
      
     </div>
-  </div>
-     
-      
+  </div>   
       }
+
+{ <CheckOut opened={opened} close={close} /> }
 </div>
     
     <Footer></Footer>

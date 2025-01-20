@@ -5,7 +5,7 @@ import { IconMapPin } from '@tabler/icons-react';
 import { Indicator } from '@mantine/core';
 import Navlinks from './Navlinks';
 import MenuItem from './MenuItem';
-import { useCart } from '../../Context/CartContext';
+import { useCart } from '../../../Context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -23,13 +23,13 @@ const Header = () => {
           </div>
 
           {/* Navbar */}
-          <div className='flex gap-8 text-mine-shaft-300 h-full  items-center'>
+          <div className='hidden md:flex gap-8  text-mine-shaft-300 h-full  items-center'>
           <Navlinks></Navlinks>
           </div>
 
 
           {/* Location */}
-          <div className=' flex gap-3 p-2 w-48 h-8 rounded items-center cursor-pointer text-mine-shaft-300 '>
+          <div className='hidden lg:flex gap-3 p-2 w-48 h-8 rounded items-center cursor-pointer text-mine-shaft-300 '>
           <IconMapPin stroke={2} />
           <div>Location</div>
             </div>

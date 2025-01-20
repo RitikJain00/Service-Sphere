@@ -54,7 +54,7 @@ const Features = () => {
           {
             feature.map((feature, index) => (
               <Grid.Col
-                span={3}
+              span={{  sm: 5, md: 4, lg: 3 }}
                 key={index}
                 className=" flex flex-col items-center justify-around border-bright-sun-300 rounded-xl hover:bg-bright-sun-950 hover:scale-105 hover:cursor-pointer hover:shadow-[0_0_5px_2px_black] !shadow-bright-sun-300 border-2 w-96 mx-8 mt-8 gap-2 p-4 transition-all duration-500 group"
               >

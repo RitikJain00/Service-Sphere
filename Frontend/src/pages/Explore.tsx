@@ -7,9 +7,11 @@ import Offer from "../components/Services/Others/Offers"
 import Promise from "../components/Services/Others/OurPromise"
 import Jobs from "../components/Services/JobCards/Jobs"
 
-const HouseKeeping = () => {
+
+const Explore = () => {
+  
   return <div className="min-h-[100vh] bg-mine-shaft-950">
-    <Header></Header>
+   <Header></Header>
     <Divider mx="md" mb='xl' />
 
       {/* Filters */}
@@ -20,19 +22,20 @@ const HouseKeeping = () => {
 
         {/* Services */}
         <div className="w-1/2 ">
-          <Jobs></Jobs>
+          <Jobs ></Jobs>
         </div>
 
 
         {/* Cart & offers */}
-        <div className="w-1/3 sticky top-[30px] h-[calc(100vh-100px)]  overflow-scroll">
+        <div className="w-1/3 sticky top-[30px] h-[calc(100vh-100px)] overflow-scroll">
             <Cart></Cart> 
             <Offer></Offer>
             <Promise></Promise>
         </div>
       </div>
     <Footer></Footer>
+
   </div>
 }
 
-export default HouseKeeping
+export default Explore

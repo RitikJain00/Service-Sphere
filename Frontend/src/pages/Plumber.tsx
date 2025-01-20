@@ -1,4 +1,4 @@
-import Header from "../components/Header/Header"
+import Header from "../components/Customer/Header/Header"
 import Footer from "../components/Footer"
 import { Divider } from "@mantine/core"
 import SearchBox from "../components/Services/Fiters/SearchBox"
