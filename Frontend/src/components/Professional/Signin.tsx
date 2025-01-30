@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { TextInput, rem } from '@mantine/core';
 import { IconAt } from '@tabler/icons-react';
 
@@ -5,12 +6,56 @@ import { PasswordInput} from '@mantine/core';
 import { IconLock } from '@tabler/icons-react';
 
 import { Button } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import axios from "axios";
+import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
 
 
 
 const Signin = () => {
-  return <div className="w-1/2 flex flex-col  bg-mine-shaft-950">
+
+  const navigate = useNavigate()
+  const [data , setData] = useState({username: '', password: ''});
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  
+    setData({...data, [e.target.name]: e.target.value})
+    setError(null);
+  }
+
+  const handleSignIn = async () => {
+
+    console.log(data);
+    
+       const checkSchema =  signinSchema.safeParse(data);
+
+       if(!checkSchema.success){
+        setError(checkSchema.error.errors[0].message);
+        return;
+       }
+       
+      
+      
+      try{
+        const response = await axios({
+          method: 'post',
+          url: 'http://localhost:3000/professional/signin',
+          data: data,
+          withCredentials: true,
+        });
+        localStorage.setItem("authToken", response.data.token)
+        localStorage.setItem("Type" , 'Professional')
+        navigate('/DashBoard')
+      } catch(err : any) {
+        setError(err.response?.data.msg || "Something went wrong!");
+      }
+
+  }
+
+
+  return <div className="w-full md:w-1/2 flex flex-col  bg-mine-shaft-950">
     
   <div className="text-4xl text-bright-sun-400 mt-24 font-semibold text-center  hover:scale-110 transition-all duration-300">Professional Account</div>
 
@@ -22,8 +67,11 @@ const Signin = () => {
                     variant="unstyled"
                     required
                       leftSection={<IconAt style={{ width: rem(16), height: rem(16) }} />}
+                      name='username'
                      label="Email"
                      placeholder="Your Email"
+                     value={data.username}
+                     onChange={handleChange}
                    styles={{
                         input: {
                          backgroundColor: '#2d2d2d', 
@@ -51,7 +99,10 @@ const Signin = () => {
                     <PasswordInput
                    variant="unstyled"
                    leftSection={<IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
+                   name='password'
                    label="Password"
+                   onChange={handleChange}
+                   value={data.password}
                    withAsterisk
                    placeholder="Password"
                    styles={{
@@ -76,15 +127,19 @@ const Signin = () => {
                 }}/>
                     </div>
 
-                   
+                    {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+
                     <Button variant="filled" color="yellow"  styles={{
                           label: {
                             fontSize: '20px',
                             color: '#454545',
                           },
-                          
-                        }}>
-                        <Link to={'/DashBoard'}>Login Account</Link></Button>
+                        }}
+                        onClick={handleSignIn}
+                        >
+                          Login Account
+                          </Button>
+                      
 
                     <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
                       Don't Have An Account ?  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/ProfessionalSignup'}>Sign Up</Link>

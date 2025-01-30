@@ -6,13 +6,34 @@ import { Indicator } from '@mantine/core';
 import Navlinks from './Navlinks';
 import MenuItem from './MenuItem';
 import { useCart } from '../../../Context/CartContext';
-import { useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { Button } from '@mantine/core';
+
 
 
 const Header = () => {
   
+ 
   const  { cart }  = useCart();
   const navigate = useNavigate();
+  const [user, setUser] = useState<{ token: string | null; type: string | null }>({
+    token: '',
+    type: ''
+  });
+ 
+  useEffect(() => {
+    // Check token in localStorage
+    const obj = {
+      token: localStorage.getItem("authToken"),
+      type: localStorage.getItem("Type"),
+    };
+  
+    setUser(obj);
+  }, []);
+
+
+   
     return(
       <div className="w-full h-24 px-6  bg-mine-shaft-950 flex justify-between items-center  text-cyan-50 ">
 
@@ -35,29 +56,31 @@ const Header = () => {
             </div>
 
             
-          
-            
+          { (user.type === 'Customer' && user.token )? 
+        
+          ( <div className='flex gap-4 items-center'>
+           <MenuItem setUser={setUser} ></MenuItem>
 
-
-          {/* Profile, cart, notification */}
-          <div className='flex gap-4 items-center'>
-              <MenuItem></MenuItem>
-
-               <Indicator inline processing color="red"  offset={6} size={8}>
-               <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>  
-                    <IconBellRinging stroke={2} />
-               </div>
-               </Indicator>
-
-               <Indicator label={cart.length} size={20} color="bright-sun.7" offset={6}>
-                   <div onClick={() => navigate('/Cart')} className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
-                   <IconShoppingCart stroke={2} />
-                  
-                   </div>
-                  </Indicator>
-         
-            
+            <Indicator inline processing color="red"  offset={6} size={8}>
+            <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>  
+                 <IconBellRinging stroke={2} />
             </div>
+            </Indicator>
+
+            <Indicator label={cart.length} size={20} color="bright-sun.7" offset={6}>
+                <div onClick={() => navigate('/Cart')} className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
+                <IconShoppingCart stroke={2} />
+               
+                </div>
+               </Indicator>
+      
+         
+         </div>) :  <Button variant="light" color="yellow" onClick={() => navigate('/CustomerLogin')}>Login</Button>
+         }
+           
+
+
+         
       </div>
      
  

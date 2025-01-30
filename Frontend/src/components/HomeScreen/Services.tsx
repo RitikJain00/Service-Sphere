@@ -49,12 +49,12 @@ const Services = () => {
     description: "Trust our skilled house cleaning professionals to keep your home spotless. With expertise in deep cleaning and maintenance, we ensure your space remains fresh and organized, saving you time and effort." 
   }
 ]
-  return <div className="mt-20 mx-10">
+  return <div className="mt-20 md:mx-10">
 
-<div className="text-4xl font-bold text-mine-shaft-100 text-center mb-6">What Are You <span className="text-bright-sun-500">Looking </span>For</div>
+<div className="text-3xl md:text-4xl font-bold text-mine-shaft-100 text-center mb-6">What Are You <span className="text-bright-sun-500">Looking </span>For</div>
 
 
-<div className="text-lg text-mine-shaft-300 text-center w-7/12 mx-auto">
+<div className="text-basic md:text-lg text-mine-shaft-300 text-center w-7/12 mx-auto">
   <div>Experience world-class household services with our reliable, skilled, and always-on-time experts</div>
   <div>we ensure your home gets the care it deserves!</div>
 </div>
@@ -73,7 +73,7 @@ const Services = () => {
      {Service.map((service, index) => <Carousel.Slide key={index} 
      >
 
-      <div className=" flex flex-col items-center justify-around border-bright-sun-300 rounded-xl hover:cursor-pointer hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300  border-2 w-80 mx-8 my-4 mt-12 gap-2 p-4  ">
+      <div className=" flex flex-col items-center justify-around border-bright-sun-300 rounded-xl hover:cursor-pointer hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300  border-2 w-60 sm:w-80 mx-8 my-4 mt-12 gap-2 p-4  ">
         
       <div className='rounded-full bg-bright-sun-500'>
       <img className="w-28 h-28  " src={`ServicesCards/${service.name}.png`} alt="services" />

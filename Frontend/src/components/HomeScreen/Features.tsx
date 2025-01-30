@@ -39,12 +39,12 @@ const Features = () => {
   ];
 
   return (
-    <div className="mt-24 mx-10">
-      <div className="text-4xl font-bold text-mine-shaft-100 text-center mb-6">
+    <div className="mt-24 md:mx-10">
+      <div className="text-3xl md:text-4xl font-bold text-mine-shaft-100 text-center mb-6">
         Discover What <span className="text-bright-sun-500">Makes Us</span> Unique
       </div>
 
-      <div className="text-lg text-mine-shaft-300 text-center w-7/12 mx-auto">
+      <div className="text-basic md:text-lg text-mine-shaft-300 text-center w-7/12 mx-auto">
         <div>Simplify your home care with 24/7 support, affordable rates, and trusted experts</div>
         <div>All designed for your convenience</div>
       </div>
@@ -59,12 +59,12 @@ const Features = () => {
                 className=" flex flex-col items-center justify-around border-bright-sun-300 rounded-xl hover:bg-bright-sun-950 hover:scale-105 hover:cursor-pointer hover:shadow-[0_0_5px_2px_black] !shadow-bright-sun-300 border-2 w-96 mx-8 mt-8 gap-2 p-4 transition-all duration-500 group"
               >
                
-                <div className="w-20 h-20 rounded-full bg-bright-sun-600 flex justify-center items-center">
-                  <img className="w-10 h-10" src={`Features/${feature.icon}.png`} alt={feature.name} />
+                <div className="w-12 h-12 md:w-20 md:h-20 rounded-full bg-bright-sun-600 flex justify-center items-center">
+                  <img className="w-7 h-7 md:w-10 md:h-10" src={`Features/${feature.icon}.png`} alt={feature.name} />
                 </div>
-                <div className="text-xl font-semibold text-center text-amber-300">{feature.name}</div>
+                <div className="text-sm md:text-xl font-semibold text-center text-amber-300">{feature.name}</div>
 
-                <div className="text-center text-mine-shaft-200 my-2">
+                <div className="text-sm md:text-base text-center text-mine-shaft-200 my-2">
                   {feature.description}
                 </div>
               </Grid.Col>

@@ -1,17 +1,17 @@
 const Working = () => {
-  return <div className="mt-24 mx-16">
+  return <div className="mt-24 md:mx-16">
 
-      <div className="text-4xl font-bold text-mine-shaft-100 text-center mb-6">Reserve <span className="text-bright-sun-500">Your Service</span> in 3 Simple Steps</div>
+      <div className="text-3xl md:text-4xl font-bold text-mine-shaft-100 text-center mb-6">Reserve <span className="text-bright-sun-500">Your Service</span> in 3 Simple Steps</div>
 
-  <div className="text-lg text-mine-shaft-300 text-center w-7/12 mx-auto">
+  <div className="text-basic md:text-lg text-mine-shaft-300 text-center w-7/12 mx-auto">
   Your go-to solution for household services: quick selection, flexible scheduling, and instant confirmation
   </div>
 
-    <div className="flex flex-col lg:flex-row  gap-20">
+    <div className="flex flex-col items-center lg:flex-row  gap-20">
 
       {/* Left Section */}
       <div className="items-center hover:scale-110 transition duration-300">
-          <img className ='w-[60rem]' src="Working/Girl.png" alt="girl" />
+          <img className ='w-[40rem] lg:w-[60rem]' src="Working/Girl.png" alt="girl" />
       </div>
 
       {/* Right Section */}

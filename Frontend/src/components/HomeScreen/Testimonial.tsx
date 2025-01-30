@@ -75,9 +75,9 @@ const Testimonial = () => {
     },
   ]
 
-  return <div className="mt-24 mx-16">
+  return <div className="mt-24 md:mx-12">
 
-    <div className="text-4xl font-bold text-mine-shaft-100 text-center mb-6">Love From Our <span className="text-bright-sun-500">Past</span> Customers</div>
+    <div className="text-3xl md:text-4xl font-bold text-mine-shaft-100 text-center mb-6">Love From Our <span className="text-bright-sun-500">Past</span> Customers</div>
 
    <div>
 
@@ -90,7 +90,7 @@ const Testimonial = () => {
     
     { review.map((item , index) => <Carousel.Slide key={index}>
     
-      <div className=" flex flex-col  justify-around border-bright-sun-300 rounded-xl hover:cursor-pointer hover:scale-105 hover:bg-bright-sun-950 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300  border-2 w-96 mx-8 my-4 mt-12 gap-2 p-4 items-center ">
+      <div className=" flex flex-col  justify-around border-bright-sun-300 rounded-xl hover:cursor-pointer hover:scale-105 hover:bg-bright-sun-950 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300  border-2 w-70 sm:w-96 mx-8 my-4 mt-12 gap-2 p-4 items-center ">
 
 
       <div className='flex gap-5'>

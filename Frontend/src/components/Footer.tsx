@@ -5,9 +5,9 @@ import { IconArrowRightDashed } from '@tabler/icons-react';
 
 
 const Footer = () => {
-  return <div className=' mt-20 h-80 bg-gradient-to-r from-mine-shaft-900 to-mine-shaft-950 text-mine-shaft-100  rounded-tl-[125px] '>
+  return <div className=' mt-20  bg-gradient-to-r from-mine-shaft-900 to-mine-shaft-950 text-mine-shaft-100  rounded-tl-[125px] '>
 
-    <div className='flex pl-20 pr-5 pt-10  gap-16 mb-4 '>
+    <div className='flex flex-col sm:flex-row sm:flex-auto pl-20 pr-5 pt-10  gap-16 mb-4 '>
 
       <div className='w-80 flex flex-col gap-6'>
 
@@ -20,6 +20,8 @@ const Footer = () => {
         Seamlessly Connecting You with Trusted Service Professionals, Anytime, Anywhere, for All Your Home Needs. Your One-Stop Solution for Home Services
         </div>
       </div>
+
+      <div className='flex flex-col md:flex-row gap-16'>
 
       <div className='flex flex-col gap-4 hover:scale-105 transition duration-200'>
 
@@ -77,7 +79,7 @@ const Footer = () => {
         </div>
         
       </div>
-
+    </div>
 
       <div className='flex flex-col gap-4 hover:scale-105 transition duration-200'>
         <div className='text-mine-shaft-50 hover:text-bright-sun-400'>

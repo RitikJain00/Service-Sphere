@@ -1,14 +1,58 @@
+import { useState } from 'react';
 import { TextInput, rem } from '@mantine/core';
-import { IconAt } from '@tabler/icons-react';
+import { IconAt, IconUserCircle } from '@tabler/icons-react';
 
 import { PasswordInput} from '@mantine/core';
 import { IconLock } from '@tabler/icons-react';
 
 import { Button } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { signupSchema } from "../../../../Shared/Validation/AuthSchema";
 
 
 const Signup = () => {
+
+  const navigate = useNavigate()
+  const [data , setData] = useState({name: '', username: '', password: '', confirmPassword: ''});
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setData({...data, [e.target.name]: e.target.value})
+    
+    setError(null);
+  }
+
+  const handleSignUp = async () => {
+
+       const checkSchema =  signupSchema.safeParse(data);
+
+       if(!checkSchema.success){
+        setError(checkSchema.error.errors[0].message);
+        return;
+       }
+       
+      if(data.password !== data.confirmPassword){
+        setError("Password does'nt Match");
+        return;
+      }
+      
+      try{
+        const response = await axios({
+          method: 'post',
+          url: 'http://localhost:3000/professional/signup',
+          data: data,
+          withCredentials: true,
+        });
+        localStorage.setItem("authToken", response.data.token)
+        localStorage.setItem("Type" , 'Professional')
+        navigate('/DashBoard')
+      } catch(err : any) {
+        setError(err.response?.data.msg || "Something went wrong!");
+      }
+
+  }
+
   
   return <div className="w-1/2 flex flex-col  bg-mine-shaft-950">
     
@@ -16,18 +60,22 @@ const Signup = () => {
 
     <div className=" ml-16 flex flex-col gap-6 w-auto pr-32 mt-16" >
 
-    <div>
+ 
+                      <div>
                       <TextInput
                       variant="unstyled"
                       required
-                       label="Full Name"
-                       placeholder="Your Name"
+                        leftSection={<IconUserCircle style={{ width: rem(16), height: rem(16) }} />}
+                       label="Company Name"
+                       placeholder="Company Name"
+                       name='name'
+                       value={data.name}
+                       onChange={handleChange}
                      styles={{
                           input: {
                            backgroundColor: '#2d2d2d', 
                            border: '1px solid #5d5d5d', 
-                           
-                           padding: '0.75rem 0.75rem',
+                           padding: '1rem 2rem',
                            outline: 'none',
                            color: '#d1d1d1',
                            borderRadius: '4px', 
@@ -53,6 +101,9 @@ const Signup = () => {
                         leftSection={<IconAt style={{ width: rem(16), height: rem(16) }} />}
                        label="Email"
                        placeholder="Your Email"
+                       name='username'
+                       value={data.username}
+                       onChange={handleChange}
                      styles={{
                           input: {
                            backgroundColor: '#2d2d2d', 
@@ -83,6 +134,9 @@ const Signup = () => {
                      label="Password"
                      withAsterisk
                      placeholder="Password"
+                     name='password'
+                     value={data.password}
+                     onChange={handleChange}
                      styles={{
                       input: {
                        backgroundColor: '#2d2d2d', 
@@ -112,6 +166,9 @@ const Signup = () => {
                      label="Confirm Password"
                      withAsterisk
                      placeholder="Confirm Password"
+                     name='confirmPassword'
+                     value={data.confirmPassword}
+                     onChange={handleChange}
                      styles={{
                       input: {
                        backgroundColor: '#2d2d2d', 
@@ -134,15 +191,15 @@ const Signup = () => {
                   }}/>
                       </div>
 
-                     
+                      {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
                       <Button variant="filled" color="yellow"  styles={{
                           label: {
                             fontSize: '20px',
                             color: '#454545',
-                          },
-                          
-                        }}>Create Account</Button>
+                          },}}
+                          onClick={handleSignUp}
+                          >Create Account</Button>
 
                       <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
                         Have An Account  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/ProfessionalLogin'}>Login</Link>

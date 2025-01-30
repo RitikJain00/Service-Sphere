@@ -3,6 +3,8 @@ import { Menu,  rem } from '@mantine/core';
 import { Avatar } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
+import { useNavigate } from 'react-router-dom';
+
 import {
  
 
@@ -16,8 +18,19 @@ import {
 import Feedback from './Feedback';
 
 
-const MenuItem = () =>  {
+const MenuItem = ( {setUser}: any ) =>  {
   
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('Type')
+    localStorage.removeItem('authToken')
+    setUser({
+      token: null,
+      type: null
+    })
+    navigate('/home')
+  }
 
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -66,6 +79,7 @@ const MenuItem = () =>  {
         <Menu.Item
           color="red"
           leftSection={<IconLogout2 style={{ width: rem(14), height: rem(14) }} />}
+          onClick={handleLogout}
         >
           Logout
         </Menu.Item>
