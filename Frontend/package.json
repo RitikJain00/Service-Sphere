@@ -18,10 +18,13 @@
     "axios": "^1.7.9",
     "embla-carousel-autoplay": "^7.1.0",
     "embla-carousel-react": "^7.1.0",
+    "framer-motion": "^12.1.0",
+    "lucide-react": "^0.474.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-fast-marquee": "^1.6.5",
     "react-router-dom": "^6.28.0",
+    "recharts": "^2.15.1",
     "tabler-icons-react": "^1.56.0",
     "zod": "^3.24.1"
   },

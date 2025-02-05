@@ -1,5 +1,5 @@
-import Header from "../components/Customer/Header/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Customer/Header/Header";
+import Footer from "../../components/Footer";
 import { Divider } from "@mantine/core";
 
 const Privacy = () => {

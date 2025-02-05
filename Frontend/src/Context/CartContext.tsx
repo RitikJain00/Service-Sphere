@@ -33,6 +33,8 @@ interface CartContextType {
       setCart((prevCart) => {
         const exists = prevCart.some((item) => item.Id === job.Id);
         if (!exists) {
+
+          
           const updatedCart = [...prevCart, job];
           const updatedTotal = updatedCart.reduce(
             (sum, item) => sum + parseInt(item.Price, 10),

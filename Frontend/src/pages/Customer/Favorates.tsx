@@ -1,7 +1,7 @@
-import Header from "../components/Customer/Header/Header";
-import Footer from "../components/Footer";
-import { useCart } from "../Context/CartContext";
-import ServiceCard from "../components/Services/JobCards/ServiceCard";
+import Header from "../../components/Customer/Header/Header";
+import Footer from "../../components/Footer";
+import { useCart } from "../../Context/CartContext";
+import ServiceCard from "../../components/Services/JobCards/ServiceCard";
 import { Divider } from "@mantine/core"
 import { Grid } from '@mantine/core';
 

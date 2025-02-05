@@ -40,7 +40,7 @@ const Signup = () => {
       try{
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:3000/professional/signup',
+          url: 'http://localhost:3000/professionalsign/signup',
           data: data,
           withCredentials: true,
         });

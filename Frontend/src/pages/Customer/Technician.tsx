@@ -1,17 +1,15 @@
-import Header from "../components/Customer/Header/Header"
-import Footer from "../components/Footer"
+import Header from "../../components/Customer/Header/Header"
+import Footer from "../../components/Footer"
 import { Divider } from "@mantine/core"
-import SearchBox from "../components/Services/Fiters/SearchBox"
-import Cart from "../components/Services/Others/Cart"
-import Offer from "../components/Services/Others/Offers"
-import Promise from "../components/Services/Others/OurPromise"
-import Jobs from "../components/Services/JobCards/Jobs"
+import SearchBox from "../../components/Services/Fiters/SearchBox"
+import Cart from "../../components/Services/Others/Cart"
+import Offer from "../../components/Services/Others/Offers"
+import Promise from "../../components/Services/Others/OurPromise"
+import Jobs from "../../components/Services/JobCards/Jobs"
 
-
-const Explore = () => {
-  
+const Technician = () => {
   return <div className="min-h-[100vh] bg-mine-shaft-950">
-   <Header></Header>
+    <Header></Header>
     <Divider mx="md" mb='xl' />
 
       {/* Filters */}
@@ -22,7 +20,7 @@ const Explore = () => {
 
         {/* Services */}
         <div className="w-1/2 ">
-          <Jobs ></Jobs>
+          <Jobs></Jobs>
         </div>
 
 
@@ -34,8 +32,7 @@ const Explore = () => {
         </div>
       </div>
     <Footer></Footer>
-
   </div>
 }
 
-export default Explore
+export default Technician

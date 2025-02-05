@@ -1,11 +1,11 @@
-import Header from "../components/Customer/Header/Header";
-import Footer from "../components/Footer";
+import Header from "../../components/Customer/Header/Header";
+import Footer from "../../components/Footer";
 import { Divider } from "@mantine/core"
-import { useCart } from "../Context/CartContext"
+import { useCart } from "../../Context/CartContext"
 import { Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button } from '@mantine/core';
-import CheckOut from "../Booking/Checkout";
+import CheckOut from "../../Booking/Checkout";
 
 
 

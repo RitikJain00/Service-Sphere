@@ -1,119 +1,86 @@
-import React, { createContext, useState, useContext,  ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import axios from 'axios';
 
-interface BasicInfo {
-  name: string;
-  about: string;
+interface BasicInfo { name: string; about: string; }
+interface ContactInfo { email: string, phone: string; }
+interface AddressInfo { home: string; city: string; pin: string; country: string; }
+
+interface ProfileContextType {
+  edit: boolean[];
+  basic: BasicInfo;
+  contact: ContactInfo;
+  address: AddressInfo;
+
+  handleBasicChange: (field: string, value: string) => void;
+  handleContactChange: (field: string, value: string) => void;
+  handleAddressChange: (field: string, value: string) => void;
+  handleClick: (index: number) => void;
+  saveProfile: () => void;
 }
 
-interface ContactInfo {
-  email: string;
-  phone: string;
-}
-
-interface AddressInfo {
-  home: string;
-  city: string;
-  pin: string;
-  country: string;
-}
-
-interface PaymentInfo {
-  number: string;
-  date: string;
-  cvv: string;
-  name: string;
-}
-
-interface ProfileContextType{
-  edit: boolean[],
-  basic: BasicInfo,
-  contact: ContactInfo,
-  address: AddressInfo ,
-  payment: PaymentInfo,
-  handleBasicChange: (field: string, value: string) => void,
-  handleContactChange: (field: string, value: string) => void,
-  handleAddressChange: (field: string, value: string) => void,
-  handlePaymentChange: (field: string, value: string) => void,
-  handleClick: (index: number) => void
-}
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
-
-interface ProfileProviderProps {
-  children: ReactNode; // Explicitly define the type for children
+interface ProfileProviderProps { 
+  children: ReactNode;
 }
 
-export const ProfileProvider: React.FC<ProfileProviderProps> = ({children}) => {
+export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => {
+  const [edit, setEdit] = useState([false, false, false, false]);
+  const [basic, setBasic] = useState<BasicInfo>({ name: '', about: '' });
+  const [contact, setContact] = useState<ContactInfo>({email: '', phone: '' });
+  const [address, setAddress] = useState<AddressInfo>({ home: '', city: '', pin: '', country: '' });
 
-  const [edit, setEdit] = useState([false,false,false,false]);
+  const type = localStorage.getItem('Type') 
+  const token = localStorage.getItem('authToken')
+  const apiUrl = type === 'Customer' 
+    ? 'http://localhost:3000/customerprofile/profile' 
+    : 'http://localhost:3000/professionalprofile/profile';
 
-  const [basic , setBasic] = useState({
-    name: 'Ritik Jain',
-    about: 'Your comfort, our commitment! We are here to serve you better every day.'
-  })
+  useEffect(() => {
+    console.log(token);
 
-  const [contact , setContact] = useState({
-    email: 'ritikjain590@gmail.com',
-    phone: '7836086508'
-  })
+    axios({
+      method: 'get',
+      url: apiUrl,
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(response => {
+        const data = response.data;
+        setBasic({ name: data.name, about: data.about });
+        setContact({email: data.username, phone: data.phone });
+        setAddress({ home: data.home, city: data.city, pin: data.pin, country: data.country });
+      })
+      .catch(error => console.error("Error fetching profile:", error));
+  }, [apiUrl]);
 
-  const [address , setAddress] = useState({
-    home: 'B/22 Street No - 7 New Modern Shahdara',
-    city: 'New Delhi',
-    pin: '110032',
-    country: 'India'
-  })
+  const handleBasicChange = (field: string, value: string) => setBasic(prev => ({ ...prev, [field]: value }));
+  const handleContactChange = (field: string, value: string) => setContact(prev => ({ ...prev, [field]: value }));
+  const handleAddressChange = (field: string, value: string) => setAddress(prev => ({ ...prev, [field]: value }));
 
-  const [payment , setPayment] = useState({
-    number: '0000 0000 0000 0000',
-    date: '09/29',
-    cvv: '8 1 2',
-    name: 'Ritik Jain'
-  })
-
-
-  const handleBasicChange = (field: string, value: string) => {
-    setBasic((prev) => ({
-      ...prev, 
-      [field]: value, 
-    }));
-  };
-
-  const handleContactChange = (field: string, value: string) => {
-   
-    setContact((prev) => ({
-      ...prev, 
-      [field]: value, 
-    }));
-  };
-
-  const handleAddressChange = (field: string, value: string) => {
-   
-    setAddress((prev) => ({
-      ...prev, 
-      [field]: value, 
-    }));
-  };
-
-  const handlePaymentChange = (field: string, value: string) => {
-   
-    setPayment((prev) => ({
-      ...prev, 
-      [field]: value, 
-    }));
-  };
 
   const handleClick = (index: number) => {
-    const newEdit = [...edit]; 
-    newEdit[index] = !newEdit[index]; 
-    setEdit(newEdit); 
-    
-  }
+    const newEdit = [...edit];
+    newEdit[index] = !newEdit[index];
+    setEdit(newEdit);
+  };
 
+  const saveProfile = () => {
+    console.log(token)
+    axios({
+      method: 'put',
+      url: apiUrl,
+      headers: {Authorization: `Bearer ${token}`},
+        data: {basic, contact, address}
+    })
+      .then(() => alert("Profile updated successfully!"))
+      .catch(error => console.error("Error updating profile:", error));
+  };
 
-  return <ProfileContext.Provider value={{edit, basic, contact,address, payment, handleBasicChange, handleContactChange, handleAddressChange, handlePaymentChange, handleClick}}>
-    {children}
+  return (
+    <ProfileContext.Provider value={{ edit, basic, contact, address, handleBasicChange, handleContactChange, handleAddressChange,  handleClick, saveProfile }}>
+      {children}
     </ProfileContext.Provider>
+  );
 };
 
 export const useProfile = (): ProfileContextType => {
@@ -123,4 +90,3 @@ export const useProfile = (): ProfileContextType => {
   }
   return context;
 };
-

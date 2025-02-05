@@ -1,5 +1,8 @@
+import Header from "../../components/Customer/Header/Header";
+import Footer from "../../components/Footer";
 
-import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconCreditCardPay , IconCalendarMonth, IconUser  } from '@tabler/icons-react';
+
+import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser  } from '@tabler/icons-react';
 import { IconMail } from '@tabler/icons-react';
 import { IconPencil } from '@tabler/icons-react';
 import { ActionIcon } from '@mantine/core';
@@ -7,12 +10,25 @@ import { Divider } from '@mantine/core';
 
 
 import { TextInput, rem  } from '@mantine/core';
-import { useProfile } from '../../../Context/ProfileContext';
+import { useProfile } from '../../Context/ProfileContext';
 
-const ProfileDetail = () => {
+const CustomerProfile = () => {
 
     const Detail = useProfile();
-    return  <div>
+    return  <div className="min-h-[100vh] font-['poppins'] bg-mine-shaft-950 ">
+
+        <Header></Header>
+         <Divider mx="md" mb='xl' />
+
+
+         <div className="mx-32">
+      
+      {/*   Image Section */}
+
+        <div  className="w-full relative">
+          <img className='rounded-t-2xl w-full ' src="/Profile/ServiceSphereBanner.png" alt="" />
+          <img className="w-48 h-48 rounded-full absolute -bottom-24 left-4 border-mine-shaft-900 border-8" src="/Home/avatar-9.png" alt="" />
+        </div>
 
       {/* Basic Detail */}
 
@@ -81,6 +97,7 @@ const ProfileDetail = () => {
               className='w-96'
               leftSection={<IconMail style={{ width: rem(16), height: rem(16) }} />}
               label="Your Email"
+              disabled
               withAsterisk
               placeholder="Email"
               value={`${Detail.contact.email}`}
@@ -222,105 +239,6 @@ const ProfileDetail = () => {
     </div>
 
 
-    <Divider mx="md" my='xl' />
-
-    {/* Payment Details */}
-
-    <div className='px-8 w-full flex justify-between'>
-        <div className='flex flex-col gap-4'>
-   
-        <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Payment Details :</div>
-
-        {Detail.edit[3] ? 
-          <div className='flex flex-col gap-2 '>
-            
-            <div className='w-full'>
-            <TextInput
-              className='w-96'
-              leftSection={<IconCreditCardPay style={{ width: rem(16), height: rem(16) }} />}
-              label="Card Number"
-              withAsterisk
-              placeholder="Card Number"
-              value={`${Detail.payment.number}`}
-              onChange={(e) => Detail.handlePaymentChange("number", e.target.value)}
-            />
-            </div>
-
-            <div>
-            <TextInput
-              label="Expiry Date MM/YY"
-              leftSection={<IconCalendarMonth style={{ width: rem(16), height: rem(16) }} />}
-              withAsterisk
-              placeholder="MM/YY"
-              value={`${Detail.payment.date}`}
-              onChange={(e) => Detail.handlePaymentChange("date", e.target.value)}
-            />
-            </div>
-
-            <div>
-            <TextInput
-              label="CVV"
-              leftSection={<IconMapPinCode style={{ width: rem(16), height: rem(16) }} />}
-              withAsterisk
-              placeholder="CVV"
-              value={`${Detail.payment.cvv}`}
-              onChange={(e) => Detail.handlePaymentChange("cvv", e.target.value)}
-            />
-            </div>
-
-            <div>
-            <TextInput
-              label="Your Name"
-              leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} />}
-              withAsterisk
-              placeholder="Name"
-              value={`${Detail.payment.name}`}
-              onChange={(e) => Detail.handlePaymentChange("name", e.target.value)}
-            />
-            </div>
-
-          </div> :
-          <>
-            <div className='flex gap-16 text-2xl'>
-              <div className='w-32'>Card No:</div>
-              <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
-              < IconCreditCardPay stroke={2} />
-              {Detail.payment.number}</div>
-              </div>
-
-
-       
-
-        <div className='flex gap-16 text-2xl'>
-            <div className='w-32'>Date </div>
-            <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
-            <IconCalendarMonth  stroke={2} />
-            {Detail.payment.date} </div>
-        </div>
-
-        <div className='flex gap-16 text-2xl'>
-            <div className='w-32'>CVV:</div>
-            <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
-            <IconMapPinCode stroke={2} />
-            {Detail.payment.cvv} </div>
-        </div>
-
-        <div className='flex gap-16 text-2xl'>
-            <div className='w-32'>Name:</div>
-            <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
-            <IconUser stroke={2} />
-            {Detail.payment.name} </div>
-        </div>
-        </>
-}
-</div>
-
-   <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(3)} >
-            { Detail.edit[3] ? <div>Save</div>  : < IconPencil stroke={2} />}   
-          </ActionIcon> 
-          
-    </div>
-
 
     <Divider mx="md" my='xl' />
 
@@ -364,9 +282,11 @@ const ProfileDetail = () => {
     
         </div>
 
+        </div>
 
+         <Footer></Footer>
 </div>
 
 }
 
-export default ProfileDetail;
+export default CustomerProfile;

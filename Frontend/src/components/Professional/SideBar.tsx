@@ -1,8 +1,12 @@
 import { IconPlant2 } from '@tabler/icons-react';
 import { Avatar } from '@mantine/core';
-import Navlinks from './NavLinks';
+import Navlinks from './Header/NavLinks';
+
+
 
 const SideBar = () => {
+
+
   return <div className="w-1/5 min-h-full bg-mine-shaft-900 flex flex-col items-center">
     
     {/* Logo */}
@@ -16,8 +20,10 @@ const SideBar = () => {
           </div>
           <span className='text-xl mt-2 text-mine-shaft-300'>Ritik Jain</span>
 
+
+        
           <div className='mt-12 flex flex-col gap-8'>
-            <Navlinks></Navlinks>
+           <Navlinks></Navlinks>
           </div>
   </div>
 

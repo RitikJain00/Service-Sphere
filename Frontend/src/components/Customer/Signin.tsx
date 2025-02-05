@@ -27,23 +27,21 @@ const Signin = () => {
 
   const handleSignIn = async () => {
 
-    
        const checkSchema =  signinSchema.safeParse(data);
 
        if(!checkSchema.success){
         setError(checkSchema.error.errors[0].message);
         return;
        }
-       
-      
-      
+
       try{
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:3000/customer/signin',
+          url: 'http://localhost:3000/customersign/signin',
           data: data,
           withCredentials: true,
         });
+        console.log('done')
         localStorage.setItem("authToken", response.data.token)
         localStorage.setItem("Type" , 'Customer')
         navigate('/home')

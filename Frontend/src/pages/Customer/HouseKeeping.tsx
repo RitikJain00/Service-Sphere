@@ -1,11 +1,11 @@
-import Header from "../components/Customer/Header/Header"
-import Footer from "../components/Footer"
+import Header from "../../components/Customer/Header/Header"
+import Footer from "../../components/Footer"
 import { Divider } from "@mantine/core"
-import SearchBox from "../components/Services/Fiters/SearchBox"
-import Cart from "../components/Services/Others/Cart"
-import Offer from "../components/Services/Others/Offers"
-import Promise from "../components/Services/Others/OurPromise"
-import Jobs from "../components/Services/JobCards/Jobs"
+import SearchBox from "../../components/Services/Fiters/SearchBox"
+import Cart from "../../components/Services/Others/Cart"
+import Offer from "../../components/Services/Others/Offers"
+import Promise from "../../components/Services/Others/OurPromise"
+import Jobs from "../../components/Services/JobCards/Jobs"
 
 const HouseKeeping = () => {
   return <div className="min-h-[100vh] bg-mine-shaft-950">

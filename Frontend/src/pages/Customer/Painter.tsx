@@ -1,15 +1,20 @@
-import Header from "../components/Customer/Header/Header"
-import Footer from "../components/Footer"
+import Header from "../../components/Customer/Header/Header"
+import Footer from "../../components/Footer"
 import { Divider } from "@mantine/core"
-import SearchBox from "../components/Services/Fiters/SearchBox"
-import Cart from "../components/Services/Others/Cart"
-import Offer from "../components/Services/Others/Offers"
-import Promise from "../components/Services/Others/OurPromise"
-import Jobs from "../components/Services/JobCards/Jobs"
+import SearchBox from "../../components/Services/Fiters/SearchBox"
+import Cart from "../../components/Services/Others/Cart"
+import Offer from "../../components/Services/Others/Offers"
+import Promise from "../../components/Services/Others/OurPromise"
+import Jobs from "../../components/Services/JobCards/Jobs"
 
-const Contractor = () => {
+
+
+const Painter = () => {
+ 
+
+
   return <div className="min-h-[100vh] bg-mine-shaft-950">
-    <Header></Header>
+   <Header></Header>
     <Divider mx="md" mb='xl' />
 
       {/* Filters */}
@@ -20,13 +25,13 @@ const Contractor = () => {
 
         {/* Services */}
         <div className="w-1/2 ">
-          <Jobs></Jobs>
+          <Jobs ></Jobs>
         </div>
 
 
         {/* Cart & offers */}
         <div className="w-1/3 sticky top-[30px] h-[calc(100vh-100px)] overflow-scroll">
-            <Cart></Cart> 
+            <Cart ></Cart> 
             <Offer></Offer>
             <Promise></Promise>
         </div>
@@ -35,4 +40,4 @@ const Contractor = () => {
   </div>
 }
 
-export default Contractor
+export default Painter

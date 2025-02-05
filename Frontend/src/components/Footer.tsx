@@ -55,9 +55,9 @@ const Footer = () => {
 
         <div className='flex flex-col gap-2'>
         <div className='hover:text-bright-sun-400 '><Link to = '/about'>About Us</Link></div>
-        <div className='hover:text-bright-sun-400'><Link to = '/Terms&Conditions'>Terms & Condition</Link></div>
+        <div className='hover:text-bright-sun-400'><Link to = '/TermsAndConditions'>Terms & Condition</Link></div>
         <div className='hover:text-bright-sun-400'><Link to = '/PrivacyPolicy'>Privacy Policy</Link></div>
-        <div className='hover:text-bright-sun-400'><Link to = '/Refund&Cancellation'>Refund & Cancellation Policy</Link></div>
+        <div className='hover:text-bright-sun-400'><Link to = '/RefundAndCancellation'>Refund & Cancellation Policy</Link></div>
         <div className='hover:text-bright-sun-400'><Link to = '/about'>Careers</Link></div>
         </div>
         
