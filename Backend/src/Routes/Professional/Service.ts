@@ -68,7 +68,7 @@ router.get("/allService", LoginStatus, async (req: Request, res: Response): Prom
   }
 });
 
-router.put("/allService", LoginStatus, async (req: Request, res: Response): Promise<void> => {
+router.put("/editService", LoginStatus, async (req: Request, res: Response): Promise<void> => {
 
   console.log(req.body)
   const {id, name, company, description, category, expireince, location, price } = req.body;
@@ -96,7 +96,7 @@ router.put("/allService", LoginStatus, async (req: Request, res: Response): Prom
 });
 
 
-router.delete("/allService", LoginStatus, async (req: Request, res: Response): Promise<void> => {
+router.delete("/deleteService", LoginStatus, async (req: Request, res: Response): Promise<void> => {
   
   try {
     
