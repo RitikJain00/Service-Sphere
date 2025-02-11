@@ -140,9 +140,7 @@ const Signin = () => {
                     <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
                      <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 ' to={'/'}>Forgot Password ?</Link>
                     </div>
-                    
-
-                    
+    
                     
           </div>           
   </div>

@@ -75,7 +75,7 @@ const CustomerProfile = () => {
   
            <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(0)}>
             
-            { Detail.edit[0] ? <div>Save</div>  : <  IconPencil stroke={2} /> }
+            { Detail.edit[0] ? <div onClick={() => Detail.saveProfile()} >Save</div>  : <  IconPencil stroke={2} /> }
             </ActionIcon> 
     </div>
 
@@ -137,7 +137,7 @@ const CustomerProfile = () => {
 </div>
 
    <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl'  onClick={() => Detail.handleClick(1)}>
-              { Detail.edit[1] ? <div>Save</div>  : < IconPencil stroke={2} /> }
+              { Detail.edit[1] ? <div onClick={() => Detail.saveProfile()}>Save</div>  : < IconPencil stroke={2} /> }
           </ActionIcon> 
 
     </div>
@@ -233,7 +233,7 @@ const CustomerProfile = () => {
 </div>
 
    <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(2)}>
-          { Detail.edit[2] ? <div>Save</div>  :  < IconPencil stroke={2} /> }
+          { Detail.edit[2] ? <div onClick={() => Detail.saveProfile()}>Save</div>  :  < IconPencil stroke={2} /> }
           </ActionIcon> 
           
     </div>

@@ -30,7 +30,7 @@ const Header = () => {
     };
   
     setUser(obj);
-  }, []);
+  }, [user.token]);
 
 
    

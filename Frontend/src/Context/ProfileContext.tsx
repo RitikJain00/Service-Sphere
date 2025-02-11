@@ -30,14 +30,13 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const [contact, setContact] = useState<ContactInfo>({email: '', phone: '' });
   const [address, setAddress] = useState<AddressInfo>({ home: '', city: '', pin: '', country: '' });
 
-  const type = localStorage.getItem('Type') 
-  const token = localStorage.getItem('authToken')
-  const apiUrl = type === 'Customer' 
-    ? 'http://localhost:3000/customerprofile/profile' 
-    : 'http://localhost:3000/professionalprofile/profile';
+ const type = localStorage.getItem('Type') 
+    const token = localStorage.getItem('authToken')
+    const apiUrl = type === 'Customer' 
+      ? 'http://localhost:3000/customerprofile/profile' 
+      : 'http://localhost:3000/professionalprofile/profile';
 
   useEffect(() => {
-    console.log(token);
 
     axios({
       method: 'get',
@@ -46,12 +45,12 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
     })
       .then(response => {
         const data = response.data;
-        setBasic({ name: data.name, about: data.about });
+        setBasic({ name: data.name, about: data.description });
         setContact({email: data.username, phone: data.phone });
-        setAddress({ home: data.home, city: data.city, pin: data.pin, country: data.country });
+        setAddress({ home: data.address, city: data.city, pin: data.pincode, country: data.country });
       })
       .catch(error => console.error("Error fetching profile:", error));
-  }, [apiUrl]);
+  }, [token,type]);
 
   const handleBasicChange = (field: string, value: string) => setBasic(prev => ({ ...prev, [field]: value }));
   const handleContactChange = (field: string, value: string) => setContact(prev => ({ ...prev, [field]: value }));

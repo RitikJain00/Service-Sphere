@@ -23,13 +23,15 @@ const MenuItem = ( {setUser}: any ) =>  {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    if (window.confirm("Are you sure you want to log out?")) {
     localStorage.removeItem('Type')
     localStorage.removeItem('authToken')
     setUser({
-      token: null,
-      type: null
+      token: '',
+      type: '',
     })
     navigate('/home')
+    }
   }
 
   const [opened, { open, close }] = useDisclosure(false);
