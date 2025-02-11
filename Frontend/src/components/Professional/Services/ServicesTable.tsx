@@ -31,7 +31,7 @@ const ProductsTable = () => {
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/service/allService", {
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/service/allService", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -76,7 +76,7 @@ const ProductsTable = () => {
   // Handle Delete
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete("http://localhost:3000/service/allService", {
+      await axios.delete("https://service-sphere-j7vd.onrender.com/service/deleteService", {
         headers: { Authorization: `Bearer ${token}` },
         data: { id },
         withCredentials: true,

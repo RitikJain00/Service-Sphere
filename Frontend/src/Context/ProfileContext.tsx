@@ -33,8 +33,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
  const type = localStorage.getItem('Type') 
     const token = localStorage.getItem('authToken')
     const apiUrl = type === 'Customer' 
-      ? 'http://localhost:3000/customerprofile/profile' 
-      : 'http://localhost:3000/professionalprofile/profile';
+      ? 'https://service-sphere-j7vd.onrender.com/customerprofile/profile' 
+      : 'https://service-sphere-j7vd.onrender.com/professionalprofile/profile';
 
   useEffect(() => {
 

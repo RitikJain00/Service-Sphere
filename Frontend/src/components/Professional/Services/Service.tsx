@@ -54,7 +54,7 @@ const  handleServiceSubmit = async () => {
   try {
     const professional = await await axios ({     // to get the location and company name
       method: 'get',
-      url: 'http://localhost:3000/professionalprofile/profile',
+      url: 'https://service-sphere-j7vd.onrender.com/professionalprofile/profile',
       headers: {Authorization: `Bearer ${token}`},
     })
 
@@ -85,8 +85,8 @@ const  handleServiceSubmit = async () => {
     }
 
     const apiUrl = isEditMode
-        ? 'http://localhost:3000/service/allService'
-        : 'http://localhost:3000/service/createservice';
+        ? 'https://service-sphere-j7vd.onrender.com/service/editService'
+        : 'https://service-sphere-j7vd.onrender.com/service/createservice';
       const method = isEditMode ? 'put' : 'post';
 
 

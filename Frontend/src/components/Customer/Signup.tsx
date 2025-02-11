@@ -41,7 +41,7 @@ const Signup = () => {
       try{
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:3000/customersign/signup',
+          url: 'https://service-sphere-j7vd.onrender.com/customersign/signup',
           data: data,
           withCredentials: true,
         });
