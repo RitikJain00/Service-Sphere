@@ -1,12 +1,12 @@
 import express from 'express'
 
-import  customerSign  from './Routes/Customer/CustomerSign'
-import customerProfile from './Routes/Customer/CustomerProfile'
+import  customerSign  from './src/Routes/Customer/CustomerSign'
+import customerProfile from './src/Routes/Customer/CustomerProfile'
 
-import    professionalSign   from './Routes/Professional/ProfessionlSign' 
-import professionalProfile from './Routes/Professional/ProfessionalProfile'
+import    professionalSign   from './src/Routes/Professional/ProfessionlSign' 
+import professionalProfile from './src/Routes/Professional/ProfessionalProfile'
 
-import service from './Routes/Professional/Service'
+import service from './src/Routes/Professional/Service'
 
 import cors from "cors";
 
