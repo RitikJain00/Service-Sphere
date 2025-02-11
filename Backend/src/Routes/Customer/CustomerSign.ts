@@ -1,15 +1,16 @@
-import express from 'express'
+import express, { Request, Response }  from 'express'
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import { signupSchema, signinSchema } from "../../../Shared/Validation/AuthSchema";
+import { signupSchema, signinSchema } from "../../../../Shared/Validation/AuthSchema";
+
 
 const router = express.Router();
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "RitikJain"
 
 
-router.post('/signup' , async (req,res) => {
+router.post('/signup' , async (req : Request , res: Response) => {
 
   const {name, username, password } = req.body;
 
@@ -42,28 +43,25 @@ router.post('/signup' , async (req,res) => {
           profile: {
             create: {
               name: name,
-              description: "", 
-              image: "", 
-              phone: "",    
-              address: "",    
-              city: "",       
-              pincode: 0,     
-              country: "", 
-              cardNo : "",
-              date:   "",
-              cvv :  0,
-              cardName: ""  
+              description: null! as string,
+              image: null! as string, 
+              phone: null! as string,
+              address: null! as string,    
+              city: null! as string,     
+              pincode: null! as string,    
+              country: null! as string,
+          
             }
           }},
       })
      
-      const token = jwt.sign({customerId: newCustomer.id}, JWT_SECRET, {
+      const token = jwt.sign({customerId: newCustomer.id,username: newCustomer.username }, JWT_SECRET, {
         expiresIn: "7d"
       });
 
       res.status(201).json({
         msg: "Signup successful",
-        professional: { id: newCustomer.id, username: newCustomer.username },
+        professional: { customerId: newCustomer.id, username: newCustomer.username },
         token
       });
     } catch (error) {
@@ -103,13 +101,13 @@ router.post('/signin' , async (req,res) => {
       return
     }
    
-    const token = jwt.sign({ id: existingCustomer.id }, JWT_SECRET, {
+    const token = jwt.sign({customerId: existingCustomer.id,username: existingCustomer.username }, JWT_SECRET, {
       expiresIn: "7d", // Token expires in 1 day
     });
 
     res.status(200).json({
       msg: "Signin successful",
-      professional: { id: existingCustomer.id, username: existingCustomer.username },
+      professional: { customerId: existingCustomer.id, username: existingCustomer.username },
       token,
     });
   } catch (error) {

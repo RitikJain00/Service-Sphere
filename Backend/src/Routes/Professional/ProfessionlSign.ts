@@ -2,8 +2,9 @@ import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
+import LoginStatus from "../../Middleware/CheckLoginStatus";
 
-import { signinSchema, signupSchema } from "../../../Shared/Validation/AuthSchema";
+import { signinSchema, signupSchema } from "../../../../Shared/Validation/AuthSchema";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -36,28 +37,29 @@ router.post(
 
       const newProfessional = await prisma.professional.create({
         data: { 
-          username: username,
-           password:  hashedPassword,
+          username,
+          password: hashedPassword,
           profile: {
             create: {
-              name: name,
-              description: "", 
-              image: "",     
-              address: "",    
-              city: "",       
-              pincode: 0,     
-              country: "", 
-              
+              name,
+              description: null! as string,  // ✅ Force TypeScript to accept `null`
+              image: null! as string,
+              address: null! as string,    
+              city: null! as string,       
+              pincode: null! as string,     
+              country: null! as string, 
             }
-          }},
+          }
+        }
       });
+      
 
-      const token = jwt.sign({professionalId: newProfessional.id}, JWT_SECRET, {
+      const token = jwt.sign({professionalId: newProfessional.id,username: newProfessional.username }, JWT_SECRET, {
         expiresIn: "7d"
       });
       res.status(201).json({
         msg: "Signup successful",
-        professional: { id: newProfessional.id, username: newProfessional.username},
+        professional: { professionalId: newProfessional.id, username: newProfessional.username},
         token
       });
     } catch (error) {
@@ -96,13 +98,13 @@ router.post(
         return
       }
 
-      const token = jwt.sign({ id: existingProfessional.id }, JWT_SECRET, {
+      const token = jwt.sign({ professionalId: existingProfessional.id, username: existingProfessional.username }, JWT_SECRET, {
         expiresIn: "7d", // Token expires in 1 day
       });
   
       res.status(200).json({
         msg: "Signin successful",
-        professional: { id: existingProfessional.id, username: existingProfessional.username },
+        professional: { professionalId: existingProfessional.id, username: existingProfessional.username },
         token,
       });
     } catch (error) {
@@ -111,5 +113,6 @@ router.post(
     }
 
   });
+
 
 export default router;

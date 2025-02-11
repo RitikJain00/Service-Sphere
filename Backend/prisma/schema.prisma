@@ -35,33 +35,30 @@ model Professional {
 }
 
 model CustomerProfile {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
-  description String
-  image       String
-  phone       String
-  address     String
-  city        String
-  pincode     Int
-  country     String
-  cardNo      String
-  date        DateTime
-  cvv         Int
-  cardName    String
+  description String?
+  image       String?
+  phone       String?
+  address     String?
+  city        String?
+  pincode     String?
+  country     String?
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique
 }
 
 model ProfessionalProfile {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
-  description String
-  image       String
-  address     String
-  city        String
-  pincode     Int
-  country     String
+  description String?
+  image       String?
+  phone       String?
+  address     String?
+  city        String?
+  pincode     String?
+  country     String?
 
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int          @unique
@@ -116,9 +113,14 @@ model PastBookings {
 model Services {
   id          Int      @id @default(autoincrement())
   name        String
+  company     String
   description String
-  booking     String
-  price       String
+  category    String
+  expireince  String
+  location    String
+  rating      Float?
+  booking     String?
+  price       Int
   time        DateTime
 
   professional   Professional @relation(fields: [professionalId], references: [id])
