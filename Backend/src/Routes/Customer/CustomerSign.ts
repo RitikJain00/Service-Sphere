@@ -52,8 +52,21 @@ router.post('/signup' , async (req : Request , res: Response) => {
               country: null! as string,
           
             }
-          }},
+          },
+        },
       })
+
+      const cart = await prisma.cart.create({
+        data: {
+          customerId:  newCustomer.id, 
+        }
+      });
+  
+      const favorate = await prisma.favorite.create({
+        data: {
+          customerId:  newCustomer.id, 
+        }
+      });
      
       const token = jwt.sign({customerId: newCustomer.id,username: newCustomer.username }, JWT_SECRET, {
         expiresIn: "7d"
@@ -62,7 +75,9 @@ router.post('/signup' , async (req : Request , res: Response) => {
       res.status(201).json({
         msg: "Signup successful",
         professional: { customerId: newCustomer.id, username: newCustomer.username },
-        token
+        token,
+        Cart: {id: cart.id ,cid: cart.customerId},
+        favorateId: {id: favorate.id ,cid: favorate.customerId}
       });
     } catch (error) {
       console.error("Error during signup:", error);

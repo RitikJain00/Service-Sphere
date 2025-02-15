@@ -20,8 +20,26 @@ model Customer {
   profile         CustomerProfile? // One-to-One Relationship
   upcommingOrders UpcommingOrders[]
   pastOrders      PastOrders[]
-  favorites       Services[]        @relation("FavoritesRelation")
-  cart            Services[]        @relation("CartRelation")
+
+  Cart     Cart?
+  Favorite Favorite?
+}
+
+model Cart {
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @unique
+
+  services Services[] @relation("CartServicesRelation")
+  total    Int        @default(0)
+}
+
+model Favorite {
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @unique
+
+  services Services[] @relation("FavoriteServicesRelation")
 }
 
 model Professional {
@@ -113,6 +131,7 @@ model PastBookings {
 model Services {
   id          Int      @id @default(autoincrement())
   name        String
+  image       String?
   company     String
   description String
   category    String
@@ -130,6 +149,6 @@ model Services {
   pastorders        PastOrders[]        @relation("OrderServicesRelation")
   upcommingbookings UpcommingBookings[] @relation("BookingServiceRelation")
   pastbookings      PastBookings[]      @relation("BookingServiceRelation")
-  favorites         Customer[]          @relation("FavoritesRelation")
-  carts             Customer[]          @relation("CartRelation")
+  carts             Cart[]              @relation("CartServicesRelation")
+  favorites         Favorite[]          @relation("FavoriteServicesRelation")
 }

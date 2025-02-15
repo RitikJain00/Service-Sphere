@@ -70,7 +70,7 @@ router.get("/allService", LoginStatus, async (req: Request, res: Response): Prom
 
 router.put("/editService", LoginStatus, async (req: Request, res: Response): Promise<void> => {
 
-  console.log(req.body)
+  
   const {id, name, company, description, category, expireince, location, price } = req.body;
   try {
     
