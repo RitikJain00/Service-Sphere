@@ -16,6 +16,7 @@ interface ProfileContextType {
   handleAddressChange: (field: string, value: string) => void;
   handleClick: (index: number) => void;
   saveProfile: () => void;
+  updateAuth: (newToken: string, newType: string) => void
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -30,13 +31,22 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const [contact, setContact] = useState<ContactInfo>({email: '', phone: '' });
   const [address, setAddress] = useState<AddressInfo>({ home: '', city: '', pin: '', country: '' });
 
- const type = localStorage.getItem('Type') 
-    const token = localStorage.getItem('authToken')
-    const apiUrl = type === 'Customer' 
-      ? 'https://service-sphere-j7vd.onrender.com/customerprofile/profile' 
-      : 'https://service-sphere-j7vd.onrender.com/professionalprofile/profile';
+  const [token, setToken] = useState(localStorage.getItem("authToken"));
+  const [type, setType] = useState(localStorage.getItem("Type"));
+   
+  const updateAuth = (newToken: string, newType: string) => {
+    setToken(newToken);
+    setType(newType);
+  };
+      
 
   useEffect(() => {
+    if (!token || !type) return;
+
+  const apiUrl =
+    type === "Customer"
+      ? "https://service-sphere-j7vd.onrender.com/customerprofile/profile"
+      : "https://service-sphere-j7vd.onrender.com/professionalprofile/profile";
 
     axios({
       method: 'get',
@@ -52,6 +62,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
       .catch(error => console.error("Error fetching profile:", error));
   }, [token,type]);
 
+
+
   const handleBasicChange = (field: string, value: string) => setBasic(prev => ({ ...prev, [field]: value }));
   const handleContactChange = (field: string, value: string) => setContact(prev => ({ ...prev, [field]: value }));
   const handleAddressChange = (field: string, value: string) => setAddress(prev => ({ ...prev, [field]: value }));
@@ -64,7 +76,11 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   };
 
   const saveProfile = () => {
-    console.log(token)
+    if (!token || !type) return;
+      const apiUrl =
+      type === "Customer"
+      ? "https://service-sphere-j7vd.onrender.com/customerprofile/profile"
+      : "https://service-sphere-j7vd.onrender.com/professionalprofile/profile";
     axios({
       method: 'put',
       url: apiUrl,
@@ -76,7 +92,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   };
 
   return (
-    <ProfileContext.Provider value={{ edit, basic, contact, address, handleBasicChange, handleContactChange, handleAddressChange,  handleClick, saveProfile }}>
+    <ProfileContext.Provider value={{ edit, basic, contact, address, handleBasicChange, handleContactChange, handleAddressChange,  handleClick, saveProfile, updateAuth }}>
       {children}
     </ProfileContext.Provider>
   );

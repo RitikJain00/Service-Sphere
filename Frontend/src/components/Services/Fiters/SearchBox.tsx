@@ -5,34 +5,23 @@ import SelectComboboxData from "./Combobox";
 
 import { RangeSlider } from '@mantine/core';
 import { useState } from 'react';
+import { useLocation } from "react-router-dom";
 
 
 
 const SearchBox = () => {
 
   const [value, setValue] = useState<[number, number]>([0, 750]);
+  const location = useLocation()
 
-
-  const MultiselectData = [
-    {
-      title: 'Search Category',
-      icon: IconSearch,
-      options: ['Table' , 'Chair', 'Bed', 'Cubord', 'Ceiling', 'Floaring']
-    },
-    {
-      title: 'Search Location',
-      icon: IconMapPin,
-      options: ['Delhi','Mumbai','Kolkata','Chennai','Bengaluru','Hyderabad','Jaipur','Lukhnow','Pune',  'Guwahati','Ahemdabad','Bhubaneswar']
-    },
-
-  ]
+  
 
   const ComboboxData = [
   
     {
       title: 'Experience',
       icon: IconBriefcase ,
-      options: ['More than 1 Year', 'More than 3 Year', 'More than 5 Year','More than 10 Year', 'More than 20 Year',  'More than 30 Year', 'More than 50 Year']
+      options: ['1+ Years', '3+ Years', '5+ Years', '10+ Years', '20+ Years', '30+ Years']
     },
 
     {
@@ -46,11 +35,24 @@ const SearchBox = () => {
     return <div className="flex flex-col gap-12 ">
 
       {/* Category & Location */}
-      {
-         MultiselectData.map((item,index) => <div key={index} className=""> 
-        <SearchableMultiSelect Data = {item}/> 
-        </div>)
-      }
+     
+      {location.pathname.slice(1) === 'Explore' && <SearchableMultiSelect Data = {
+         {
+          title: 'Search Category',
+          icon: IconSearch,
+          options: ['Carpenter' , 'Painter', 'HouseKeeping', 'Electrician', 'Contractor', 'Plumber', 'Technician', 'PestControl']
+        }
+      }/>}
+
+      
+
+      <SearchableMultiSelect Data = {
+        {
+          title: 'Search Location',
+          icon: IconMapPin,
+          options: ['Delhi','Mumbai','Kolkata','Chennai','Bengaluru','Hyderabad','Jaipur','Lukhnow','Pune',  'Guwahati','Ahemdabad','Bhubaneswar']
+        }
+      }/>
 
       {/* Expierience and Rating */}
       {

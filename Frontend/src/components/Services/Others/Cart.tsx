@@ -20,8 +20,8 @@ const Cart = () => {
         <div className='w-full flex flex-col gap-2 items-center'>
           {cart.map((job , index ) => (
             <div key={index} className=" w-full flex justify-between items-center mt-2 text-sm">
-              <div className='w-1/2'>{job.ServiceName}  </div>
-              <div> &#8377; {job.Price}</div>
+              <div className='w-1/2'>{job.name}  </div>
+              <div> &#8377; {job.price}</div>
               <Button variant="light" color="red" radius="md" size="xs" onClick={() => removeFromCart(job)}>Delete</Button>
             </div>
           ))}

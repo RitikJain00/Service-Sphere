@@ -7,9 +7,9 @@ import Offer from "../../components/Services/Others/Offers"
 import Promise from "../../components/Services/Others/OurPromise"
 import Jobs from "../../components/Services/JobCards/Jobs"
 
-const Technician = () => {
+const SpecificService = () => {
   return <div className="min-h-[100vh] bg-mine-shaft-950">
-    <Header></Header>
+     <Header></Header>
     <Divider mx="md" mb='xl' />
 
       {/* Filters */}
@@ -35,4 +35,4 @@ const Technician = () => {
   </div>
 }
 
-export default Technician
+export default SpecificService

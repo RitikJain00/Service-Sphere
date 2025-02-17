@@ -9,7 +9,7 @@ import { Button } from '@mantine/core';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { signupSchema } from "../../../../Shared/Validation/AuthSchema";
-
+import { useProfile } from '../../Context/ProfileContext';
 
 const Signup = () => {
   
@@ -17,10 +17,11 @@ const Signup = () => {
 
   const [data , setData] = useState({name: '', username: '', password: '', confirmPassword: ''});
   const [error, setError] = useState<string | null>(null);
+  const {updateAuth} = useProfile()
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({...data, [e.target.name]: e.target.value})
-    
     setError(null);
   }
 
@@ -47,8 +48,9 @@ const Signup = () => {
         });
         localStorage.setItem("authToken", response.data.token)
         localStorage.setItem("Type" , 'Customer')
-        
+     
         navigate('/home')
+        updateAuth(response.data.token,"Customer")
       } catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
       }

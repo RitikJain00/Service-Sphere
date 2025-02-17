@@ -176,7 +176,7 @@ const  handleServiceSubmit = async () => {
                    <Select
                     leftSection={<IconBriefcase stroke={2} />}
                     placeholder="Pick value"
-                    data={['1+ Year', '3+ Year', '5+ Year', '10+ Year', '20+ Year', '30+ Year']}
+                    data={['1+ Years', '3+ Years', '5+ Years', '10+ Years', '20+ Years', '30+ Years']}
 
                     name='expirence'
                     value={data.expireince}

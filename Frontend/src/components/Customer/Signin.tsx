@@ -10,6 +10,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import axios from "axios";
 import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
+import { useProfile } from '../../Context/ProfileContext';
+
 
 
 
@@ -18,6 +20,8 @@ const Signin = () => {
   const navigate = useNavigate()
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
+  const {updateAuth} = useProfile()
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   
@@ -34,18 +38,22 @@ const Signin = () => {
         return;
        }
 
-      try{
+       try {
         const response = await axios({
-          method: 'post',
-          url: 'https://service-sphere-j7vd.onrender.com/customersign/signin',
+          method: "post",
+          url: "https://service-sphere-j7vd.onrender.com/customersign/signin",
           data: data,
           withCredentials: true,
         });
-        console.log('done')
-        localStorage.setItem("authToken", response.data.token)
-        localStorage.setItem("Type" , 'Customer')
-        navigate('/home')
-      } catch(err : any) {
+    
+        const token = response.data.token;
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("Type", "Customer");
+       
+          navigate("/home");
+          updateAuth(token,"Customer")
+      
+      }  catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
       }
 

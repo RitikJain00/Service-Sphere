@@ -1,13 +1,15 @@
 
 export interface Job {
-  Id: String,
-  ServiceName: string;
-  CompanyName: string;
+  id: number,
+  name : string;
+  company: string;
+  description: string;
+  category:   string;
   image: string,
-  Expirence: string;
-  Location: string;
-  Bookings: string;
-  Brief: string;
-  Price: string;
-  Time: string;
+  expireince: string;
+  location: string;
+  rating:  number;
+  booking: string;
+  price: number;
+  time: string;
 }

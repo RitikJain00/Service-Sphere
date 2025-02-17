@@ -17,7 +17,7 @@ const Favorate = () => {
         {Favorate.length > 0 ? (
           <Grid>
             {Favorate.map((job) =>  <Grid.Col span={4}>
-               <ServiceCard key={job.Id} job={job} /> 
+               <ServiceCard key={job.id} job={job} /> 
                </Grid.Col>)}
             
           </Grid>

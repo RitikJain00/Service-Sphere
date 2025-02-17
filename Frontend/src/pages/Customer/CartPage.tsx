@@ -9,6 +9,7 @@ import CheckOut from "../../Booking/Checkout";
 
 
 
+
 const CartPage = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -22,10 +23,12 @@ const CartPage = () => {
     <Header></Header>
     <Divider mx="md" mb='xl' />
 
-    <div className="flex-grow flex justify-center items-center">
+    
 
+    <div className="flex-grow flex justify-center items-center">
+    
       {
-      cart.length == 0 ? 
+      (cart.length === 0) ? 
       <div className="flex flex-col gap-4 justify-center items-center">
          <img className="w-32 h-32" src="/ServicePages/carts.png" alt="" />
          <div className="text-2xl text-mine-shaft-300 font-semibold"> No Items In Your Cart  </div>
@@ -48,9 +51,9 @@ const CartPage = () => {
           { cart.map((job,index) =>  
             <Table.Tr key={index} className="text-xl font-bold text-center">
             <Table.Td className="flex items-center justify-center"> <img className="w-24 h-24 " src={job.image} alt="" /> </Table.Td>
-            <Table.Td>{job.ServiceName}</Table.Td>
-            <Table.Td>{job.CompanyName}</Table.Td>
-            <Table.Td>&#8377; {job.Price}</Table.Td>
+            <Table.Td>{job.name}</Table.Td>
+            <Table.Td>{job.company}</Table.Td>
+            <Table.Td>&#8377; {job.price}</Table.Td>
             <Table.Td><Button variant="light" color="red" radius="md" size="md" onClick={() => removeFromCart(job)}>Delete</Button></Table.Td>
           </Table.Tr> 
         )}

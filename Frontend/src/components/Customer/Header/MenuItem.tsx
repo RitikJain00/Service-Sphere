@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
 
+
 import {
  
 
@@ -21,6 +22,7 @@ import Feedback from './Feedback';
 const MenuItem = ( {setUser}: any ) =>  {
   
   const navigate = useNavigate();
+ 
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
@@ -48,7 +50,9 @@ const MenuItem = ( {setUser}: any ) =>  {
       <Menu.Dropdown>
         <Menu.Label>User Dashboard</Menu.Label>
         <Link to={'/CustomerProfile'}>
+       
         <Menu.Item leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}>
+          
           Profile
         </Menu.Item>
         </Link>
