@@ -4,7 +4,7 @@ import { Button } from '@mantine/core';
 
 const Contact = () => {
   return (
-    <div className="min-h-[100vh] bg-mine-shaft-950">
+    <div className="min-h-[100vh] w-full bg-mine-shaft-950">
          <Header></Header>
 
 

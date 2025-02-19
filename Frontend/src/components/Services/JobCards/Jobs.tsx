@@ -18,7 +18,7 @@ const Jobs = () => {
   
 
   useEffect(() => {
-    axios.get("https://service-sphere-j7vd.onrender.com/shopService/allService", {
+    axios.get("http://localhost:3000/shopService/allService", {
       params: { category: ServiceType } // Send category as query param
     })
     .then((response) => {

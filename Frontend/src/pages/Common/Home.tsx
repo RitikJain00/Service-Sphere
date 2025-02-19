@@ -12,7 +12,7 @@ import Footer from "../../components/Footer";
 
 const Home = () => {
     return (
-      <div className="min-h-[100vh] bg-mine-shaft-950 text-base">
+      <div className="min-h-[100vh] w-full bg-mine-shaft-950 text-base">
            <Header></Header>
            
            <Hero></Hero>

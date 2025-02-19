@@ -45,8 +45,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
 
   const apiUrl =
     type === "Customer"
-      ? "https://service-sphere-j7vd.onrender.com/customerprofile/profile"
-      : "https://service-sphere-j7vd.onrender.com/professionalprofile/profile";
+      ? "http://localhost:3000/customerprofile/profile"
+      : "http://localhost:3000/professionalprofile/profile";
 
     axios({
       method: 'get',
@@ -79,8 +79,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
     if (!token || !type) return;
       const apiUrl =
       type === "Customer"
-      ? "https://service-sphere-j7vd.onrender.com/customerprofile/profile"
-      : "https://service-sphere-j7vd.onrender.com/professionalprofile/profile";
+      ? "http://localhost:3000/customerprofile/profile"
+      : "http://localhost:3000/professionalprofile/profile";
     axios({
       method: 'put',
       url: apiUrl,

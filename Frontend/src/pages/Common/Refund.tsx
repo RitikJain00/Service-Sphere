@@ -3,7 +3,7 @@ import Header from "../../components/Customer/Header/Header";
 import { Divider } from "@mantine/core";
 
 const Refund = () => {
-  return <div className="min-h-[100vh] bg-mine-shaft-950">
+  return <div className="min-h-[100vh] w-full bg-mine-shaft-950">
     <Header></Header>
     <Divider mx="md" mb='xl' />
 

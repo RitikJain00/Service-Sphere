@@ -13,10 +13,8 @@ import CheckOut from "../../Booking/Checkout";
 const CartPage = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { cart ,total, removeFromCart } = useCart();
-  const gst = 18/100 * total;
-  const discount = 20/100 * (total + gst);
-
+  const { cart ,total,gst,discount, removeFromCart } = useCart();
+ 
 
 
   return <div  className=" flex flex-col min-h-[100vh] bg-mine-shaft-950">

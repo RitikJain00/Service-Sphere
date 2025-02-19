@@ -8,15 +8,22 @@ import { Loader } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 
+
 interface CartContextType {
   Favorate : Job[],
   cart : Job[],
+  upcommingBooking: Job[],
+  orders: Job[],
+
   total: number,
-  loading: boolean
+  gst: number,
+  discount: number,
+  loading: boolean,
   addToCart: (job: Job) => void,
   removeFromCart: (job: Job) => void
   addToFavorate: (job: Job) => void,
   removeFromFavorate: (job: Job) => void
+  BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => void
 
  }
 
@@ -30,8 +37,12 @@ interface CartContextType {
 
     
     const [cart, setCart] = useState<Job[]>([]);
+    const [upcommingBooking, setUpCommingBooking] = useState<Job[]>([]);
+    const [orders, setOrders] = useState<Job[]>([]);
     const [Favorate, setFavorate] = useState<Job[]>([]);
     const [total, setTotal] = useState<number>(0);
+    const [gst, setGst] = useState<number>(0.0);
+    const [discount, setDiscount] = useState<number>(0.0);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate()
 
@@ -45,11 +56,15 @@ interface CartContextType {
       try{
         const response = await axios({
           method: 'get',
-          url: 'https://service-sphere-j7vd.onrender.com/shopService/cartItems',
+          url: 'http://localhost:3000/shopService/cartItems',
           headers: {Authorization: `Bearer ${token}`}
         })
+       
         setCart(response.data.cartInfo.services);  // Uddate Cart 
         setTotal(response.data.cartInfo.total);    // Upadte Total
+        setGst(response.data.cartInfo.gst);
+        setDiscount(response.data.cartInfo.discount);
+        
       } catch(error){
         console.log('Error in Fetching Cart', error)
       }
@@ -69,7 +84,7 @@ interface CartContextType {
       try{
         const response = await axios({
           method: 'get',
-          url: 'https://service-sphere-j7vd.onrender.com/shopService/favorateItems',
+          url: 'http://localhost:3000/shopService/favorateItems',
           headers: {Authorization: `Bearer ${token}`}
         })
         setFavorate(response.data.favorateInfo.services);  // Update  Favorate
@@ -108,7 +123,7 @@ interface CartContextType {
         try{
            await axios({      // add item in cart
             method: 'post',
-            url: 'https://service-sphere-j7vd.onrender.com/shopService/addToCart',
+            url: 'http://localhost:3000/shopService/addToCart',
             headers: {Authorization: `Bearer ${token}`},
             data: job
           })
@@ -143,7 +158,7 @@ interface CartContextType {
       try{
         await axios({         // Remove item from cart
           method: 'put',
-          url: 'https://service-sphere-j7vd.onrender.com/shopService/deleteFromCart',
+          url: 'http://localhost:3000/shopService/deleteFromCart',
           headers: {Authorization: `Bearer ${token}`},
           data: job
         })
@@ -168,6 +183,31 @@ interface CartContextType {
         setLoading(false); 
       };
 
+      const BookServices = async (paymentMode: string, selectedDate: { [key: number]: Date | null }) => {
+        const token = localStorage.getItem('authToken')
+        if(!token) return
+
+        const updatedCart = cart.map(service => ({
+          ...service,
+          bookingDate: selectedDate[service.id] || null, // Assign the correct date to the service
+        }));
+       
+        try{
+          await axios({
+            method: 'post',
+            url: 'http://localhost:3000/booking/order',
+            headers: {Authorization: `Bearer ${token}`},
+            data: {cart: updatedCart, paymentMode,total,gst,discount}
+          })
+          alert('Booking confirmed!');
+          setUpCommingBooking(cart)
+          setCart([]);
+        }catch(error){
+          console.log(error)
+          alert('Booking not confirmed!')
+        }
+      }
+
 
     const addToFavorate = async (job: Job) => {
       const token = localStorage.getItem('authToken')
@@ -180,7 +220,7 @@ interface CartContextType {
       try{
          await axios({        // Add item to favorates list
           method: 'post',
-          url: 'https://service-sphere-j7vd.onrender.com/shopService/addToFavorate',
+          url: 'http://localhost:3000/shopService/addToFavorate',
           headers: {Authorization: `Bearer ${token}`},
           data: job
         })
@@ -215,7 +255,7 @@ interface CartContextType {
       try{
        await axios({          // Remove item from Favorate List
           method: 'put',
-          url: 'https://service-sphere-j7vd.onrender.com/shopService/deleteFromFavorate',
+          url: 'http://localhost:3000/shopService/deleteFromFavorate',
           headers: {Authorization: `Bearer ${token}`},
           data: job
         })
@@ -241,7 +281,7 @@ interface CartContextType {
       };
 
     return (
-      <CartContext.Provider value= {{cart, Favorate, total,loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
+      <CartContext.Provider value= {{cart, upcommingBooking, orders, BookServices, Favorate, total,gst, discount, loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
        }}>
         {loading && (  
       <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">

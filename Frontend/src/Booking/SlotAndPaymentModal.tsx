@@ -3,28 +3,82 @@ import { useState } from 'react';
 import dayjs from 'dayjs';
 import { DateInput } from '@mantine/dates';
 import { useCart } from '../Context/CartContext';
+import { useProfile } from '../Context/ProfileContext';
+import axios from 'axios';
 
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 
-
-
 interface SlotAndPaymentProps {
   opened: boolean;
   close: () => void;
-  total: number;
 }
 
-
-
-const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, total }) => {
+const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) => {
 
   const [selectedDate, setSelecteddate] = useState<{ [key: number]: Date | null }>({})
   const [paymentMode, setPaymentMode] = useState<'online' | 'offline' | ''>('');
+  const { cart,total,gst,discount, BookServices } = useCart()
+  const {basic, contact} = useProfile()
+  const token = localStorage.getItem('authToken')
 
-  const { cart } = useCart()
 
-  const handlePayment = () => {
+  const handleOnlinePayment = async () => {
+    try {
+      // Get Razorpay key
+      const { data } = await axios.get("http://localhost:3000/payment/getKey");
+      const key = data.key;
+     
+
+      // Create an order in the backend
+      const { data: orderData } = await axios.post(
+        "http://localhost:3000/payment/process",
+        { Grandtotal: total + gst - discount },
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+      );
+
+
+      if (!orderData.success) {
+        alert("Failed to create payment order");
+        return;
+      }
+
+      const { order } = orderData;
+      console.log(order)
+
+      // Configure Razorpay payment
+      const options = {
+        key: key,
+        amount: order.amount,
+        currency: order.currency,
+        name: "Service Sphere",
+        description: "Service Payment",
+        order_id: order.id, 
+        handler: function (response: any) {
+          alert("Payment Successful! Transaction ID: " + response.razorpay_payment_id);
+          BookServices(paymentMode, selectedDate);
+          close();
+        },
+        prefill: {
+          name: basic.name,
+          email: contact.email,
+          contact: contact.phone,
+        },
+        theme: {
+          color: "#F37254",
+        },
+      
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Error in processing payment");
+    }
+  };
+
+  const handlePayment = async() => {
     const allDatesSelected = cart.every((service) => selectedDate[service.id] !== undefined && selectedDate[service.id] !== null);
 
     if (!allDatesSelected) {
@@ -34,9 +88,9 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, tot
 
     if (paymentMode === 'online') {
       alert('Redirecting to online payment...');
+      handleOnlinePayment()
     } else if(paymentMode === 'offline') {
-      
-      alert('Booking confirmed! Pay at the time of service.');
+      BookServices(paymentMode,selectedDate,) 
       close();
     }
     else {
@@ -57,8 +111,8 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, tot
       <div className='flex flex-col gap-3'>
         <div className='text-bright-sun-400 text-3xl font-bold text-center mb-2'>Select Slot & Payment</div>
 
-        {cart.map((service) => <div className='flex justify-between items-center mb-4'>
-          <div key={service.id} className='text-xl font-semibold text-mine-shaft-300'>{service.name}</div>
+        {cart.map((service) => <div key={service.id} className='flex justify-between items-center mb-4'>
+          <div className='text-xl font-semibold text-mine-shaft-300'>{service.name}</div>
           <div> <DateInput
              minDate={new Date()}
              maxDate={dayjs(new Date()).add(2, 'month').toDate()}

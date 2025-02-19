@@ -2,7 +2,7 @@
 import { Modal, Button,TextInput} from '@mantine/core';
 import { useProfile } from '../Context/ProfileContext';
 import { IconUserCircle, IconMail,  IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode,  } from '@tabler/icons-react';
-import { useCart } from '../Context/CartContext';
+
 import SlotAndPaymentModal from './SlotAndPaymentModal';
 import { useState } from 'react';
 
@@ -14,8 +14,7 @@ interface CheckOutProps {
 const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
  
   const Detail = useProfile();
-  let {total} = useCart();
-  total = ((total + (18/100 * total)) - (20/100 * (total + (18/100 * total))));
+
   const [slotModalOpen, setSlotModalOpen] = useState(false);
   const [error, setError] = useState<string | null>('Check Your Details');
 
@@ -145,7 +144,7 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
       </div>
       </Modal>
 
-      {slotModalOpen && <SlotAndPaymentModal opened={slotModalOpen} close={() => setSlotModalOpen(false)} total={total} />}
+      {slotModalOpen && <SlotAndPaymentModal opened={slotModalOpen} close={() => setSlotModalOpen(false)}  />}
   
     </div>
       
