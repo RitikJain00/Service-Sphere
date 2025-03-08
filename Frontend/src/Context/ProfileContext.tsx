@@ -10,13 +10,16 @@ interface ProfileContextType {
   basic: BasicInfo;
   contact: ContactInfo;
   address: AddressInfo;
+  walletAmount: number;
 
   handleBasicChange: (field: string, value: string) => void;
   handleContactChange: (field: string, value: string) => void;
   handleAddressChange: (field: string, value: string) => void;
+  handleWalletMoney: (amount: number) => void
   handleClick: (index: number) => void;
   saveProfile: () => void;
   updateAuth: (newToken: string, newType: string) => void
+  
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -30,6 +33,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const [basic, setBasic] = useState<BasicInfo>({ name: '', about: '' });
   const [contact, setContact] = useState<ContactInfo>({email: '', phone: '' });
   const [address, setAddress] = useState<AddressInfo>({ home: '', city: '', pin: '', country: '' });
+  const [walletAmount , setWalletAmount] = useState<number>(0);
 
   const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [type, setType] = useState(localStorage.getItem("Type"));
@@ -58,6 +62,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
         setBasic({ name: data.name, about: data.description });
         setContact({email: data.username, phone: data.phone });
         setAddress({ home: data.address, city: data.city, pin: data.pincode, country: data.country });
+        setWalletAmount(data.walletAmount.Total)
       })
       .catch(error => console.error("Error fetching profile:", error));
   }, [token,type]);
@@ -67,6 +72,28 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const handleBasicChange = (field: string, value: string) => setBasic(prev => ({ ...prev, [field]: value }));
   const handleContactChange = (field: string, value: string) => setContact(prev => ({ ...prev, [field]: value }));
   const handleAddressChange = (field: string, value: string) => setAddress(prev => ({ ...prev, [field]: value }));
+
+  const handleWalletMoney = async (amount: number) => {
+    try {
+      const response = await axios.put(
+        'http://localhost:3000/customerprofile/wallet',
+        { amount },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      if (response.status === 200) {
+        alert("Payment Added to Wallet Successfully");
+  
+        setWalletAmount((prevWallet) => prevWallet + Number(amount));
+      } else {
+        console.error("Unexpected response:", response);
+      }
+    } catch (error) {
+      console.error("Error updating wallet:", error);
+      alert("Failed to add money to wallet");
+    }
+  };
+  
 
 
   const handleClick = (index: number) => {
@@ -92,7 +119,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   };
 
   return (
-    <ProfileContext.Provider value={{ edit, basic, contact, address, handleBasicChange, handleContactChange, handleAddressChange,  handleClick, saveProfile, updateAuth }}>
+    <ProfileContext.Provider value={{ edit, basic, contact, address, handleBasicChange, handleContactChange, handleAddressChange,  handleClick,handleWalletMoney, saveProfile, updateAuth, walletAmount}}>
       {children}
     </ProfileContext.Provider>
   );

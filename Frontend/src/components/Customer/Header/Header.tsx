@@ -9,6 +9,7 @@ import { useCart } from '../../../Context/CartContext';
 import {  useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { Button } from '@mantine/core';
+import axios from 'axios';
 
 
 
@@ -18,19 +19,27 @@ const Header = () => {
   const  { cart }  = useCart();
   const navigate = useNavigate();
   const [user, setUser] = useState<{ token: string | null; type: string | null }>({
-    token: '',
-    type: ''
+    token: localStorage.getItem("authToken"),
+    type: localStorage.getItem("Type")
   });
  
   useEffect(() => {
-    // Check token in localStorage
-    const obj = {
-      token: localStorage.getItem("authToken"),
-      type: localStorage.getItem("Type"),
-    };
+    if (!user.token) return; 
   
-    setUser(obj);
-  }, [user.token]);
+    axios
+      .get("http://localhost:3000/customersign/checkLogin", {
+        headers: { Authorization: `Bearer ${user.token}` },
+        withCredentials: true,
+      })
+      .catch((error) => {
+        if (error.response?.status === 403) {
+          setUser({ token: null, type: null }); 
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("Type");
+        }
+      });
+  
+  }, []); 
 
 
    

@@ -1,5 +1,7 @@
 import Header from "../../components/Customer/Header/Header";
 import Footer from "../../components/Footer";
+import Wallet from "../../components/Customer/Wallet";
+import { useDisclosure } from "@mantine/hooks";
 
 
 import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser  } from '@tabler/icons-react';
@@ -7,12 +9,16 @@ import { IconMail } from '@tabler/icons-react';
 import { IconPencil } from '@tabler/icons-react';
 import { ActionIcon } from '@mantine/core';
 import { Divider } from '@mantine/core';
+import { Button } from '@mantine/core';
 
 
 import { TextInput, rem  } from '@mantine/core';
 import { useProfile } from '../../Context/ProfileContext';
 
 const CustomerProfile = () => {
+
+  const [opened, { open, close }] = useDisclosure(false);
+ 
 
     const Detail = useProfile();
     return  <div className="min-h-[100vh] font-['poppins'] bg-mine-shaft-950 ">
@@ -245,6 +251,22 @@ const CustomerProfile = () => {
     <div className='px-8 w-full flex justify-between'>
         <div className='flex flex-col gap-4'>
    
+        <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Your Wallet :</div>
+
+        <div className="flex gap-48">
+        <div className='text-2xl'>₹ {Detail.walletAmount}</div> 
+        <Button onClick={() => open()} variant="light" color="orange">Add Money</Button>
+        </div>
+        
+        </div>
+    
+        </div>
+
+        <Divider mx="md" my='xl' />
+
+    <div className='px-8 w-full flex justify-between'>
+        <div className='flex flex-col gap-4'>
+   
         <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Upcoming Bookings :</div>
 
         <div className='text-2xl'>No Booking Schedule</div> 
@@ -270,17 +292,15 @@ const CustomerProfile = () => {
 
         <Divider mx="md" my='xl' />
 
-    <div className='px-8 w-full flex justify-between'>
-        <div className='flex flex-col gap-4'>
-   
-        <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Your Reviews :</div>
-
-        <div className='text-2xl'>No Reviews Yet</div> 
-
-    
+        <div className='px-8 w-full flex justify-between'>
+            <div className='flex flex-col gap-4'>
+            <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Your Reviews :</div>
+          <div className='text-2xl'>No Reviews Yet</div> 
         </div>
     
         </div>
+
+        {<Wallet opened={opened} close={close} />}
 
         </div>
 

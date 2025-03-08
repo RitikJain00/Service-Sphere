@@ -13,3 +13,10 @@ export interface Job {
   price: number;
   time: string;
 }
+
+export interface UpcommingBookingCustomer {
+  date: Date,
+  amount: number,
+  payment: string,
+  service: Job
+}

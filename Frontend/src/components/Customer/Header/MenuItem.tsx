@@ -65,9 +65,11 @@ const MenuItem = ( {setUser}: any ) =>  {
         </Menu.Item>
         </Link>
 
+        <Link to={'/MyOrders'}>
         <Menu.Item leftSection={<IconShoppingCart style={{ width: rem(14), height: rem(14) }} />}>
         My Orders
         </Menu.Item>
+        </Link>
 
    
       

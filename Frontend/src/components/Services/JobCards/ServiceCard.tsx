@@ -6,7 +6,7 @@ import { useCart } from "../../../Context/CartContext";
 import {  useEffect,useState } from 'react';
 
 const ServiceCard = (   {job }  : any) => {
-  console.log(job)
+ 
   const { addToCart, addToFavorate, removeFromFavorate,  Favorate} = useCart();
 
   const [isFavorited, setIsFavorited] = useState<boolean>(false);

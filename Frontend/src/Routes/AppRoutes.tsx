@@ -28,6 +28,7 @@ import Services from "../pages/Partner/Services";
 import Bookings from "../pages/Partner/Booking";
 import History from "../pages/Partner/History";
 import ProfessionalProfile from "../pages/Partner/ProfessionalProfile";
+import MyOrders from "../pages/Customer/MyOrders";
 
 
 const AppRoutes = () => {
@@ -62,6 +63,7 @@ const AppRoutes = () => {
             <Route path="/CustomerProfile" element={<CustomerProfile />} />
             <Route path="/Cart" element={<CartPage />} />
             <Route path="/Favorate" element={<Favorite />} />
+            <Route path="/MyOrders" element={<MyOrders />} />
 
             {/* Professional Routes */}
             <Route path="/ProfessionalSignup" element={<Professional />} />

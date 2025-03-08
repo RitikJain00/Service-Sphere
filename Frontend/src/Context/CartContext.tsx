@@ -1,6 +1,6 @@
 import React  from "react";
 import { createContext, useContext, useState,useEffect, ReactNode } from "react";
-import { Job } from "../Data/Job";
+import { Job, UpcommingBookingCustomer } from "../Data/Job";
 import { showNotification } from '@mantine/notifications';
 import { IconX, IconCheck,IconAlertTriangle } from '@tabler/icons-react';
 import axios from "axios"
@@ -12,8 +12,10 @@ import { useNavigate } from "react-router-dom";
 interface CartContextType {
   Favorate : Job[],
   cart : Job[],
-  upcommingBooking: Job[],
+  upcommingBooking: UpcommingBookingCustomer[],
+  upcommingOrders: UpcommingBookingCustomer[],
   orders: Job[],
+  pastBooking: UpcommingBookingCustomer[],
 
   total: number,
   gst: number,
@@ -23,7 +25,7 @@ interface CartContextType {
   removeFromCart: (job: Job) => void
   addToFavorate: (job: Job) => void,
   removeFromFavorate: (job: Job) => void
-  BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => void
+  BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => Promise<void>
 
  }
 
@@ -37,7 +39,9 @@ interface CartContextType {
 
     
     const [cart, setCart] = useState<Job[]>([]);
-    const [upcommingBooking, setUpCommingBooking] = useState<Job[]>([]);
+    const [upcommingBooking, setUpCommingBooking] = useState<UpcommingBookingCustomer[]>([]);
+    const [pastBooking, setPastBooking] = useState<UpcommingBookingCustomer[]>([]);
+    const [upcommingOrders, setUpCommingOrders] = useState<UpcommingBookingCustomer[]>([]);
     const [orders, setOrders] = useState<Job[]>([]);
     const [Favorate, setFavorate] = useState<Job[]>([]);
     const [total, setTotal] = useState<number>(0);
@@ -93,10 +97,58 @@ interface CartContextType {
       }
       setLoading(false); 
   }
-  
+
   useEffect(() => {
     fetchFavorateItem();
   }, [])
+
+  const fetchUpcommingBookings = async () => {
+    const token = localStorage.getItem('authToken')
+      if(!token) return
+    setLoading(true); 
+
+    try{
+      const response = await axios({
+        method: 'get',
+        url: 'http://localhost:3000/shopService/Upcomming',
+        headers: {Authorization: `Bearer ${token}`}
+      })
+      setUpCommingBooking(response.data.UpcommingBookingInfo.services);  // Update  Favorate
+    } catch(error){
+      console.log('Error in Fetching favorate', error)
+    }
+    setLoading(false); 
+}
+
+useEffect(() => {
+  fetchUpcommingBookings();
+}, [])
+
+const fetchUpcommingOrders = async () => {
+  const token = localStorage.getItem('authToken')
+    if(!token) return
+  setLoading(true); 
+
+  try{
+    const response = await axios({
+      method: 'get',
+      url: 'http://localhost:3000/shopService/UpcommingItems',
+      headers: {Authorization: `Bearer ${token}`}
+    })
+
+    setUpCommingOrders(response.data.UpcommingBookingInfo);  
+  
+  } catch(error){
+    console.log('Error in Fetching favorate', error)
+  }
+  setLoading(false); 
+}
+
+useEffect(() => {
+  fetchUpcommingOrders();
+}, [])
+  
+  
    
 
     const addToCart = async(job: Job) => {
@@ -200,12 +252,14 @@ interface CartContextType {
             data: {cart: updatedCart, paymentMode,total,gst,discount}
           })
           alert('Booking confirmed!');
-          setUpCommingBooking(cart)
-          setCart([]);
+          fetchUpcommingBookings()
+          fetchCartItem();
         }catch(error){
           console.log(error)
           alert('Booking not confirmed!')
         }
+
+        return Promise.resolve();
       }
 
 
@@ -281,7 +335,7 @@ interface CartContextType {
       };
 
     return (
-      <CartContext.Provider value= {{cart, upcommingBooking, orders, BookServices, Favorate, total,gst, discount, loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
+      <CartContext.Provider value= {{cart, upcommingOrders,orders, upcommingBooking, pastBooking,  BookServices, Favorate, total,gst, discount, loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
        }}>
         {loading && (  
       <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">

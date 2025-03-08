@@ -5,6 +5,8 @@ import { DateInput } from '@mantine/dates';
 import { useCart } from '../Context/CartContext';
 import { useProfile } from '../Context/ProfileContext';
 import axios from 'axios';
+import { Loader } from '@mantine/core';
+
 
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
@@ -17,9 +19,10 @@ interface SlotAndPaymentProps {
 const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) => {
 
   const [selectedDate, setSelecteddate] = useState<{ [key: number]: Date | null }>({})
-  const [paymentMode, setPaymentMode] = useState<'online' | 'offline' | ''>('');
+  const [paymentMode, setPaymentMode] = useState<'Online' | 'COD' |'Wallet' | ''>('');
+  const [loader, setLoader] = useState(false);
   const { cart,total,gst,discount, BookServices } = useCart()
-  const {basic, contact} = useProfile()
+  const {basic, contact, walletAmount} = useProfile()
   const token = localStorage.getItem('authToken')
 
 
@@ -60,9 +63,9 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) =>
           close();
         },
         prefill: {
-          name: basic.name,
-          email: contact.email,
-          contact: contact.phone,
+          name: basic?.name || "User Name",
+          email: contact?.email || "user@example.com",
+          contact: contact?.phone || "0000000000",
         },
         theme: {
           color: "#F37254",
@@ -72,11 +75,36 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) =>
 
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
+
+
+      rzp.on("payment.failed", function (response: any) {
+      console.error("Payment Failed:", response.error);
+     alert("Payment Failed. Try Again.");
+});
+
     } catch (error) {
       console.error("Payment error:", error);
       alert("Error in processing payment");
     }
   };
+
+  const handleWalletPayment = async() => {
+    try {
+      setLoader(true)
+      await axios.put(
+        "http://localhost:3000/customerprofile/walletOrder",
+        { Grandtotal: (total + gst - discount) },
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+      );
+
+      await BookServices(paymentMode,selectedDate)
+      close(); 
+    }catch(error) {
+      console.log(error)
+    } finally {
+      setLoader(false)
+    }
+  }
 
   const handlePayment = async() => {
     const allDatesSelected = cart.every((service) => selectedDate[service.id] !== undefined && selectedDate[service.id] !== null);
@@ -86,12 +114,19 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) =>
       return;
     }
 
-    if (paymentMode === 'online') {
+    if (paymentMode === 'Online') {
       alert('Redirecting to online payment...');
       handleOnlinePayment()
-    } else if(paymentMode === 'offline') {
-      BookServices(paymentMode,selectedDate,) 
+    } else if(paymentMode === 'COD') {
+      BookServices(paymentMode,selectedDate) 
       close();
+    }
+    else if(paymentMode === 'Wallet'){
+      if((total + gst - discount) > walletAmount) {
+        alert('Insufficient Balance')
+        return
+      }
+      handleWalletPayment()
     }
     else {
       alert('Please Choose a Payment Mode')
@@ -133,10 +168,12 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) =>
         withAsterisk
          size='md'
           value={paymentMode} 
-          onChange={(value: string) => setPaymentMode(value as "online" | "offline" | "")}  >
-             <Group mt="md" gap={96}>
-             <Radio value="offline" size='md' label="Pay in Cash" />
-             <Radio value="online" size='md' label="Pay Online" />
+          onChange={(value: string) => setPaymentMode(value as "Online" | "COD" | "Wallet" | "")}  >
+             <Group mt="md" gap={16}>
+             <Radio value="COD" size='md' label="Pay By Cash" />
+             <Radio value="Wallet" size='md' label="Pay By Wallet " />
+             <Radio value="Online" size='md' label="Pay Online" />
+            
              </Group>
      
         </Radio.Group>
@@ -145,9 +182,16 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) =>
 
         {/* Confirm Payment Button */}
         <Button className='mt-2' fullWidth size='md' variant="filled" color="lime" onClick={handlePayment}>
-          Confirm Booking &#8377;{total}
+          Confirm Booking &#8377;{total + gst - discount}
         </Button>
       </div>
+
+      {loader && (
+      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-lg z-[9999]">
+    <Loader color="blue" size="xl" />
+     </div>
+      )}
+
     </Modal>
   );
 };
