@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Orders" ALTER COLUMN "bookedDate" DROP DEFAULT,
+ALTER COLUMN "bookedDate" SET DATA TYPE TEXT;

@@ -1,5 +1,6 @@
 import express from 'express'
 
+
 import  customerSign  from './src/Routes/Customer/CustomerSign'
 import customerProfile from './src/Routes/Customer/CustomerProfile'
 import shopService from './src/Routes/Customer/ShopServices'
@@ -7,6 +8,10 @@ import shopService from './src/Routes/Customer/ShopServices'
 import    professionalSign   from './src/Routes/Professional/ProfessionlSign' 
 import professionalProfile from './src/Routes/Professional/ProfessionalProfile'
 import service from './src/Routes/Professional/Service'
+
+import payment from './src/Routes/Payment/Payment'
+import booking from './src/Routes/Booking/Booking'
+
 
 
 import cors from "cors";
@@ -37,6 +42,8 @@ app.use('/professionalsign',professionalSign);
 app.use('/professionalprofile',professionalProfile);
 app.use('/service', service)
 
+app.use('/payment', payment)
+app.use('/booking', booking)
 
 
 

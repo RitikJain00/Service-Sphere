@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import { signupSchema, signinSchema } from "../../../../Shared/Validation/AuthSchema";
+import LoginStatus from '../../Middleware/CheckLoginStatus';
 
 
 const router = express.Router();
@@ -67,6 +68,13 @@ router.post('/signup' , async (req : Request , res: Response) => {
           customerId:  newCustomer.id, 
         }
       });
+
+      const wallet = await prisma.wallet.create({
+        data: {
+          customerId:  newCustomer.id, 
+        }
+      });
+
      
       const token = jwt.sign({customerId: newCustomer.id,username: newCustomer.username }, JWT_SECRET, {
         expiresIn: "7d"
@@ -131,6 +139,10 @@ router.post('/signin' , async (req,res) => {
   }
 
 });
+
+router.get('/checkLogin', LoginStatus, async (req,res) => {
+  res.status(200).json({msg: "Logged In"})
+})
 
 
 

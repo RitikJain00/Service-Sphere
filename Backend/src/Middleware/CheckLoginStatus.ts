@@ -8,8 +8,9 @@ interface AuthenticatedRequest extends Request {
 }
 
 const LoginStatus = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+
   const authenticate = req.headers.authorization; // Extract token from header
-  console.log(authenticate)
+ 
 
   if (!(authenticate) || !(authenticate.startsWith('Bearer '))) 
   {
@@ -21,7 +22,6 @@ const LoginStatus = (req: AuthenticatedRequest, res: Response, next: NextFunctio
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET); // Verify token
-    console.log(decoded)
     req.user = decoded; // Attach decoded user to request
     next(); // Pass to next middleware/route
   } catch (err) {

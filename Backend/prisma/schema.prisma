@@ -18,11 +18,22 @@ model Customer {
   username        String            @unique
   password        String
   profile         CustomerProfile? // One-to-One Relationship
+  wallet          Wallet?
   upcommingOrders UpcommingOrders[]
   pastOrders      PastOrders[]
+  orders          Orders[]
 
-  Cart     Cart?
-  Favorite Favorite?
+  Cart              Cart?
+  Favorite          Favorite?
+  UpcommingBookings UpcommingBookings[]
+  PastBookings      PastBookings[]
+}
+
+model Wallet {
+  id         Int      @id @default(autoincrement())
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @unique
+  Total      Int      @default(0)
 }
 
 model Cart {
@@ -32,6 +43,8 @@ model Cart {
 
   services Services[] @relation("CartServicesRelation")
   total    Int        @default(0)
+  gst      Int        @default(0)
+  discount Int        @default(0)
 }
 
 model Favorite {
@@ -83,53 +96,95 @@ model ProfessionalProfile {
 }
 
 model UpcommingOrders {
-  id         Int        @id @default(autoincrement())
-  services   Services[] @relation("OrderServicesRelation")
-  total      Int
-  gst        Int
-  discount   Int
-  grandTotal Int
-  date       DateTime
+  id      Int    @id @default(autoincrement())
+  date    String
+  amount  Float
+  payment String
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int
+
+  service   Services @relation(fields: [serviceId], references: [id])
+  serviceId Int
+
+  booking   UpcommingBookings @relation(fields: [bookingId], references: [id])
+  bookingId Int               @unique
 }
 
 model PastOrders {
-  id         Int        @id @default(autoincrement())
-  services   Services[] @relation("OrderServicesRelation")
-  total      Int
-  gst        Int
-  discount   Int
-  grandTotal Int
-  date       DateTime
+  id             Int    @id @default(autoincrement())
+  slotDate       String
+  completionDate String
+  amount         Float
+  payment        String
+  status         String
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int
+
+  service   Services @relation(fields: [serviceId], references: [id])
+  serviceId Int
+}
+
+model Orders {
+  id         Int    @id @default(autoincrement())
+  total      Int
+  gst        Float
+  discount   Float
+  grandTotal Float
+  payment    String
+  bookedDate String // When the order was placed
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  services OrderService[] // Stores all services related to this order
+}
+
+model OrderService {
+  id      Int    @id @default(autoincrement())
+  order   Orders @relation(fields: [orderId], references: [id])
+  orderId Int
+  date    String // Booking date of this service
+
+  service   Services @relation(fields: [serviceId], references: [id])
+  serviceId Int
 }
 
 model UpcommingBookings {
-  id       Int        @id @default(autoincrement())
-  services Services[] @relation("BookingServiceRelation")
-  Amount   Int
-
-  date           DateTime
+  id             Int          @id @default(autoincrement())
+  amount         Float
+  payment        String
+  date           String
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  service    Services @relation(fields: [serviceId], references: [id])
+  serviceId  Int
+
+  booking UpcommingOrders?
 }
 
 model PastBookings {
-  id       Int        @id @default(autoincrement())
-  services Services[] @relation("BookingServiceRelation")
-  Amount   Int
-  date     DateTime
+  id             Int    @id @default(autoincrement())
+  amount         Float
+  slotdate       String
+  completionDate String
+  payment        String
+  status         String
 
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int
+  service        Services     @relation(fields: [serviceId], references: [id])
+  serviceId      Int
+  customer       Customer     @relation(fields: [customerId], references: [id])
+  customerId     Int
 }
 
 model Services {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   image       String?
   company     String
@@ -140,15 +195,18 @@ model Services {
   rating      Float?
   booking     String?
   price       Int
-  time        DateTime
+  time        String
+  isActive    String  @default("Active")
 
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int
 
-  upcommingorders   UpcommingOrders[]   @relation("OrderServicesRelation")
-  pastorders        PastOrders[]        @relation("OrderServicesRelation")
-  upcommingbookings UpcommingBookings[] @relation("BookingServiceRelation")
-  pastbookings      PastBookings[]      @relation("BookingServiceRelation")
-  carts             Cart[]              @relation("CartServicesRelation")
-  favorites         Favorite[]          @relation("FavoriteServicesRelation")
+  upcommingOrders   UpcommingOrders[]
+  orderService      OrderService[]
+  upcommingBookings UpcommingBookings[]
+  pastBookings      PastBookings[]
+
+  carts      Cart[]       @relation("CartServicesRelation")
+  favorites  Favorite[]   @relation("FavoriteServicesRelation")
+  PastOrders PastOrders[]
 }

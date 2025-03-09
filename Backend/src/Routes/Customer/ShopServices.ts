@@ -14,7 +14,10 @@ router.get("/allService", async (req: Request, res: Response): Promise<void> => 
     const serviceCategory = req.query.category as string || "Explore"; 
  
     const Services = await prisma.services.findMany({
-      where: serviceCategory !== "Explore" ? { category: serviceCategory } : {},
+      where: { 
+        isActive: "Active",
+        ...(serviceCategory !== "Explore" && { category: serviceCategory }),
+      },
       select: {
         id: true,
         name: true,
@@ -26,8 +29,7 @@ router.get("/allService", async (req: Request, res: Response): Promise<void> => 
         price: true,
         rating: true,
         booking: true,
-        time: true, 
-       
+        time: true,       
     }
     });
 
@@ -41,35 +43,57 @@ router.get("/allService", async (req: Request, res: Response): Promise<void> => 
 
 // Cart Section
 
-router.post("/addToCart",LoginStatus, async (req: Request, res: Response): Promise<void> => {
-      try {
-        const userId = (req as any).user.customerId;
-        const { id, price } = req.body;
-        const response = await prisma.cart.update({
-          where: {customerId: userId}, 
-          data: {
-            services: {
-              connect: { id: id }, 
-            },
+router.post("/addToCart", LoginStatus, async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = (req as any).user.customerId;
+    const { id, price } = req.body;
+    
+    const gst = (18 / 100) * price;
+    const discount = (10 / 100) * price;
 
-            total: {
-              increment: price
-            }
-          }
-          
-        })
+    const response = await prisma.cart.upsert({
+      where: { customerId: userId },
 
-        res.status(200).json({ message: "Service added to cart successfully", response });
-      }catch(error){
-        console.error("Error adding to cart:", error);
-        res.status(500).json({ error: "Failed to add service to cart" });
+      update: {
+        services: {
+          connect: { id: id },
+        },
+        total: {
+          increment: price,
+        },
+        gst: {
+          increment: gst, 
+        },
+        discount: {
+          increment: discount, 
+        }
+      },
+
+      create: {
+        customerId: userId, 
+        total: price, 
+        gst: gst, 
+        discount: discount, 
+        services: {
+          connect: { id: id }, 
+        }
       }
+    });
+
+    res.status(200).json({ message: "Service added to cart successfully", response });
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    res.status(500).json({ error: "Failed to add service to cart" });
+  }
 });
+
 
 router.put("/deleteFromCart",LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = (req as any).user.customerId;
     const { id,price } = req.body;
+    const gst = (18/100)*price;
+    const discount = (10/100)*price;
     const response = await prisma.cart.update({
       where: {customerId: userId}, 
       data: {
@@ -78,11 +102,15 @@ router.put("/deleteFromCart",LoginStatus, async (req: Request, res: Response): P
         },
         total: {
           decrement: price
+        },
+        gst: {
+          decrement: gst
+        },
+        discount: {
+          decrement: discount
         }
-      }
-      
+      }  
     })
-
     res.status(200).json({ message: "Service deleted from cart successfully", response });
   }catch(error){
     console.error("Error in deleting from cart:", error);
@@ -98,11 +126,11 @@ router.get("/cartItems",LoginStatus, async (req: Request, res: Response): Promis
       where: {customerId: userId}, 
       select: {
         services: true,
-        total: true
+        total: true,
+        gst: true,
+        discount: true
       }
     })
-
-
     res.status(200).json({ message: "Service Fetch successfully", cartInfo: data });
   }catch(error){
     console.error("Error in fetching Cart:", error);
@@ -129,10 +157,10 @@ router.post("/addToFavorate",LoginStatus, async (req: Request, res: Response): P
       
     })
 
-    res.status(200).json({ message: "Service added to cart successfully", response });
+    res.status(200).json({ message: "Service added to Favorate successfully", response });
   }catch(error){
-    console.error("Error adding to cart:", error);
-    res.status(500).json({ error: "Failed to add service to cart" });
+    console.error("Error adding to  Favorates:", error);
+    res.status(500).json({ error: "Failed to add service in  Favorates" });
   }
 });
 
@@ -151,30 +179,52 @@ const response = await prisma.cart.update({
   
 })
 
-res.status(200).json({ message: "Service deleted from cart successfully", response });
+res.status(200).json({ message: "Service deleted from  Favorates successfully", response });
 }catch(error){
-console.error("Error in deleting from cart:", error);
-res.status(500).json({ error: "Failed to delete service from cart" });
+console.error("Error in deleting from  Favorates:", error);
+res.status(500).json({ error: "Failed to delete service from  Favorates" });
 }
 });
 
 router.get("/favorateItems",LoginStatus, async (req: Request, res: Response): Promise<void> => {
 try {
 const userId = (req as any).user.customerId;
-
 const data = await prisma.cart.findUnique({
   where: {customerId: userId}, 
   select: {
     services: true,
-   
   }
 })
 
+res.status(200).json({ message: "Favorate Items Fetch successfully", UpcommingBookingInfo: data });
 
-res.status(200).json({ message: "Service Fetch successfully", favorateInfo: data });
 }catch(error){
-console.error("Error in fetching Cart:", error);
-res.status(500).json({ error: "Error in fetching Cart:" });
+console.error("Error in fetching Favorate Items:", error);
+res.status(500).json({ error: "Error in fetching Favorate Items:" });
+}
+});
+
+
+router.get("/UpcommingItems",LoginStatus, async (req: Request, res: Response): Promise<void> => {
+  try {
+  const userId = (req as any).user.customerId;
+  
+  const data = await prisma.upcommingOrders.findMany({
+    where: {customerId: userId}, 
+    select: {
+      id: true,
+      date: true,
+      amount: true,
+      payment: true,
+      service: true,
+     
+    }
+  })
+
+res.status(200).json({ message: "Upcomming Bookings Fetch successfully", UpcommingBookingInfo: data });
+}catch(error){
+console.error("Error in fetching Upcomming Bookings:", error);
+res.status(500).json({ error: "Error in fetching Upcomming Bookings:" });
 }
 });
 

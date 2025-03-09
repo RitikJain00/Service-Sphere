@@ -23,12 +23,18 @@ router.get("/profile", LoginStatus, async (req: Request, res: Response) => {
         country: true,
       },
     });
-    console.log(userProfile)
     if (!userProfile) {
        res.status(404).json({ msg: "User profile not found" });
        return
     }
-      res.json({ ...userProfile, username: email }); 
+
+    const walletAmount = await prisma.wallet.findUnique({
+      where: { customerId: userId },
+      select: {
+        Total: true
+      }
+    })
+      res.json({ ...userProfile, username: email, walletAmount  }); 
      
   } catch (error) {
     console.error("Error fetching profile:", error);
@@ -62,6 +68,55 @@ router.put("/profile", LoginStatus, async (req: Request, res: Response) => {
     console.error("Error updating profile:", error);
     res.status(500).json({ msg: "Internal server error" });
     return 
+  }
+});
+
+
+router.put("/wallet", LoginStatus, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.customerId; 
+    const { amount } = req.body;
+
+    const updatedWallet = await prisma.wallet.upsert({
+      where: { customerId: userId },
+      update: {
+        Total: {
+          increment: parseInt(amount), // Add the new amount
+        },
+      },
+      create: {
+        customerId: userId,
+        Total: parseInt(amount), 
+      },
+    });
+
+    res.status(200).json({ msg: "Wallet updated successfully", updatedWallet });
+  } catch (error) {
+    console.error("Error updating wallet", error);
+    res.status(500).json({ msg: "Internal server error", error });
+  }
+});
+
+router.put("/walletOrder", LoginStatus, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.customerId; 
+    const { Grandtotal } = req.body;
+
+    const updatedWallet = await prisma.wallet.update({
+      where: { customerId: userId },
+
+      data: {
+        Total: {
+         decrement: parseInt(Grandtotal), // Add the new amount
+        },
+      }
+  
+    });
+
+    res.status(200).json({ msg: "Wallet updated successfully", updatedWallet });
+  } catch (error) {
+    console.error("Error updating wallet", error);
+    res.status(500).json({ msg: "Internal server error", error });
   }
 });
 
