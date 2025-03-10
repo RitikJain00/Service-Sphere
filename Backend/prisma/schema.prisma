@@ -34,6 +34,7 @@ model Wallet {
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique
   Total      Int      @default(0)
+  Pending    Int      @default(0)
 }
 
 model Cart {
@@ -60,6 +61,7 @@ model Professional {
   username          String               @unique
   password          String
   profile           ProfessionalProfile? // One-to-One Relationship
+  wallet            ProfessionalWallet?
   services          Services[]
   UpcommingBookings UpcommingBookings[]
   PastBookings      PastBookings[]
@@ -209,4 +211,20 @@ model Services {
   carts      Cart[]       @relation("CartServicesRelation")
   favorites  Favorite[]   @relation("FavoriteServicesRelation")
   PastOrders PastOrders[]
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  name     String
+  wallet   Int    @default(0)
+}
+
+model ProfessionalWallet {
+  id             Int          @id @default(autoincrement())
+  Total          Int          @default(0)
+  Pending        Int          @default(0)
+  professional   Professional @relation(fields: [professionalId], references: [id])
+  professionalId Int          @unique
 }

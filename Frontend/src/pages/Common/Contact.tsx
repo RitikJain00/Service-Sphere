@@ -1,5 +1,5 @@
 import Header from "../../components/Customer/Header/Header";
-import Footer from "../../components/Footer";
+import Footer from "../../components/Footer/Footer";
 import { Button } from '@mantine/core';
 
 const Contact = () => {

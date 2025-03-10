@@ -1,16 +1,43 @@
 
 import { Divider } from "@mantine/core"
-import { IconMapPin,  IconRecharging,IconBriefcase, IconClock } from "@tabler/icons-react";
+import { IconMapPin,  IconRecharging,IconBriefcase, IconClock, IconCreditCardPay } from "@tabler/icons-react";
+import { Button } from '@mantine/core';
+import axios from "axios";
+import { useCart } from "../../../Context/CartContext";
 
 
 const UpcommingBooking = (   {job }  : any) => {
 
-  const date = new Date(job.date);
-  const formattedDate = date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit"
-  });
+  const {fetchUpcommingBookings} = useCart()
+  const token = localStorage.getItem('authToken')
+
+const handleCancel = async () => {
+  console.log(job)
+  if (window.confirm("Are you sure you want to cancel the service")) {
+    try{
+      const response = await axios.post("http://localhost:3000/service/cancelBooking", 
+        { 
+          id: job.id,
+          amount: job.amount,
+          payment: job.payment,
+          date: job.date,
+          serviceId: job.service.id,
+          professionalId: job.service.professionalId
+
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }, 
+          withCredentials: true,
+        }
+      );
+      alert('Service Completed Successfully');
+      fetchUpcommingBookings();
+
+    } catch(error){
+      console.log(error)
+    }
+  }
+}
 
   return <div className=' mt-8  p-4  bg-mine-shaft-900 rounded-xl hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300'>
 
@@ -18,15 +45,16 @@ const UpcommingBooking = (   {job }  : any) => {
 
       {/* Head Section */}
 
-      <div className="flex gap-8">
+      <div className="flex justify-between">
     
-          <div><img className='w-12 h-12' src={job.image} alt="" /></div>
-        
-        <div className="">
+          <div className="flex gap-4">
+            <img className='w-20 h-20' src={job.image} alt="" />
+        <div className="ml-4">
           <div className='text-2xl font-semibold text-mine-shaft-300 font-[poppins]'>{job.service.name}</div>
           <div className='mt-1'>{job.service.company} &#x2022; &#x2B50; 4.26</div>
         </div>
-        <div><img className="w-8 h-8 cursor-pointer" src="/cancel.png" alt="" /></div>
+        </div>
+        <Button onClick={handleCancel} variant="light" color="red">Cancel</Button>
          
       </div>
 
@@ -43,6 +71,10 @@ const UpcommingBooking = (   {job }  : any) => {
             <div className='bg-mine-shaft-800 text-bright-sun-300 rounded-lg px-2 py-1 flex gap-2'>
             <IconRecharging size={20} stroke={2} />
             <div>{job.service.booking}</div>
+            </div>
+            <div className='bg-mine-shaft-800 text-bright-sun-300 rounded-lg px-2 py-1 flex gap-2'>
+            <IconCreditCardPay size={20} stroke={2} />
+            <div>{job.payment}</div>
             </div>
         </div>
 
@@ -61,7 +93,7 @@ const UpcommingBooking = (   {job }  : any) => {
       {/* Price and Time */}
       <div className='flex justify-between '>
         <div className='font-semibold text-xl text-mine-shaft-200'>&#8377; {job.amount}</div>
-        <div className='flex gap-1 items-center text-sm text-mine-shaft-300'><IconClock size={20} stroke={2} /> {formattedDate}</div>
+        <div className='flex gap-1 items-center text-sm text-mine-shaft-300'><IconClock size={20} stroke={2} /> {job.date}</div>
       </div>
 
     </div>

@@ -24,7 +24,8 @@ interface CartContextType {
   addToCart: (job: Job) => void,
   removeFromCart: (job: Job) => void
   addToFavorate: (job: Job) => void,
-  removeFromFavorate: (job: Job) => void
+  removeFromFavorate: (job: Job) => void,
+  fetchUpcommingBookings: () => void
   BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => Promise<void>
 
  }
@@ -110,12 +111,12 @@ interface CartContextType {
     try{
       const response = await axios({
         method: 'get',
-        url: 'http://localhost:3000/shopService/Upcomming',
+        url: 'http://localhost:3000/shopService/UpcommingItems',
         headers: {Authorization: `Bearer ${token}`}
       })
       setUpCommingBooking(response.data.UpcommingBookingInfo.services);  // Update  Favorate
     } catch(error){
-      console.log('Error in Fetching favorate', error)
+      console.log('Error in Fetching UpcommingBookings', error)
     }
     setLoading(false); 
 }
@@ -139,7 +140,7 @@ const fetchUpcommingOrders = async () => {
     setUpCommingOrders(response.data.UpcommingBookingInfo);  
   
   } catch(error){
-    console.log('Error in Fetching favorate', error)
+    console.log('Error in Fetching UpcommingOrders', error)
   }
   setLoading(false); 
 }
@@ -335,7 +336,7 @@ useEffect(() => {
       };
 
     return (
-      <CartContext.Provider value= {{cart, upcommingOrders,orders, upcommingBooking, pastBooking,  BookServices, Favorate, total,gst, discount, loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
+      <CartContext.Provider value= {{cart, upcommingOrders,fetchUpcommingBookings,orders, upcommingBooking, pastBooking,  BookServices, Favorate, total,gst, discount, loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
        }}>
         {loading && (  
       <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">

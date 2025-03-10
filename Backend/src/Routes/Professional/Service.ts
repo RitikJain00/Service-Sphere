@@ -300,7 +300,7 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
     const userId = (req as any).user.professionalId; // Extract user ID from token
     
     const { Orderid, date, customerId, serviceId,amount, payment } = req.body;
-    console.log(customerId)
+
  
    
     await prisma.$transaction(async (prisma) => {
@@ -349,20 +349,20 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
 
       // 5. Add Money To wallet
 
-      if(payment !== 'COD'){
-        const updatedWallet = await prisma.wallet.upsert({
-          where: { customerId: customerId },
-          update: {
-            Total: {
-              increment: parseFloat(amount), // Add the new amount
-            },
-          },
-          create: {
-            customerId: customerId,
-            Total: parseInt(amount), 
-          },
-        });
-      }
+      // if(payment !== 'COD'){
+      //   const updatedWallet = await prisma.wallet.upsert({
+      //     where: { customerId: customerId },
+      //     update: {
+      //       Total: {
+      //         increment: parseFloat(amount), // Add the new amount
+      //       },
+      //     },
+      //     create: {
+      //       customerId: customerId,
+      //       Total: parseInt(amount), 
+      //     },
+      //   });
+      // }
       
 
     });
@@ -373,5 +373,89 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
     res.status(500).json({ msg: 'Something went wrong' });
   }
 })
+
+router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): Promise<void> => {
+  const currentDate = new Date();
+  const formattedDate = dateFormatter(currentDate)
+
+  try {
+    const userId = (req as any).user.customerId; // Extract user ID from token
+    
+    const { id, date,amount, payment, serviceId, professionalId } = req.body;
+   
+
+    await prisma.$transaction(async (prisma) => {
+      
+
+        // 1. Delete Upcomming Order
+        const deletedOrder = await prisma.upcommingOrders.delete({
+          where: {bookingId: id},
+          select: { bookingId: true } 
+        });
+
+
+      // 2. Delete Upcoming Booking
+      await prisma.upcommingBookings.delete({
+        where: {id: deletedOrder.bookingId}
+        })
+
+
+      // 3. Create Past Booking
+      await prisma.pastBookings.create({
+        data: {
+          slotdate: date,
+          completionDate: formattedDate,
+          professionalId: professionalId,
+          customerId: userId,
+          serviceId: serviceId,
+          amount: amount,
+          payment: payment,
+          status: 'Cancelled'
+        }
+      });
+
+  
+      // 4. Create Past Order
+      await prisma.pastOrders.create({
+
+        data: ({
+          slotDate: date,
+          completionDate: formattedDate,
+          amount: amount,
+          payment: payment,
+          status: 'Cancelled',
+          customerId: userId,
+          serviceId: serviceId,
+        })
+      });
+
+      // 5. Add Money To wallet
+
+      // if(payment !== 'COD'){
+      //   const updatedWallet = await prisma.wallet.upsert({
+      //     where: { customerId: userId },
+      //     update: {
+      //       Total: {
+      //         increment: parseFloat(amount), // Add the new amount
+      //       },
+      //     },
+      //     create: {
+      //       customerId: userId,
+      //       Total: parseInt(amount), 
+      //     },
+      //   });
+      // }
+      
+
+    });
+
+    res.json({ msg: 'Order Rejected successfully ' });
+  }catch(error) {
+    console.error(error);
+    res.status(500).json({ msg: 'Something went wrong' });
+  }
+})
+
+
 
 export default router;

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
-import { IconCheck } from "@tabler/icons-react";
+import CustomerDetails from "../Bookings/CustomerDetails";
 import { showNotification } from "@mantine/notifications";
 
 import { Loader } from '@mantine/core';
@@ -31,7 +31,9 @@ interface Service {
 }
 interface upcommingService {
   id: string;
-  date: string;
+  slotdate: string;
+  completionDate: string;
+  status: string;
   amount: string;
   payment: string;
   customer: CustomerInfo;
@@ -39,19 +41,7 @@ interface upcommingService {
 }
 
 
-const dateFormatter = (response: any) => {
 
-  response.data.service.map((ser: any) => {
-    const date = new Date(ser.date);
-    const formattedDate = date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit"
-  });
-  ser.date = formattedDate
-  })
-  
-}
 
 
 const PastBooking = () => {
@@ -70,7 +60,7 @@ const PastBooking = () => {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
-      dateFormatter(response)
+ 
       setLoader(false);
       setProductData(response.data.service);
       setFilteredProducts(response.data.service);
@@ -92,27 +82,17 @@ const PastBooking = () => {
 
     const filtered = productData.filter(
       (product) =>
-        product.date.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term)
+        product.slotdate.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term)
     );
     setFilteredProducts(filtered);
   };
 
   const handleDetails = (service: upcommingService) => {
     setbookingdetail(service)
-   
     open();
   }
 
-  // const handleComplete = (service: upcommingService) => {
-  //   setService(null);
-  
-
-  // };
-
-  // const handleReject = (service: upcommingService) => {
-  //   setService(service);
-    
-  // };
+ 
 
   
 
@@ -159,7 +139,10 @@ const PastBooking = () => {
                   Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Date
+                  Slot
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Completion
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Price
@@ -186,14 +169,19 @@ const PastBooking = () => {
                     />
                    {product.service.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.slotdate}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.completionDate}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.amount}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">{product.payment}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <Button variant="light" color="lime" onClick={() => handleDetails(product)}>Details</Button></td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  Status
-                  </td>
+                  <td
+                    className={` whitespace-nowrap text-md  font-semibold 
+                    ${product.status === "Completed" ? "text-green-400" : "text-red-500"}`}
+                      >
+                    {product.status}
+                </td>
+
                 </motion.tr>
               ))}
             </tbody>
@@ -202,7 +190,7 @@ const PastBooking = () => {
         </div>
       )}
 
-    
+{ booking && <CustomerDetails opened={opened} close={close}  booking={booking} /> }
 
     </motion.div>
   );

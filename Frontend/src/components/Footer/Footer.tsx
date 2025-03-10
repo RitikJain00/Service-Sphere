@@ -3,8 +3,14 @@ import { IconPlant2 } from '@tabler/icons-react';
 import { IconMail } from '@tabler/icons-react';
 import { IconArrowRightDashed } from '@tabler/icons-react';
 
+import { useDisclosure } from '@mantine/hooks';
+import AdminSign from '../Admin/AdminSign';
+
 
 const Footer = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+
   return <div className=' mt-20  bg-gradient-to-r from-mine-shaft-900 to-mine-shaft-950 text-mine-shaft-100  rounded-tl-[125px] '>
 
     <div className='flex flex-col sm:flex-row sm:flex-auto pl-20 pr-5 pt-10  gap-16 mb-4 '>
@@ -58,7 +64,7 @@ const Footer = () => {
         <div className='hover:text-bright-sun-400'><Link to = '/TermsAndConditions'>Terms & Condition</Link></div>
         <div className='hover:text-bright-sun-400'><Link to = '/PrivacyPolicy'>Privacy Policy</Link></div>
         <div className='hover:text-bright-sun-400'><Link to = '/RefundAndCancellation'>Refund & Cancellation Policy</Link></div>
-        <div className='hover:text-bright-sun-400'><Link to = '/about'>Careers</Link></div>
+        <div onClick={open} className='hover:text-bright-sun-400 cursor-pointer'>Admin</div>
         </div>
         
       </div>
@@ -118,11 +124,12 @@ const Footer = () => {
               <img className='w-6 h-6' src="Social/linkedin.png" alt="" />
               </a>
             </div>
-
-          
+   
       </div>
 
       </div>
+
+      <AdminSign opened={opened} close={close} ></AdminSign>
 
       <hr className='w-[90%] m-auto border-b-2' />
 

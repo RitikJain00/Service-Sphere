@@ -31,6 +31,11 @@ import ProfessionalProfile from "../pages/Partner/ProfessionalProfile";
 import MyOrders from "../pages/Customer/MyOrders";
 
 
+import Admin from "../pages/Admin/Admin";
+import Customers from "../pages/Admin/Customers";
+import Professionals from "../pages/Admin/Professionals";
+
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -74,6 +79,11 @@ const AppRoutes = () => {
             <Route path="/Services" element={<Services />} />
             <Route path="/Bookings" element={<Bookings />} />
             <Route path="/History" element={<History />} />
+
+              {/* Admin Route */}
+              <Route path="/Admin" element={<Admin />} />
+              <Route path="/Customers" element={<Customers />} />
+              <Route path="/Professionals" element={<Professionals />} />
 
             {/* Catch-All Route (Redirect to Home) */}
             <Route path="*" element={<Home />} />

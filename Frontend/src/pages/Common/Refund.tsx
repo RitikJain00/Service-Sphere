@@ -1,4 +1,4 @@
-import Footer from "../../components/Footer";
+import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Customer/Header/Header";
 import { Divider } from "@mantine/core";
 

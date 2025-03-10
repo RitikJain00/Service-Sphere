@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Modal, TextInput} from '@mantine/core';
+import { Modal, TextInput, Button} from '@mantine/core';
 import { IconCurrencyRupee } from '@tabler/icons-react';
-import { Button } from '@mantine/core';
+
 import { useProfile } from '../../Context/ProfileContext';
 import axios from 'axios';
 

@@ -1,27 +1,23 @@
+import React from 'react'
 import { useState } from 'react';
-import { TextInput, rem } from '@mantine/core';
+import { Modal,Button, TextInput,rem} from '@mantine/core';
 import { IconAt, IconLock } from '@tabler/icons-react';
 
-import { PasswordInput} from '@mantine/core';
-
-
-import { Button } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
-import { useProfile } from '../../Context/ProfileContext';
+import { PasswordInput} from '@mantine/core';
 
+interface SigninProps {
+  opened: boolean; // Whether the modal is open
+  close: () => void; // Function to close the modal
 
-
-
-const Signin = () => {
+}
+const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
 
   const navigate = useNavigate()
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
-  const {updateAuth} = useProfile()
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   
@@ -41,17 +37,17 @@ const Signin = () => {
        try {
         const response = await axios({
           method: "post",
-          url: "http://localhost:3000/customersign/signin",
+          url: "http://localhost:3000/adminsign/signin",
           data: data,
           withCredentials: true,
         });
     
         const token = response.data.token;
         localStorage.setItem("authToken", token);
-        localStorage.setItem("Type", "Customer");
-       
-          navigate("/home");
-          updateAuth(token,"Customer")
+        localStorage.setItem("Type", "Admin");
+        close();
+        navigate("/Admin");
+         
       
       }  catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
@@ -59,15 +55,13 @@ const Signin = () => {
 
   }
 
-  return <div className={"w-full md:w-1/2 flex flex-col  bg-mine-shaft-950"}>
-    
-  <div className="text-4xl text-bright-sun-400 mt-24 font-semibold text-center  hover:scale-110 transition-all duration-300">Customer Account</div>
+  return (
+   <Modal opened={opened} onClose={close}  centered>
 
-  <div className=" ml-16 flex flex-col gap-8 w-auto pr-32 mt-20 " >
-                 
+<div className='text-bright-sun-400 text-3xl font-bold text-center mb-2'>Admin Login</div>
 
-                    <div>
-                    <TextInput
+          <div className='flex flex-col gap-4'>
+          <TextInput
                     variant="unstyled"
                     required
                       leftSection={<IconAt style={{ width: rem(16), height: rem(16) }} />}
@@ -96,10 +90,8 @@ const Signin = () => {
                          
                          }
                     }} />
-                    </div>
+               
 
-
-                    <div>
                     <PasswordInput
                    variant="unstyled"
                    leftSection={<IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
@@ -129,7 +121,7 @@ const Signin = () => {
                      
                      }
                 }}/>
-                    </div>
+                    
 
                     {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
@@ -139,19 +131,16 @@ const Signin = () => {
                             color: '#454545',
                           },}}
                           onClick={handleSignIn}
-                          >Login Account</Button>
+                          >Login Account
+                    </Button>
+          </div>
+            
+                   
 
-                    <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
-                    Don't Have An Account ?  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/CustomerSignup'}>Sign Up</Link>
-                    </div>
-
-                    <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
-                     <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 ' to={'/'}>Forgot Password ?</Link>
-                    </div>
+   
     
-                    
-          </div>           
-  </div>
+    </Modal>
+  )
 }
 
-export default Signin
+export default AdminSign

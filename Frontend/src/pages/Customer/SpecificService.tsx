@@ -1,5 +1,5 @@
 import Header from "../../components/Customer/Header/Header"
-import Footer from "../../components/Footer"
+import Footer from "../../components/Footer/Footer"
 import { Divider } from "@mantine/core"
 import SearchBox from "../../components/Services/Fiters/SearchBox"
 import Cart from "../../components/Services/Others/Cart"

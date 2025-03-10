@@ -4,61 +4,58 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
-import { IconCheck } from "@tabler/icons-react";
+
 import { showNotification } from "@mantine/notifications";
 
 import { Loader } from '@mantine/core';
-import CustomerDetails from "./CustomerDetails";
+import ProfessionalDetails from "./ProfessionalDetails";
 
-interface CustomerProfile{
+
+
+interface Profile {
   name: string;
   phone: string;
-  address: string;
-  city: string;
-  pincode: string;
-  country: string;
   image: string;
+  city: string
+}
+interface service{
+  services: number
 }
 
-interface CustomerInfo {
+interface ProfessionalData {
   id: string;
   username: string;
-  profile: CustomerProfile
-}
-interface Service {
-  id: string;
-  name: string;
-}
-interface upcommingService {
-  id: string;
-  date: string;
-  amount: string;
-  payment: string;
-  customer: CustomerInfo;
-  service: Service
+  wallet: number;
+  profile: Profile;
+  _count: service;
+  completedPastBookings: number;
+  rejectedPastBookings: number
 }
 
 
-const BookingTable = () => {
+
+
+
+const PastBooking = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [booking, setbookingdetail] = useState<upcommingService | null>(null);
-  const [productData, setProductData] = useState<upcommingService[]>([]);
+  const [booking, setbookingdetail] = useState<ProfessionalData | null>(null);
+  const [professionalData, setProfessionalData] = useState<ProfessionalData[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState<upcommingService[]>([]);
+  const [filteredProfessional, setFilteredProfessionals] = useState<ProfessionalData[]>([]);
   const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
 
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/service/allBookings", {
+      const response = await axios.get("http://localhost:3000/adminsDashboard/professional/allProfessionals", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
+ 
       setLoader(false);
-      setProductData(response.data.service);
-      setFilteredProducts(response.data.service);
-      
+      setProfessionalData(response.data.service);
+      setFilteredProfessionals(response.data.service);
     } catch (error) {
       console.error("Error fetching services:", error);
       setLoader(false);
@@ -67,77 +64,43 @@ const BookingTable = () => {
 
   useEffect(() => {
     fetchData();
-   
+    console.log(professionalData)
   }, []);
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(professionalData)
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filtered = productData.filter(
-      (product) =>
-        product.date.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term)
+    const filtered = professionalData.filter(
+      (professional) =>
+        professional.profile.city.toLowerCase().includes(term) || professional.profile.name.toLowerCase().includes(term) 
     );
-    setFilteredProducts(filtered);
+    setFilteredProfessionals(filtered);
   };
 
-  const handleDetails =  (service: upcommingService) => {
+  const handleDetails = (service: ProfessionalData) => {
     setbookingdetail(service)
     open();
   }
 
-  const handleComplete = async (service: upcommingService) => {
-    if (window.confirm("Are you sure you want to complete the service")) {
-    try{
-      const response = await axios.post("http://localhost:3000/service/completeBooking", 
-        { 
-          Orderid: service.id,
-          date: service.date,
-          customerId: service.customer.id,
-          serviceId: service.service.id,
-          amount: service.amount,
-          payment: service.payment
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }, 
-          withCredentials: true,
-        }
-      );
-      alert('Service Completed Successfully');
-      fetchData();
+  const handlePayment = (service: ProfessionalData) => {
+    
+  }
 
-    } catch(error){
-      console.log(error)
-    }
-  }};
+  // const handleComplete = (service: upcommingService) => {
+  //   setService(null);
+  
 
- 
+  // };
 
-  const handleReject = async (service: upcommingService) => {
-    if (window.confirm("Are you sure you want to reject the service")) {
-    try{
-      const response = await axios.post("http://localhost:3000/service/rejectBooking", 
-        { 
-          Orderid: service.id,
-          date: service.date,
-          customerId: service.customer.id,
-          serviceId: service.service.id,
-          amount: service.amount,
-          payment: service.payment
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }, 
-          withCredentials: true,
-        }
-      );
-      alert('Service Rejected Successfully');
-      fetchData();
+  // const handleReject = (service: upcommingService) => {
+  //   setService(service);
+    
+  // };
 
-    } catch(error){
-      console.log(error)
-    }
-  }};
+  
 
   return (
     <motion.div
@@ -155,7 +118,7 @@ const BookingTable = () => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Bookings List</h2>
+        <h2 className="text-xl font-semibold text-gray-100">Professional List</h2>
         <div className="relative">
           <input
             type="text"
@@ -169,9 +132,9 @@ const BookingTable = () => {
       </div>
 
       {/* Table */}
-      {productData.length === 0 && !loader ? (
+      {professionalData.length === 0 && !loader ? (
         <div className="flex justify-center items-center min-h-[20vh] text-2xl text-mine-shaft-300">
-          No Bookings Available
+          No Professional Available
         </div>
       ) : (
         <div className="overflow-x-auto">
@@ -182,24 +145,35 @@ const BookingTable = () => {
                   Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Date
+                  Profile
+                </th>
+               
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Services
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Price
+                  Completed Bookings
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Rejected Bookings
+                </th>
+              
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Balance
+                </th>
+
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                  Payment
                 </th>
+
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Customer
+                 Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Actions
-                </th>
+               
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredProducts.map((product: upcommingService) => (
+              {filteredProfessional.map((product: ProfessionalData) => (
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -207,21 +181,24 @@ const BookingTable = () => {
                       alt="Product img"
                       className="size-10 rounded-full"
                     />
-                   {product.service.name}
+                   {product.profile.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.amount}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">{product.payment}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <Button variant="light" color="lime" onClick={() => handleDetails(product)}>Details</Button></td>
+                  <Button variant="light" color="orange" onClick={() => handleDetails(product)}>Details</Button></td>
+                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product._count.services}</td>
+                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product.completedPastBookings}</td>
+                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product.rejectedPastBookings}</td>
+                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300 font-semibold">{product.wallet}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    <button onClick={() => handleComplete(product)}  className="text-indigo-400 hover:text-indigo-300 mr-2">
-                      <SquareCheckBig size={18} />
-                    </button>
-                    <button onClick={() => handleReject(product)} className="text-red-400 hover:text-red-300">
-                      <BadgeX size={18} />
-                    </button>
-                  </td>
+                  <Button variant="light" color="lime" onClick={() => handlePayment(product)}>Pay</Button></td>
+                  
+                  {/* <td
+                    className={` whitespace-nowrap text-md  font-semibold 
+                    ${product.status === "Completed" ? "text-green-400" : "text-red-500"}`}
+                      >
+                    {product.status}
+                </td> */}
+
                 </motion.tr>
               ))}
             </tbody>
@@ -230,10 +207,10 @@ const BookingTable = () => {
         </div>
       )}
 
-     { booking && <CustomerDetails opened={opened} close={close}  booking={booking} /> }
+{ booking && <ProfessionalDetails opened={opened} close={close}  booking={booking} /> }
 
     </motion.div>
   );
 };
 
-export default BookingTable;
+export default PastBooking;

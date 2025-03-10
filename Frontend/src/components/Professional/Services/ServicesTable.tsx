@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Edit, Search, Trash2 } from "lucide-react";
+import { Edit, Search, } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
@@ -8,6 +8,7 @@ import { IconCheck } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import ServiceHandler from "./Service";
 import { Loader } from '@mantine/core';
+import { IconCaretUpDown } from '@tabler/icons-react';
 
 interface Service {
   id: string;
@@ -18,6 +19,7 @@ interface Service {
   expireince: number;
   location: string;
   price: number;
+  isActive: string;
 }
 
 const ProductsTable = () => {
@@ -33,7 +35,7 @@ const ProductsTable = () => {
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://service-sphere-j7vd.onrender.com/service/allService", {
+      const response = await axios.get("http://localhost:3000/service/allService", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -74,25 +76,29 @@ const ProductsTable = () => {
     open();
   };
 
-  const handleDelete = async (id: string) => {
+  const handleStatusChange = async (service: Service) => {
+    if (window.confirm("Are you sure you want to Change the Status of the service")) {
     try {
-      await axios.delete("https://service-sphere-j7vd.onrender.com/service/deleteService", {
-        headers: { Authorization: `Bearer ${token}` },
-        data: { id },
-        withCredentials: true,
-      });
+      await axios.put(
+        "http://localhost:3000/service/statusChange",
+        { id: service.id, status: service.isActive }, // ✅ Send data correctly
+        {
+          headers: { Authorization: `Bearer ${token}` }, // ✅ Headers should be in the 3rd parameter
+          withCredentials: true,
+        }
+      );
 
       fetchData();
       showNotification({
-        title: "Service Deleted",
-        message: "Your service has been deleted successfully!",
+        title: "Service Status Changed",
+        message: "Your Service Status Changed Successfully!",
         color: "teal",
         icon: <IconCheck size={20} />,
       });
     } catch (error) {
-      console.error("Error deleting service:", error);
+      console.error("Error in changing status of the service:", error);
     }
-  };
+  }};
 
   return (
     <motion.div
@@ -146,6 +152,9 @@ const ProductsTable = () => {
                   Experience
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                 Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -164,12 +173,18 @@ const ProductsTable = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.category}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹ {product.price.toFixed(2)}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.expireince} </td>
+                  <td
+                    className={` whitespace-nowrap px-6 py-4 text-md  font-semibold 
+                    ${product.isActive === "Active" ? "text-green-400 " : "text-red-500"}`}
+                      >
+                    {product.isActive}
+                </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     <button onClick={() => handleEdit(product)} className="text-indigo-400 hover:text-indigo-300 mr-2">
-                      <Edit size={18} />
+                      <Edit size={22} />
                     </button>
-                    <button onClick={() => handleDelete(product.id)} className="text-red-400 hover:text-red-300">
-                      <Trash2 size={18} />
+                    <button onClick={() => handleStatusChange(product)} className="text-red-500 hover:text-red-300">
+                      <IconCaretUpDown size={22} />
                     </button>
                   </td>
                 </motion.tr>

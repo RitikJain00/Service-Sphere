@@ -5,7 +5,7 @@ import Hero from '../../components/HomeScreen/Hero'
 import Services from "../../components/HomeScreen/Services";
 import Working from "../../components/HomeScreen/Working";
 import Testimonial from "../../components/HomeScreen/Testimonial";
-import Footer from "../../components/Footer";
+import Footer from "../../components/Footer/Footer";
 
 
 

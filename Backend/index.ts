@@ -9,6 +9,11 @@ import    professionalSign   from './src/Routes/Professional/ProfessionlSign'
 import professionalProfile from './src/Routes/Professional/ProfessionalProfile'
 import service from './src/Routes/Professional/Service'
 
+import adminSign from './src/Routes/Admin/AdminSign'
+import customerData from './src/Routes/Admin/CustomerData'
+import professionalData from './src/Routes/Admin/ProfessionalData'
+
+
 import payment from './src/Routes/Payment/Payment'
 import booking from './src/Routes/Booking/Booking'
 
@@ -41,6 +46,11 @@ app.use('/shopService', shopService)
 app.use('/professionalsign',professionalSign);
 app.use('/professionalprofile',professionalProfile);
 app.use('/service', service)
+
+// Admin Servers
+app.use('/adminsign',adminSign);
+app.use('/adminsDashboard/customers',customerData);
+app.use('/adminsDashboard/professional',professionalData);
 
 app.use('/payment', payment)
 app.use('/booking', booking)

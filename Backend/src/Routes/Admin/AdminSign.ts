@@ -24,42 +24,32 @@ router.post(
     }
 
     try {
-      const existingProfessional = await prisma.professional.findUnique({
+      const existingAdmin = await prisma.admin.findUnique({
         where: { username },
       });
 
-      if (existingProfessional) {
-        res.status(400).json({ msg: "User already exists. Please sign in." });
+      if (existingAdmin) {
+        res.status(400).json({ msg: "Admin already exists. Please sign in." });
         return;
       }
 
       const hashedPassword = await bcrypt.hash(password,10)
 
-      const newProfessional = await prisma.professional.create({
+      const newAdmin = await prisma.admin.create({
         data: { 
           username,
           password: hashedPassword,
-          profile: {
-            create: {
-              name,
-              description: null! as string,  // ✅ Force TypeScript to accept `null`
-              image: null! as string,
-              address: null! as string,    
-              city: null! as string,       
-              pincode: null! as string,     
-              country: null! as string, 
-            }
+          name: name
           }
-        }
       });
       
 
-      const token = jwt.sign({professionalId: newProfessional.id,username: newProfessional.username }, JWT_SECRET, {
+      const token = jwt.sign({AdminId: newAdmin.id,username: newAdmin.username }, JWT_SECRET, {
         expiresIn: "7d"
       });
       res.status(201).json({
         msg: "Signup successful",
-        professional: { professionalId: newProfessional.id, username: newProfessional.username},
+        Admin: { AdminId: newAdmin.id, username: newAdmin.username},
         token
       });
     } catch (error) {
@@ -82,29 +72,29 @@ router.post(
     }
 
     try {
-      const existingProfessional = await prisma.professional.findUnique({
+      const existingAdmin = await prisma.admin.findUnique({
         where: {username}
       })
 
-      if(!existingProfessional){
-        res.status(400).json({ msg: "User Does'nt Exist. Please Sign Up" })
+      if(!existingAdmin){
+        res.status(400).json({ msg: "Admin Does'nt Exist. Please Contact Support Team" })
         return;
       }
 
-      const isPasswordValid = await bcrypt.compare(password, existingProfessional.password );
+      const isPasswordValid = await bcrypt.compare(password, existingAdmin.password );
 
       if(!isPasswordValid){
         res.status(401).json({msg: "Invalid Username or Password"})
         return
       }
 
-      const token = jwt.sign({ professionalId: existingProfessional.id, username: existingProfessional.username }, JWT_SECRET, {
+      const token = jwt.sign({ AdminId: existingAdmin.id, username: existingAdmin.username }, JWT_SECRET, {
         expiresIn: "7d", // Token expires in 1 day
       });
   
       res.status(200).json({
         msg: "Signin successful",
-        professional: { professionalId: existingProfessional.id, username: existingProfessional.username },
+        Admin: { AdminId: existingAdmin.id, username: existingAdmin.username },
         token,
       });
     } catch (error) {
