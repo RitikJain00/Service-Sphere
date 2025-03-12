@@ -1,42 +1,21 @@
 import { motion } from "framer-motion";
-import {SquareCheckBig, Search, BadgeX } from "lucide-react";
+import {Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
 
-import { showNotification } from "@mantine/notifications";
 
 import { Loader } from '@mantine/core';
 import ProfessionalDetails from "./ProfessionalDetails";
 
 
-
-interface Profile {
-  name: string;
-  phone: string;
-  image: string;
-  city: string
-}
-interface service{
-  services: number
-}
-
-interface ProfessionalData {
-  id: string;
-  username: string;
-  wallet: number;
-  profile: Profile;
-  _count: service;
-  completedPastBookings: number;
-  rejectedPastBookings: number
-}
+import { ProfessionalData } from "../../../Type/Type";
 
 
 
 
-
-const PastBooking = () => {
+const AllProfessionalTable = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [booking, setbookingdetail] = useState<ProfessionalData | null>(null);
   const [professionalData, setProfessionalData] = useState<ProfessionalData[]>([]);
@@ -85,20 +64,7 @@ const PastBooking = () => {
     open();
   }
 
-  const handlePayment = (service: ProfessionalData) => {
-    
-  }
 
-  // const handleComplete = (service: upcommingService) => {
-  //   setService(null);
-  
-
-  // };
-
-  // const handleReject = (service: upcommingService) => {
-  //   setService(service);
-    
-  // };
 
   
 
@@ -159,12 +125,13 @@ const PastBooking = () => {
                 </th>
               
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Balance
+                Expected
                 </th>
 
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                 Payment
+                  Due
                 </th>
+
 
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                  Status
@@ -188,16 +155,18 @@ const PastBooking = () => {
                   <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product._count.services}</td>
                   <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product.completedPastBookings}</td>
                   <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product.rejectedPastBookings}</td>
-                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300 font-semibold">{product.wallet}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <Button variant="light" color="lime" onClick={() => handlePayment(product)}>Pay</Button></td>
+                 
+                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300 font-semibold">₹  {product.wallet.Pay + product.wallet.Gst}</td>
+
+                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300 font-semibold">₹  {product.wallet.Pending}</td>
                   
-                  {/* <td
-                    className={` whitespace-nowrap text-md  font-semibold 
-                    ${product.status === "Completed" ? "text-green-400" : "text-red-500"}`}
-                      >
-                    {product.status}
-                </td> */}
+                  {(product.wallet.Pending > 0 || (product.wallet.Pay + product.wallet.Gst) > 0) ?
+                  <td className="whitespace-nowrap text-md text-center font-semibold  text-red-500">
+                  {'Pending'}
+              </td> :
+               <td className="whitespace-nowrap text-md text-center font-semibold text-green-400">
+               {'Cleared'}
+           </td>}
 
                 </motion.tr>
               ))}
@@ -213,4 +182,4 @@ const PastBooking = () => {
   );
 };
 
-export default PastBooking;
+export default AllProfessionalTable;

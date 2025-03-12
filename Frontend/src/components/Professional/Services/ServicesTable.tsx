@@ -59,7 +59,7 @@ const ProductsTable = () => {
 
     const filtered = productData.filter(
       (product) =>
-        product.name.toLowerCase().includes(term) || product.category.toLowerCase().includes(term)
+        product.name.toLowerCase().includes(term) || product.category.toLowerCase().includes(term) || product.isActive.toLowerCase().includes(term) || product.price.toString().includes(term)
     );
     setFilteredProducts(filtered);
   };

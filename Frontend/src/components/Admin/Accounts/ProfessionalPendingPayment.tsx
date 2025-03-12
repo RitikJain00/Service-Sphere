@@ -1,39 +1,49 @@
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useDisclosure } from "@mantine/hooks";
+
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
-import CustomerDetails from "./CustomerDetail";
+
 
 
 import { Loader } from '@mantine/core';
 
-import { CustomerData } from "../../../Type/Type";
+
+interface Profile{
+  name: string,
+  phone: string,
+ }
+ interface Wallet{
+  Pending: number
+ }
+  interface professionalPendingPayment{
+    id: number,
+    username: string,
+    profile: Profile,
+    wallet: Wallet
+  }
 
 
+const PaymentPendingProfessional = () => {
 
-
-const AllCustomerTable = () => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [booking, setbookingdetail] = useState<CustomerData | null>(null);
-  const [customerData, setCustomerData] = useState<CustomerData[]>([]);
+  const [professionalPendingpayment, setProfessionalPendingpayment] = useState<professionalPendingPayment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCustomer, setFilteredCustomers] = useState<CustomerData[]>([]);
+  const [filteredProfessional, setFilteredProfessional] = useState<professionalPendingPayment[]>([]);
   const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
 
-  // Fetch Data
-  const fetchDataCustomers = async () => {
+
+  const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/adminsDashboard/customers/allCustomers", {
+      const response = await axios.get("http://localhost:3000/adminsDashboard/professional/professionalPendingPayment", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
  
       setLoader(false);
-      setCustomerData(response.data.service);
-      setFilteredCustomers(response.data.service);
+      setProfessionalPendingpayment(response.data.professional);
+      setFilteredProfessional(response.data.professional);
     } catch (error) {
       console.error("Error fetching services:", error);
       setLoader(false);
@@ -41,28 +51,48 @@ const AllCustomerTable = () => {
   };
 
   useEffect(() => {
-    fetchDataCustomers();
+    fetchData();
   }, []);
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
+    console.log(professionalPendingpayment)
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    const filtered = customerData.filter(
+    const filtered = professionalPendingpayment.filter(
       (customer) =>
-      customer.profile.city.toLowerCase().includes(term) ||
+    
       customer.profile.name.toLowerCase().includes(term) ||
       customer.wallet.Pending >= Number(term) // Compare numerically
     );
-    setFilteredCustomers(filtered);
+    setFilteredProfessional(filtered);
   };
 
-  const handleDetails = (service: CustomerData) => {
-    setbookingdetail(service)
-    open();
-  }
+
+  const handlePayment = async (amount: number, professionalId: number) => {
+    if (window.confirm("Are you sure you want to pay the due?")) {
+      setLoader(true); // Ensure the loader is set before API call
+      try {
+        await axios.post(
+          "http://localhost:3000/adminsDashboard/professional/professionalPayment",
+          { amount, professionalId }, 
+          {
+            headers: { Authorization: `Bearer ${token}` }, 
+            withCredentials: true,
+          }
+        );
+  
+        await fetchData(); 
+        alert('Payment Successfull')
+      } catch (error) {
+        console.error("Error in Payment:", error);
+      } finally {
+        setLoader(false); 
+      }
+    }
+  };
+
 
 
   return (
@@ -81,7 +111,7 @@ const AllCustomerTable = () => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-100">Customers List</h2>
+        <h2 className="text-xl font-semibold text-gray-100">Professional Balances</h2>
         <div className="relative">
           <input
             type="text"
@@ -95,46 +125,40 @@ const AllCustomerTable = () => {
       </div>
 
       {/* Table */}
-      {customerData.length === 0 && !loader ? (
+      {professionalPendingpayment.length === 0 && !loader ? (
         <div className="flex justify-center items-center min-h-[20vh] text-2xl text-mine-shaft-300">
-          No Customer Available
+          No Professional Balance Available
         </div>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-700">
             <thead>
-              <tr>
+            <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Profile
-                </th>
-               
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Orders
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Completed Bookings
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Cancelled Bookings
-                </th>
-              
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Balance
-                </th>
-
-              
 
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                 Status
+                  Email
+                </th>
+
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Phone-No
+                </th>
+
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Due Amount
                 </th>
                
+              
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Pay Due
+                </th>
+
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredCustomer.map((product: CustomerData) => (
+              {filteredProfessional.map((product: professionalPendingPayment) => (
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -144,22 +168,16 @@ const AllCustomerTable = () => {
                     />
                    {product.profile.name}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <Button variant="light" color="orange" onClick={() => handleDetails(product)}>Details</Button></td>
-                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product._count.orders}</td>
-                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product.completedPastBookings}</td>
-                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300">{product.rejectedPastBookings}</td>
-                  <td className="px-6 py-4 text-center whitespace-nowrap text-lg text-gray-300 font-semibold">₹  {product.wallet.Pending + (product.wallet.Pending*0.18)-(product.wallet.Pending*0.10)}</td>
-                  
-                  {product.wallet.Pending > 0 ?
-                  <td className="whitespace-nowrap text-md text-center font-semibold  text-red-500">
-                  {'Pending'}
-              </td> :
-               <td className="whitespace-nowrap text-md text-center font-semibold text-green-400">
-               {'Cleared'}
-           </td>}
-                 
 
+                  <td className="px-6 py-4  whitespace-nowrap text-md text-gray-300 font-semibold"> {product.username}</td>
+
+                  <td className="px-6 py-4  whitespace-nowrap text-md text-gray-300 font-semibold"> {product.profile.phone}</td>
+                
+                  <td className="px-6 py-4  whitespace-nowrap text-md text-gray-300 font-semibold">₹  {product.wallet.Pending}</td>
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                  <Button onClick={() => handlePayment(product.wallet.Pending, product.id)} variant="light" color="orange" >Payment</Button></td>
+                  
                 </motion.tr>
               ))}
             </tbody>
@@ -168,10 +186,9 @@ const AllCustomerTable = () => {
         </div>
       )}
 
-{ booking && <CustomerDetails opened={opened} close={close}  booking={booking} /> }
 
     </motion.div>
   );
 };
 
-export default AllCustomerTable;
+export default PaymentPendingProfessional;

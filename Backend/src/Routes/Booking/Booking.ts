@@ -25,39 +25,37 @@ router.post('/order', LoginStatus, async (req: Request, res: Response): Promise<
     const { cart, paymentMode, total, gst, discount } = req.body;
 
 
+
     await prisma.$transaction(async (prisma) => {
 
-    // 1. Create Upcoming Bookings
-const createdBookings = await Promise.all(
-  cart.map(async (service: any) => {
-    return prisma.upcommingBookings.create({
-      data: {
-        date: dateFormatter(service.bookingDate),
-        amount: service.price + service.price * 0.18 - service.price * 0.1,
-        payment: paymentMode,
-        customerId: userId,
-        serviceId: service.id,
-        professionalId: service.professionalId // Ensure frontend sends professionalId
-      }
-    });
-  })
-);
-
-// 2. Create Upcoming Orders using newly created booking IDs
-await Promise.all(
-  createdBookings.map(async (booking) => {
-    return prisma.upcommingOrders.create({
-      data: {
-        date: booking.date,
-        amount: booking.amount,
-        payment: booking.payment,
-        customerId: booking.customerId,
-        serviceId: booking.serviceId,
-        bookingId: booking.id, // Directly use the created booking ID
-      }
-    });
-  })
-);
+      await Promise.all(
+        cart.map(async (service: any) => {
+          // Create Upcoming Booking
+          const booking = await prisma.upcommingBookings.create({
+            data: {
+              date: dateFormatter(service.bookingDate),
+              amount: service.price - (service.price * 0.25),
+              payment: paymentMode,
+              customerId: userId,
+              serviceId: service.id,
+              professionalId: service.professionalId // Ensure frontend sends professionalId
+            }
+          });
+      
+          // Create Upcoming Order (with corrected amount)
+          return prisma.upcommingOrders.create({
+            data: {
+              date: dateFormatter(service.bookingDate),
+              amount: service.price + (service.price * 0.18) - (service.price * 0.10),  
+              payment: paymentMode,
+              customerId: userId,
+              serviceId: service.id,
+              bookingId: booking.id, // Correct booking ID mapping
+            }
+          });
+        })
+      );
+      
 
       // 3. Create Order
       const order = await prisma.orders.create({
@@ -81,9 +79,27 @@ await Promise.all(
         }))
       });
 
+      // 5. Add Money To Admin Account
+
+      if(paymentMode !== "COD"){
+        await prisma.admin.update({
+          where: {
+            id: 1,
+            name: 'Ritik Jain'
+          },
+          data: {  
+            wallet: {
+              increment: total - discount 
+            },
+            totalGst: {
+              increment: gst  
+            }
+          }
+        });
+      }
    
 
-      // 5. Empty the Cart
+      // 6. Empty the Cart
       await prisma.cart.update({
         where: { customerId: userId },
         data: {

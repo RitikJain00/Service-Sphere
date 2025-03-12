@@ -1,12 +1,13 @@
 import {  NavLink} from 'react-router-dom';
-import { IconLayoutDashboard, IconHexagonPlus,IconCalendarCheck, IconHistory } from '@tabler/icons-react';
+import { IconLayoutDashboard, IconUsers,IconBriefcase, IconDatabaseDollar } from '@tabler/icons-react';
 
 const Navlinks = () => {
 
     const links = [
         {name: 'DashBoard', url: '/Admin', icon:<IconLayoutDashboard stroke={2} />},
-        {name: 'Customers', url: '/Customers', icon:<IconHexagonPlus stroke={2} />},
-        {name: 'Professionals', url: '/Professionals', icon: <IconCalendarCheck stroke={2} />},
+        {name: 'Customers', url: '/Customers', icon:<IconUsers stroke={2} />},
+        {name: 'Professionals', url: '/Professionals', icon: <IconBriefcase stroke={2} />},
+        {name: 'Accounts', url: '/Accounts', icon: <IconDatabaseDollar stroke={2} />},
       
         // {name: 'Customer', url: '/CustomerLogin'}
     ]

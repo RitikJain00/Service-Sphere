@@ -166,6 +166,7 @@ router.get("/allBookings", LoginStatus, async (req: Request, res: Response): Pro
           select: {
             id: true,
             name: true,
+            price: true,
           },
         },
       },
@@ -216,6 +217,7 @@ router.get("/pastBookings", LoginStatus, async (req: Request, res: Response): Pr
           select: {
             id: true,
             name: true,
+            price: true
           },
         },
       },
@@ -235,7 +237,7 @@ router.post('/completeBooking', LoginStatus, async (req: Request, res: Response)
   try {
     const userId = (req as any).user.professionalId; // Extract user ID from token
     
-    const { Orderid, date, customerId, serviceId,amount, payment } = req.body;
+    const { Orderid, date, customerId, serviceId,amount,servicePrice, payment } = req.body;
     console.log(customerId)
  
    
@@ -283,9 +285,70 @@ router.post('/completeBooking', LoginStatus, async (req: Request, res: Response)
         })
       });
 
+       // 5. Maintain Cash Flow
+
+      if(payment !== 'COD'){
+        await prisma.professionalWallet.upsert({
+          where: {professionalId: userId},
+          update: {
+            Pending: {
+              increment: amount
+            }
+          },
+          create: {
+            professionalId: userId, 
+            Pending: amount
+          },
+        })
+
+        await prisma.admin.update({
+          where: {id: 1},
+          data: {
+            pay: {
+              increment: amount
+            },
+            totalGst: {
+              increment: (serviceId*0.18)
+            },
+            wallet: {
+              increment: (serviceId - (0.10*serviceId))
+            }
+          }
+        })
+      } else{
+        await prisma.professionalWallet.upsert({
+          where: {professionalId: userId},
+          update: {
+            Pay: {
+              increment: (servicePrice*0.25)
+            },
+            Gst: {
+              increment: (servicePrice*0.18)
+            },
+            Total: {
+              increment: (servicePrice + (0.18*servicePrice) - (0.10*servicePrice))
+            }
+          },
+          create: {
+            professionalId: userId, 
+            Pay: (servicePrice*0.25),
+            Gst: (servicePrice*0.18)
+          },
+        })
+        
+        await prisma.admin.update({
+          where: {id: 1},
+          data: {
+            recieve: {
+              increment: (servicePrice*0.25 + servicePrice*0.18)
+            }
+          }
+        })
+      }
+
     });
 
-    res.json({ msg: 'Order Completed successfully ' });
+    res.json({ msg: 'Service Completed successfully ' });
   }catch(error) {
     console.error(error);
     res.status(500).json({ msg: 'Something went wrong' });
@@ -299,7 +362,7 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
   try {
     const userId = (req as any).user.professionalId; // Extract user ID from token
     
-    const { Orderid, date, customerId, serviceId,amount, payment } = req.body;
+    const { Orderid, date, customerId, serviceId,servicePrice,amount, payment } = req.body;
 
  
    
@@ -347,22 +410,31 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
         })
       });
 
-      // 5. Add Money To wallet
+      // 5. Maintain Cash Flow
 
-      // if(payment !== 'COD'){
-      //   const updatedWallet = await prisma.wallet.upsert({
-      //     where: { customerId: customerId },
-      //     update: {
-      //       Total: {
-      //         increment: parseFloat(amount), // Add the new amount
-      //       },
-      //     },
-      //     create: {
-      //       customerId: customerId,
-      //       Total: parseInt(amount), 
-      //     },
-      //   });
-      // }
+      if(payment !== 'COD'){
+        await prisma.admin.update({
+          where: {id: 1},
+          data: {
+            pay: {
+              increment: (servicePrice+(0.18*servicePrice)-(0.10*servicePrice))
+            }
+          }
+        })
+
+        await prisma.customerWallet.upsert({
+          where: {customerId: customerId},
+          update: {
+            Pending: {
+              increment: servicePrice
+            }
+          },
+          create: {
+            customerId: customerId, 
+            Pending: servicePrice
+          },
+        })
+      } 
       
 
     });
@@ -381,7 +453,7 @@ router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): 
   try {
     const userId = (req as any).user.customerId; // Extract user ID from token
     
-    const { id, date,amount, payment, serviceId, professionalId } = req.body;
+    const { id, date,amount, payment, serviceId, professionalId, servicePrice } = req.body;
    
 
     await prisma.$transaction(async (prisma) => {
@@ -429,22 +501,31 @@ router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): 
         })
       });
 
-      // 5. Add Money To wallet
+    // 5. Maintain Cash Flow
 
-      // if(payment !== 'COD'){
-      //   const updatedWallet = await prisma.wallet.upsert({
-      //     where: { customerId: userId },
-      //     update: {
-      //       Total: {
-      //         increment: parseFloat(amount), // Add the new amount
-      //       },
-      //     },
-      //     create: {
-      //       customerId: userId,
-      //       Total: parseInt(amount), 
-      //     },
-      //   });
-      // }
+    if(payment !== 'COD'){
+      await prisma.admin.update({
+        where: {id: 1},
+        data: {
+          pay: {
+            increment: (servicePrice+(0.18*servicePrice)-(0.10*servicePrice))
+          }
+        }
+      })
+
+      await prisma.customerWallet.upsert({
+        where: {customerId: userId},
+        update: {
+          Pending: {
+            increment: servicePrice
+          }
+        },
+        create: {
+          customerId: userId, 
+          Pending: servicePrice
+        },
+      })
+    } 
       
 
     });

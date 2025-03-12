@@ -18,10 +18,11 @@ model Customer {
   username        String            @unique
   password        String
   profile         CustomerProfile? // One-to-One Relationship
-  wallet          Wallet?
+  wallet          customerWallet?
   upcommingOrders UpcommingOrders[]
   pastOrders      PastOrders[]
   orders          Orders[]
+  createdAt       DateTime          @default(now())
 
   Cart              Cart?
   Favorite          Favorite?
@@ -29,7 +30,7 @@ model Customer {
   PastBookings      PastBookings[]
 }
 
-model Wallet {
+model customerWallet {
   id         Int      @id @default(autoincrement())
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique
@@ -60,6 +61,7 @@ model Professional {
   id                Int                  @id @default(autoincrement())
   username          String               @unique
   password          String
+  createdAt         DateTime             @default(now())
   profile           ProfessionalProfile? // One-to-One Relationship
   wallet            ProfessionalWallet?
   services          Services[]
@@ -219,12 +221,17 @@ model Admin {
   password String
   name     String
   wallet   Int    @default(0)
+  pay      Int    @default(0)
+  recieve  Int    @default(0)
+  totalGst Int    @default(0)
 }
 
 model ProfessionalWallet {
   id             Int          @id @default(autoincrement())
   Total          Int          @default(0)
   Pending        Int          @default(0)
+  Pay            Int          @default(0)
+  Gst            Int          @default(0)
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int          @unique
 }

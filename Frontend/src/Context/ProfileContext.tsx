@@ -1,26 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import axios from 'axios';
+import {BasicInfo,ContactInfo,AddressInfo, ProfileContextType } from '../Type/Type';
 
-interface BasicInfo { name: string; about: string; }
-interface ContactInfo { email: string, phone: string; }
-interface AddressInfo { home: string; city: string; pin: string; country: string; }
-
-interface ProfileContextType {
-  edit: boolean[];
-  basic: BasicInfo;
-  contact: ContactInfo;
-  address: AddressInfo;
-  walletAmount: number;
-
-  handleBasicChange: (field: string, value: string) => void;
-  handleContactChange: (field: string, value: string) => void;
-  handleAddressChange: (field: string, value: string) => void;
-  handleWalletMoney: (amount: number) => void
-  handleClick: (index: number) => void;
-  saveProfile: () => void;
-  updateAuth: (newToken: string, newType: string) => void
-  
-}
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
 
-interface props { name: string, icon: LucideIcon, value: string, color: string}
+interface props { name: string, icon: LucideIcon, value: number, color: string}
 
 const StatCard = ({ name, icon: Icon, value, color }: props) => {
 	return (

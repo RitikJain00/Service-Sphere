@@ -69,7 +69,7 @@ router.post('/signup' , async (req : Request , res: Response) => {
         }
       });
 
-      const wallet = await prisma.wallet.create({
+      const wallet = await prisma.customerWallet.create({
         data: {
           customerId:  newCustomer.id, 
         }

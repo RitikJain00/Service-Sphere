@@ -3,15 +3,18 @@ import SideBar from "../../components/Admin/Sidebar"
 import { Divider } from "@mantine/core"
 import StateCard from '../../components/Professional/StateCard'
 import { motion } from "framer-motion";
-import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
+import { TrendingUp, Package, IndianRupee, AlertTriangle, Zap} from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
 import SalesOverviewChart from "../../components/Admin/DashBoard/LineChart";
 import SalesChannelChart from "../../components/Admin/DashBoard/BarChart";
 import { useStat } from "../../Context/StatsProvider";
+import PaymentPendingCustomers from "../../components/Admin/Accounts/CustomerPendingPayment";
+import PaymentPendingProfessional from "../../components/Admin/Accounts/ProfessionalPendingPayment";
 
 const Admin = () => {
 	const {statsAdmin} = useStat();
-	console.log(statsAdmin)
+  console.log(statsAdmin)
+
 
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
     <SideBar></SideBar>
@@ -22,16 +25,21 @@ const Admin = () => {
     <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
 				{/* STATS */}
 				<motion.div
-					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5 mb-8'
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 1 }}
 				>
-					<StateCard name='Total Orders' icon={Zap} value={statsAdmin.totalPastBookings + statsAdmin.totalUpcomingBookings} color='#6366F1' />
-					<StateCard name='Total Professionals' icon={Users} value={statsAdmin.totalProfessionals} color='#8B5CF6' />
-					<StateCard name='Total Services' icon={ShoppingBag} value={statsAdmin.totalServices} color='#EC4899' />
-					<StateCard name='Total Customers' icon={BarChart2} value={statsAdmin.totalCustomers} color='#10B981' />
+					<StateCard name='Total Revenue' icon={IndianRupee} value={statsAdmin.adminWallet.wallet} color='#EF4444' />
+					<StateCard name='Total GST' icon={Package} value={statsAdmin.adminWallet.totalGst} color='#8B5CF6' />
+					<StateCard name='Pending Amount' icon={TrendingUp} value={statsAdmin.adminWallet.recieve} color='#10B981'/>
+					<StateCard name='Payment Due' icon={AlertTriangle} value={statsAdmin.adminWallet.pay} color='#F59E0B' />
+          <StateCard name='Total Profit' icon={Zap} value={statsAdmin.adminWallet.wallet-statsAdmin.adminWallet.totalGst+statsAdmin.adminWallet.recieve-statsAdmin.adminWallet.pay} color='#6366F1' />
+      
 				</motion.div>
+
+        <PaymentPendingCustomers/>
+        <PaymentPendingProfessional/>
 
 				{/* CHARTS */}
 

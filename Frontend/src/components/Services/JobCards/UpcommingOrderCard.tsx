@@ -6,7 +6,7 @@ import axios from "axios";
 import { useCart } from "../../../Context/CartContext";
 
 
-const UpcommingBooking = (   {job }  : any) => {
+const UpcommingOrder = (   {job }  : any) => {
 
   const {fetchUpcommingBookings} = useCart()
   const token = localStorage.getItem('authToken')
@@ -15,14 +15,15 @@ const handleCancel = async () => {
   console.log(job)
   if (window.confirm("Are you sure you want to cancel the service")) {
     try{
-      const response = await axios.post("http://localhost:3000/service/cancelBooking", 
+       await axios.post("http://localhost:3000/service/cancelBooking", 
         { 
           id: job.id,
           amount: job.amount,
           payment: job.payment,
           date: job.date,
           serviceId: job.service.id,
-          professionalId: job.service.professionalId
+          professionalId: job.service.professionalId,
+          servicePrice: job.service.price
 
         },
         {
@@ -30,7 +31,7 @@ const handleCancel = async () => {
           withCredentials: true,
         }
       );
-      alert('Service Completed Successfully');
+      alert('Service Cancelled Successfully');
       fetchUpcommingBookings();
 
     } catch(error){
@@ -100,4 +101,4 @@ const handleCancel = async () => {
   </div>
 }
 
-export default UpcommingBooking
+export default UpcommingOrder

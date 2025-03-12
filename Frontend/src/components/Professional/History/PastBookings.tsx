@@ -1,44 +1,15 @@
 import { motion } from "framer-motion";
-import {SquareCheckBig, Search, BadgeX } from "lucide-react";
+import { Search} from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
 import CustomerDetails from "../Bookings/CustomerDetails";
-import { showNotification } from "@mantine/notifications";
+import { pastBookingService } from "../../../Type/Type";
 
 import { Loader } from '@mantine/core';
 
 
-interface CustomerProfile{
-  name: string;
-  phone: string;
-  address: string;
-  city: string;
-  pincode: string;
-  country: string;
-  image: string;
-}
-
-interface CustomerInfo {
-  id: string;
-  username: string;
-  profile: CustomerProfile
-}
-interface Service {
-  id: string;
-  name: string;
-}
-interface upcommingService {
-  id: string;
-  slotdate: string;
-  completionDate: string;
-  status: string;
-  amount: string;
-  payment: string;
-  customer: CustomerInfo;
-  service: Service
-}
 
 
 
@@ -46,10 +17,10 @@ interface upcommingService {
 
 const PastBooking = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [booking, setbookingdetail] = useState<upcommingService | null>(null);
-  const [productData, setProductData] = useState<upcommingService[]>([]);
+  const [booking, setbookingdetail] = useState<pastBookingService | null>(null);
+  const [productData, setProductData] = useState<pastBookingService[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState<upcommingService[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<pastBookingService[]>([]);
   const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
 
@@ -82,12 +53,12 @@ const PastBooking = () => {
 
     const filtered = productData.filter(
       (product) =>
-        product.slotdate.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term)
+        product.slotdate.toLowerCase().includes(term) ||  product.completionDate.toLowerCase().includes(term) ||  product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term) || product.amount.toString().includes(term) || product.status.toLowerCase().includes(term)
     );
     setFilteredProducts(filtered);
   };
 
-  const handleDetails = (service: upcommingService) => {
+  const handleDetails = (service: pastBookingService) => {
     setbookingdetail(service)
     open();
   }
@@ -148,6 +119,9 @@ const PastBooking = () => {
                   Price
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Earnings
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                  Payment
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -159,7 +133,7 @@ const PastBooking = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredProducts.map((product: upcommingService) => (
+              {filteredProducts.map((product: pastBookingService) => (
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -171,7 +145,11 @@ const PastBooking = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.slotdate}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.completionDate}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.amount}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.service.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                     ₹{product.status === "Completed" ? product.amount || 0 : 0}
+                      </td>
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">{product.payment}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                   <Button variant="light" color="lime" onClick={() => handleDetails(product)}>Details</Button></td>

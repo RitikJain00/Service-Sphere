@@ -4,39 +4,13 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
-import { IconCheck } from "@tabler/icons-react";
-import { showNotification } from "@mantine/notifications";
+import { upcommingService } from "../../../Type/Type";
+import { useStat } from "../../../Context/StatsProvider";
 
 import { Loader } from '@mantine/core';
 import CustomerDetails from "./CustomerDetails";
 
-interface CustomerProfile{
-  name: string;
-  phone: string;
-  address: string;
-  city: string;
-  pincode: string;
-  country: string;
-  image: string;
-}
 
-interface CustomerInfo {
-  id: string;
-  username: string;
-  profile: CustomerProfile
-}
-interface Service {
-  id: string;
-  name: string;
-}
-interface upcommingService {
-  id: string;
-  date: string;
-  amount: string;
-  payment: string;
-  customer: CustomerInfo;
-  service: Service
-}
 
 
 const BookingTable = () => {
@@ -47,6 +21,8 @@ const BookingTable = () => {
   const [filteredProducts, setFilteredProducts] = useState<upcommingService[]>([]);
   const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
+
+  const { fetchStatsProfessional } = useStat()
 
   // Fetch Data
   const fetchData = async () => {
@@ -72,12 +48,13 @@ const BookingTable = () => {
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
     const filtered = productData.filter(
       (product) =>
-        product.date.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term)
+        product.date.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term) || product.amount.toLowerCase().includes(term)
     );
     setFilteredProducts(filtered);
   };
@@ -90,14 +67,15 @@ const BookingTable = () => {
   const handleComplete = async (service: upcommingService) => {
     if (window.confirm("Are you sure you want to complete the service")) {
     try{
-      const response = await axios.post("http://localhost:3000/service/completeBooking", 
+      await axios.post("http://localhost:3000/service/completeBooking", 
         { 
           Orderid: service.id,
           date: service.date,
           customerId: service.customer.id,
           serviceId: service.service.id,
           amount: service.amount,
-          payment: service.payment
+          payment: service.payment,
+          servicePrice: service.service.price
         },
         {
           headers: { Authorization: `Bearer ${token}` }, 
@@ -117,14 +95,15 @@ const BookingTable = () => {
   const handleReject = async (service: upcommingService) => {
     if (window.confirm("Are you sure you want to reject the service")) {
     try{
-      const response = await axios.post("http://localhost:3000/service/rejectBooking", 
+       await axios.post("http://localhost:3000/service/rejectBooking", 
         { 
           Orderid: service.id,
           date: service.date,
           customerId: service.customer.id,
           serviceId: service.service.id,
           amount: service.amount,
-          payment: service.payment
+          payment: service.payment,
+          servicePrice: service.service.price
         },
         {
           headers: { Authorization: `Bearer ${token}` }, 
@@ -136,6 +115,26 @@ const BookingTable = () => {
 
     } catch(error){
       console.log(error)
+    }
+  }};
+
+  const handlePayment = async () => {
+    if (window.confirm("Are you sure you want to pay the Due")) {
+    try{
+      setLoader(true); 
+       await axios.post("http://localhost:3000/payment/professionalPayment", 
+       {},
+        {
+          headers: { Authorization: `Bearer ${token}` }, 
+          withCredentials: true,
+        }
+      );
+      alert('Payment Successfull');
+      fetchStatsProfessional();
+    } catch(error){
+      console.log(error)
+    }finally {
+      setLoader(false); // Stop loading indicator
     }
   }};
 
@@ -156,6 +155,8 @@ const BookingTable = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Bookings List</h2>
+        <div className="flex gap-4">
+        <Button onClick={handlePayment} variant="light" color="orange">Pay Due</Button>
         <div className="relative">
           <input
             type="text"
@@ -165,6 +166,7 @@ const BookingTable = () => {
             value={searchTerm}
           />
           <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+        </div>
         </div>
       </div>
 
@@ -186,6 +188,9 @@ const BookingTable = () => {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Earnings
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                  Payment
@@ -210,6 +215,7 @@ const BookingTable = () => {
                    {product.service.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.service.price}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.amount}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">{product.payment}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">

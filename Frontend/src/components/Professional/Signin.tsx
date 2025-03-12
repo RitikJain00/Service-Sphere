@@ -11,6 +11,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
 import { useProfile } from '../../Context/ProfileContext';
+import { useStat } from '../../Context/StatsProvider';
 
 
 const Signin = () => {
@@ -19,6 +20,7 @@ const Signin = () => {
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
   const {updateAuth} = useProfile()
+  const {fetchStatsProfessional} = useStat()
  
 
 
@@ -50,6 +52,7 @@ const Signin = () => {
         });
         localStorage.setItem("authToken", response.data.token)
         localStorage.setItem("Type" , 'Professional')
+        fetchStatsProfessional()
         navigate('/DashBoard')
         updateAuth(response.data.token,"Professional")
       } catch(err : any) {

@@ -2,6 +2,7 @@ import { Notifications } from "@mantine/notifications";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "../Context/CartContext";
 import { ProfileProvider } from "../Context/ProfileContext";
+import { StatProvider } from "../Context/StatsProvider";
 import ScrollToTop from "../components/Scroll";
 
 // Import all pages
@@ -34,6 +35,7 @@ import MyOrders from "../pages/Customer/MyOrders";
 import Admin from "../pages/Admin/Admin";
 import Customers from "../pages/Admin/Customers";
 import Professionals from "../pages/Admin/Professionals";
+import Accounts from "../pages/Admin/Accounts"
 
 
 const AppRoutes = () => {
@@ -42,6 +44,7 @@ const AppRoutes = () => {
       <ScrollToTop />
       <ProfileProvider>
         <CartProvider>
+        <StatProvider>
           <Notifications />
           <Routes>
             {/* Common Routes */}
@@ -71,6 +74,7 @@ const AppRoutes = () => {
             <Route path="/MyOrders" element={<MyOrders />} />
 
             {/* Professional Routes */}
+            
             <Route path="/ProfessionalSignup" element={<Professional />} />
             <Route path="/ProfessionalLogin" element={<Professional />} />
             <Route path="/professional" element={<Professional />} />
@@ -79,15 +83,19 @@ const AppRoutes = () => {
             <Route path="/Services" element={<Services />} />
             <Route path="/Bookings" element={<Bookings />} />
             <Route path="/History" element={<History />} />
+           
+            
 
               {/* Admin Route */}
               <Route path="/Admin" element={<Admin />} />
               <Route path="/Customers" element={<Customers />} />
               <Route path="/Professionals" element={<Professionals />} />
+              <Route path="/Accounts" element={<Accounts/>} />
 
             {/* Catch-All Route (Redirect to Home) */}
             <Route path="*" element={<Home />} />
           </Routes>
+          </StatProvider>
         </CartProvider>
       </ProfileProvider>
     </BrowserRouter>

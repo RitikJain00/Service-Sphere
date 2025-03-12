@@ -1,6 +1,6 @@
 import React  from "react";
 import { createContext, useContext, useState,useEffect, ReactNode } from "react";
-import { Job, UpcommingBookingCustomer } from "../Data/Job";
+import { Job, UpcommingBookingCustomer, CartContextType  } from "../Type/Type";
 import { showNotification } from '@mantine/notifications';
 import { IconX, IconCheck,IconAlertTriangle } from '@tabler/icons-react';
 import axios from "axios"
@@ -8,27 +8,6 @@ import { Loader } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 
-
-interface CartContextType {
-  Favorate : Job[],
-  cart : Job[],
-  upcommingBooking: UpcommingBookingCustomer[],
-  upcommingOrders: UpcommingBookingCustomer[],
-  orders: Job[],
-  pastBooking: UpcommingBookingCustomer[],
-
-  total: number,
-  gst: number,
-  discount: number,
-  loading: boolean,
-  addToCart: (job: Job) => void,
-  removeFromCart: (job: Job) => void
-  addToFavorate: (job: Job) => void,
-  removeFromFavorate: (job: Job) => void,
-  fetchUpcommingBookings: () => void
-  BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => Promise<void>
-
- }
 
  const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -111,7 +90,7 @@ interface CartContextType {
     try{
       const response = await axios({
         method: 'get',
-        url: 'http://localhost:3000/shopService/UpcommingItems',
+        url: 'http://localhost:3000/service/allBookings',
         headers: {Authorization: `Bearer ${token}`}
       })
       setUpCommingBooking(response.data.UpcommingBookingInfo.services);  // Update  Favorate
@@ -133,7 +112,7 @@ const fetchUpcommingOrders = async () => {
   try{
     const response = await axios({
       method: 'get',
-      url: 'http://localhost:3000/shopService/UpcommingItems',
+      url: 'http://localhost:3000/shopService/UpcommingOrders',
       headers: {Authorization: `Bearer ${token}`}
     })
 
@@ -253,7 +232,7 @@ useEffect(() => {
             data: {cart: updatedCart, paymentMode,total,gst,discount}
           })
           alert('Booking confirmed!');
-          fetchUpcommingBookings()
+          fetchUpcommingOrders()
           fetchCartItem();
         }catch(error){
           console.log(error)

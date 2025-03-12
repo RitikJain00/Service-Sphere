@@ -1,7 +1,7 @@
 import Header from "../../components/Customer/Header/Header"
 import Footer from "../../components/Footer/Footer"
 import { useCart } from "../../Context/CartContext";
-import UpcommingBooking from "../../components/Services/JobCards/UpcommingBookingCard";
+import UpcommingOrder from "../../components/Services/JobCards/UpcommingOrderCard";
 import { Divider } from "@mantine/core"
 import { Grid } from '@mantine/core';
 
@@ -21,7 +21,7 @@ const MyOrders = () => {
          
           <Grid>
             {upcommingOrders.map((job) =>  <Grid.Col span={4}>
-               <UpcommingBooking key={job.service.id} job={job} /> 
+               <UpcommingOrder key={job.service.id} job={job} /> 
                </Grid.Col>)}
             
           </Grid>

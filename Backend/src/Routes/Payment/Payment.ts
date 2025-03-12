@@ -58,4 +58,53 @@ router.post("/process", LoginStatus, async (req: Request, res: Response): Promis
   }
 });
 
+router.post("/professionalPayment", LoginStatus, async (req: Request, res: Response): Promise<void> => {
+  const professionalId = (req as any).user.professionalId;
+  console.log(professionalId)
+
+  try {
+    await prisma.$transaction(async (prisma) => {
+      // 1. Get Amount To be Paid
+      const Money = await prisma.professionalWallet.findUnique({
+        where: { professionalId: professionalId },
+        select: { Pay: true, Gst: true }
+      });
+
+      if (!Money) {
+        throw new Error("Wallet details not found.");
+      }
+
+      const payAmount = Money.Pay || 0;
+      const gstAmount = Money.Gst || 0;
+      const totalAmount = payAmount + gstAmount;
+
+      // 2. Professional Wallet Debit
+      await prisma.professionalWallet.update({
+        where: { professionalId: professionalId },
+        data: {
+          Pay: 0,
+          Gst: 0,
+          Total: { decrement: totalAmount }
+        }
+      });
+
+      // 3. Admin Wallet Credit
+      await prisma.admin.update({
+        where: { id: 1 },
+        data: {
+          totalGst: { increment: gstAmount },
+          wallet: { increment: payAmount },
+          recieve: { decrement: totalAmount }
+        }
+      });
+    });
+
+    res.json({ msg: "Payment Successful" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Something went wrong" });
+  }
+});
+
+
 export default router;

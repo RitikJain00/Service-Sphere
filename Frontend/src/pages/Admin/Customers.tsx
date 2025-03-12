@@ -3,13 +3,16 @@ import SideBar from "../../components/Admin/Sidebar"
 import { Divider } from "@mantine/core"
 import StateCard from "../../components/Professional/StateCard"
 import { motion } from "framer-motion";
-import { AlertTriangle, DollarSign, Package, TrendingUp } from "lucide-react";
+import { AlertTriangle, BarChart2, Users, TrendingUp,UserRoundCheck } from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
 import SalesTrendChart from "../../components/Admin/DashBoard/LineChart";
 import CustomerTable from '../../components/Admin/Customer/CustomerTable'
+import { useStat } from "../../Context/StatsProvider";
 
 
 const Customers = () => {
+	const {statsAdmin} = useStat();
+
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
       <SideBar></SideBar>
     <div className="w-full">
@@ -19,15 +22,16 @@ const Customers = () => {
     <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
 				{/* STATS */}
 				<motion.div
-					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5 mb-8'
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 1 }}
 				>
-					<StateCard name='Total Products' icon={Package} value={'1234'} color='#6366F1' />
-					<StateCard name='Top Selling' icon={TrendingUp} value={'89'} color='#10B981' />
-					<StateCard name='Low Stock' icon={AlertTriangle} value={'23'} color='#F59E0B' />
-					<StateCard name='Total Revenue' icon={DollarSign} value={"$543,210"} color='#EF4444' />
+					<StateCard name='Total Customers' icon={Users} value={statsAdmin.totalCustomers} color='#6366F1' />
+					<StateCard name='New Customers' icon={UserRoundCheck} value={statsAdmin.newCustomers} color='#C30E59' />
+					<StateCard name='Completed Bookings' icon={TrendingUp} value={statsAdmin.totalCompletedBookings} color='#10B981' />
+					<StateCard name='Cancelled Bookings' icon={AlertTriangle} value={statsAdmin.totalCancelledBookings} color='#F59E0B' />
+					<StateCard name='Conversion Rate' icon={BarChart2} value={parseFloat(((statsAdmin.totalCompletedBookings/(statsAdmin.totalCompletedBookings+statsAdmin.totalCancelledBookings)) * 100).toFixed(2))} color='#EF4444' />
 				</motion.div>
 
 				<CustomerTable/>

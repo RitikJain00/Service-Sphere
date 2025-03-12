@@ -205,7 +205,7 @@ res.status(500).json({ error: "Error in fetching Favorate Items:" });
 });
 
 
-router.get("/UpcommingItems",LoginStatus, async (req: Request, res: Response): Promise<void> => {
+router.get("/UpcommingOrders",LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
   const userId = (req as any).user.customerId;
   

@@ -7,8 +7,12 @@ import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
 import CategoryDistributionChart from "../../components/Professional/DashBoard/PiChart";
 import SalesOverviewChart from "../../components/Professional/DashBoard/LineChart";
 import SalesChannelChart from "../../components/Professional/DashBoard/BarChart";
+import { useStat } from "../../Context/StatsProvider";
 
 const DashBoard = () => {
+	const { statsProfessional} = useStat()
+	
+
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
     <SideBar></SideBar>
     <div className="w-full">
@@ -23,10 +27,12 @@ const DashBoard = () => {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 1 }}
 				>
-					<StateCard name='Total Sales' icon={Zap} value='$12,345' color='#6366F1' />
-					<StateCard name='New Users' icon={Users} value='1,234' color='#8B5CF6' />
-					<StateCard name='Total Products' icon={ShoppingBag} value='567' color='#EC4899' />
-					<StateCard name='Conversion Rate' icon={BarChart2} value='12.5%' color='#10B981' />
+					<StateCard name='Total Sales' icon={Zap} value={statsProfessional.completedPastBookings} color='#6366F1' />
+					<StateCard name='New Users' icon={Users} value={statsProfessional.newCustomers} color='#8B5CF6' />
+					<StateCard name='Total Services' icon={ShoppingBag} value={statsProfessional._count.services} color='#EC4899' />
+					<StateCard name='Conversion Rate %' icon={BarChart2} value={parseFloat(((statsProfessional.completedPastBookings / statsProfessional._count.PastBookings) * 100).toFixed(2))}
+
+  color='#10B981' />
 				</motion.div>
 
 				{/* CHARTS */}

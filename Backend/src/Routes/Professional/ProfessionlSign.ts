@@ -52,6 +52,12 @@ router.post(
           }
         }
       });
+
+      const wallet = await prisma.professionalWallet.create({
+        data: {
+          professionalId:  newProfessional.id, 
+        }
+      });
       
 
       const token = jwt.sign({professionalId: newProfessional.id,username: newProfessional.username }, JWT_SECRET, {

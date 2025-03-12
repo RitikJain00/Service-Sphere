@@ -8,6 +8,7 @@ import shopService from './src/Routes/Customer/ShopServices'
 import    professionalSign   from './src/Routes/Professional/ProfessionlSign' 
 import professionalProfile from './src/Routes/Professional/ProfessionalProfile'
 import service from './src/Routes/Professional/Service'
+import stats from './src/Routes/Professional/Stats'
 
 import adminSign from './src/Routes/Admin/AdminSign'
 import customerData from './src/Routes/Admin/CustomerData'
@@ -46,6 +47,8 @@ app.use('/shopService', shopService)
 app.use('/professionalsign',professionalSign);
 app.use('/professionalprofile',professionalProfile);
 app.use('/service', service)
+app.use('/statistics', stats)
+
 
 // Admin Servers
 app.use('/adminsign',adminSign);

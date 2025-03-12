@@ -28,7 +28,7 @@ router.get("/profile", LoginStatus, async (req: Request, res: Response) => {
        return
     }
 
-    const walletAmount = await prisma.wallet.findUnique({
+    const walletAmount = await prisma.customerWallet.findUnique({
       where: { customerId: userId },
       select: {
         Total: true
@@ -77,7 +77,7 @@ router.put("/wallet", LoginStatus, async (req: Request, res: Response) => {
     const userId = (req as any).user.customerId; 
     const { amount } = req.body;
 
-    const updatedWallet = await prisma.wallet.upsert({
+    const updatedWallet = await prisma.customerWallet.upsert({
       where: { customerId: userId },
       update: {
         Total: {
@@ -102,7 +102,7 @@ router.put("/walletOrder", LoginStatus, async (req: Request, res: Response) => {
     const userId = (req as any).user.customerId; 
     const { Grandtotal } = req.body;
 
-    const updatedWallet = await prisma.wallet.update({
+    const updatedWallet = await prisma.customerWallet.update({
       where: { customerId: userId },
 
       data: {
