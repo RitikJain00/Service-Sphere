@@ -22,7 +22,7 @@ const BookingTable = () => {
   const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
 
-  const { fetchStatsProfessional } = useStat()
+  const { fetchStatsProfessional,statsProfessional  } = useStat()
 
   // Fetch Data
   const fetchData = async () => {
@@ -84,6 +84,7 @@ const BookingTable = () => {
       );
       alert('Service Completed Successfully');
       fetchData();
+      fetchStatsProfessional();
 
     } catch(error){
       console.log(error)
@@ -112,6 +113,7 @@ const BookingTable = () => {
       );
       alert('Service Rejected Successfully');
       fetchData();
+      fetchStatsProfessional();
 
     } catch(error){
       console.log(error)
@@ -119,6 +121,10 @@ const BookingTable = () => {
   }};
 
   const handlePayment = async () => {
+    if(statsProfessional.wallet.Pending === 0){
+      alert('No Payment Due');
+      return
+    }
     if (window.confirm("Are you sure you want to pay the Due")) {
     try{
       setLoader(true); 

@@ -1,6 +1,9 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import axios from 'axios';
-import {BasicInfo,ContactInfo,AddressInfo, ProfileContextType } from '../Type/Type';
+import {BasicInfo,ContactInfo,AddressInfo,verificationInfo, ProfileContextType } from '../Type/Type';
+import { BasicDetail, Contact, Address } from "../../../Shared/Validation/ProfileSchema";
+import { Loader } from "@mantine/core";
+import { useDisclosure } from '@mantine/hooks';
 
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -14,45 +17,67 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const [basic, setBasic] = useState<BasicInfo>({ name: '', about: '' });
   const [contact, setContact] = useState<ContactInfo>({email: '', phone: '' });
   const [address, setAddress] = useState<AddressInfo>({ home: '', city: '', pin: '', country: '' });
+  const [verify, setVerify] = useState<verificationInfo>({email: false, phone: false})
   const [walletAmount , setWalletAmount] = useState<number>(0);
+  const [errorBasic, setErrorBasic] = useState<string | null>(null)
+  const [errorContact, setErrorContact] = useState<string | null>(null)
+  const [errorAddress, setErrorAddress] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [token, setToken] = useState(localStorage.getItem("authToken"));
   const [type, setType] = useState(localStorage.getItem("Type"));
+
    
   const updateAuth = (newToken: string, newType: string) => {
     setToken(newToken);
     setType(newType);
   };
-      
-
-  useEffect(() => {
+   
+  const fetchProfile = () => {
     if (!token || !type) return;
 
-  const apiUrl =
-    type === "Customer"
-      ? "http://localhost:3000/customerprofile/profile"
-      : "http://localhost:3000/professionalprofile/profile";
-
-    axios({
-      method: 'get',
-      url: apiUrl,
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then(response => {
-        const data = response.data;
-        setBasic({ name: data.name, about: data.description });
-        setContact({email: data.username, phone: data.phone });
-        setAddress({ home: data.address, city: data.city, pin: data.pincode, country: data.country });
-        setWalletAmount(data.walletAmount.Total)
+    const apiUrl =
+      type === "Customer"
+        ? "http://localhost:3000/customerprofile/profile"
+        : "http://localhost:3000/professionalprofile/profile";
+  
+      axios({
+        method: 'get',
+        url: apiUrl,
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .catch(error => console.error("Error fetching profile:", error));
+        .then(response => {
+          const data = response.data.userProfile;
+          console.log(data)
+        
+          setBasic({ name: data.profile.name, about: data.profile.description});
+          setContact({email: data.username, phone: data.profile.phone });
+          setAddress({ home: data.profile.address, city: data.profile.city, pin: data.profile.pincode, country: data.profile.country });
+         setWalletAmount(data.wallet.Total)
+          setVerify({email: data.isEmailVerified, phone: data.isPhoneVerified})
+        })
+        .catch(error => console.error("Error fetching profile:", error));
+  }
+
+  useEffect(() => {
+    fetchProfile()
   }, [token,type]);
 
 
 
-  const handleBasicChange = (field: string, value: string) => setBasic(prev => ({ ...prev, [field]: value }));
-  const handleContactChange = (field: string, value: string) => setContact(prev => ({ ...prev, [field]: value }));
-  const handleAddressChange = (field: string, value: string) => setAddress(prev => ({ ...prev, [field]: value }));
+  const handleBasicChange = (field: string, value: string) =>{ 
+    setBasic(prev => ({ ...prev, [field]: value } )) 
+    setErrorBasic(null) 
+  };
+  const handleContactChange = (field: string, value: string) =>{
+     setContact(prev => ({ ...prev, [field]: value }))
+     setErrorContact(null)
+  };
+  const handleAddressChange =(field: string, value: string) =>{
+      setAddress(prev => ({ ...prev, [field]: value }))
+     setErrorAddress(null)
+  }
+
 
   const handleWalletMoney = async (amount: number) => {
     try {
@@ -83,7 +108,32 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
     setEdit(newEdit);
   };
 
-  const saveProfile = () => {
+  const saveProfile = (change: number) => {
+
+    let checkSchema
+    if(change === 0){
+      checkSchema =  BasicDetail.safeParse(basic)
+      if(!checkSchema.success){
+      setErrorBasic(checkSchema.error.errors[0].message);
+      return;
+     }
+    }
+    else if(change === 1){
+      checkSchema =  Contact.safeParse(contact)
+      if(!checkSchema.success){
+      setErrorContact(checkSchema.error.errors[0].message);
+      return;
+      }
+    }
+    else{
+      checkSchema =  Address.safeParse(address)
+      if(!checkSchema.success){
+      setErrorAddress(checkSchema.error.errors[0].message);
+      return;
+      }
+    }
+
+    setLoading(true)
     if (!token || !type) return;
       const apiUrl =
       type === "Customer"
@@ -95,12 +145,21 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
       headers: {Authorization: `Bearer ${token}`},
         data: {basic, contact, address}
     })
-      .then(() => alert("Profile updated successfully!"))
+      .then(() => {
+      alert("Profile updated successfully!")
+      setLoading(false)
+  })
       .catch(error => console.error("Error updating profile:", error));
+      
   };
 
   return (
-    <ProfileContext.Provider value={{ edit, basic, contact, address, handleBasicChange, handleContactChange, handleAddressChange,  handleClick,handleWalletMoney, saveProfile, updateAuth, walletAmount}}>
+    <ProfileContext.Provider value={{ edit, basic, contact, address,verify, handleBasicChange, handleContactChange, handleAddressChange,  handleClick,handleWalletMoney, saveProfile, updateAuth, walletAmount, fetchProfile, errorBasic,errorContact,errorAddress}}>
+      {loading && (  
+      <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">
+      <Loader color="blue" size="xl" />
+      </div>
+      )}
       {children}
     </ProfileContext.Provider>
   );

@@ -1,23 +1,49 @@
 import Header from "../../components/Customer/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import Wallet from "../../components/Customer/Wallet";
+import VerifyOTP from "../../components/Verification/VerifyOTP";
+
+import { useState } from 'react'
+import { useCart } from '../../Context/CartContext';
+import { useProfile } from '../../Context/ProfileContext';
+import axios from 'axios';
+
+
+
+
+import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser, IconMail, IconPencil  } from '@tabler/icons-react';
+
+import { ActionIcon, Divider, Button, TextInput, rem   } from '@mantine/core';
 import { useDisclosure } from "@mantine/hooks";
 
-
-import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser  } from '@tabler/icons-react';
-import { IconMail } from '@tabler/icons-react';
-import { IconPencil } from '@tabler/icons-react';
-import { ActionIcon } from '@mantine/core';
-import { Divider } from '@mantine/core';
-import { Button } from '@mantine/core';
-
-
-import { TextInput, rem  } from '@mantine/core';
-import { useProfile } from '../../Context/ProfileContext';
 
 const CustomerProfile = () => {
 
   const [opened, { open, close }] = useDisclosure(false);
+  const [verifyOpened, { open: openVerify, close: closeVerify }] = useDisclosure(false);
+  const [verificationType, setVerificationType] = useState(""); // "email" or "phone"
+  const {setLoading} = useCart();
+
+
+  const handleSendOTP = async (verify: string) => {
+    const token = localStorage.getItem('authToken')
+    setVerificationType(verify)
+    try {
+      setLoading(true)
+      await axios.post(
+        "http://localhost:3000/customersign/sendOtp",
+        { emailOrphone: verify },
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+      );
+      alert(`OTP send to your ${verify}`)
+      openVerify(); 
+    }catch(error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
  
 
     const Detail = useProfile();
@@ -65,6 +91,7 @@ const CustomerProfile = () => {
             />
             </div>
 
+
           </div> :  
           <div className=" flex flex-col gap-2">
 
@@ -76,16 +103,20 @@ const CustomerProfile = () => {
         { Detail.basic.about }
         </div>
 
+        {Detail.errorBasic && <div className="text-red-500 text-sm text-center">{Detail.errorBasic}</div>}
+
 </div>
 }
   
            <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(0)}>
             
-            { Detail.edit[0] ? <div onClick={() => Detail.saveProfile()} >Save</div>  : <  IconPencil stroke={2} /> }
+            { Detail.edit[0] ? <div onClick={() => Detail.saveProfile(0)} >Save</div>  : <  IconPencil stroke={2} /> }
             </ActionIcon> 
     </div>
 
     <Divider mx="md" my='xl' />
+
+
 
     {/* Contact Details */}
 
@@ -109,6 +140,7 @@ const CustomerProfile = () => {
               value={`${Detail.contact.email}`}
               onChange={(e) => Detail.handleContactChange("email", e.target.value)}
             />
+
             </div>
 
             <div>
@@ -124,31 +156,50 @@ const CustomerProfile = () => {
 
           </div> : 
             <div>
-            <div className='flex gap-16 text-2xl'>
+              <div className="flex justify-between gap-12">
+              <div className='flex gap-16 text-2xl'>
               <div className='w-32'>Email:</div>
               <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center ">
               <div><IconMail stroke={2} /></div>
               {Detail.contact.email}</div>
               </div>
+              {Detail.verify.email===false && Detail.contact.email !== '' && 
+              <Button variant="light" color="orange"  onClick={() => { 
+                handleSendOTP("Email")
+              }}>Verify </Button>}
+              </div>
+           
 
 
-            <div className='flex gap-16  text-2xl'>
-            <div className='w-32'>Mobile:</div>
-            <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-cente  ">
-            <IconPhone stroke={2} />
-            {Detail.contact.phone}</div>
+            <div className="flex justify-between mt-4">
+              <div className='flex gap-16  text-2xl'>
+              <div className='w-32'>Mobile:</div>
+               <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-cente  ">
+                <IconPhone stroke={2} />
+                {Detail.contact.phone}</div>
+              </div>
+           
+            {Detail.verify.phone===false &&Detail.contact.phone !== '' && 
+            <Button variant="light" color="orange" onClick={() => { 
+              handleSendOTP("Phone")
+            }}>Verify</Button>}
         </div>
+        {Detail.errorContact && <div className="text-red-500 text-sm text-center mt-4">{Detail.errorContact}</div>}
         </div>
+        
 }
 </div>
 
    <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl'  onClick={() => Detail.handleClick(1)}>
-              { Detail.edit[1] ? <div onClick={() => Detail.saveProfile()}>Save</div>  : < IconPencil stroke={2} /> }
+              { Detail.edit[1] ? <div onClick={() => Detail.saveProfile(1)}>Save</div>  : < IconPencil stroke={2} /> }
           </ActionIcon> 
 
     </div>
 
     <Divider mx="md" my='xl' />
+
+
+
 
     {/* Address Details */}
 
@@ -234,12 +285,13 @@ const CustomerProfile = () => {
             <IconFlag stroke={2} />
             {Detail.address.country} </div>
         </div>
+        {Detail.errorAddress && <div className="text-red-500 text-sm text-center">{Detail.errorAddress}</div>}
         </>
 }
 </div>
 
    <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(2)}>
-          { Detail.edit[2] ? <div onClick={() => Detail.saveProfile()}>Save</div>  :  < IconPencil stroke={2} /> }
+          { Detail.edit[2] ? <div onClick={() => Detail.saveProfile(2)}>Save</div>  :  < IconPencil stroke={2} /> }
           </ActionIcon> 
           
     </div>
@@ -247,6 +299,8 @@ const CustomerProfile = () => {
 
 
     <Divider mx="md" my='xl' />
+
+    {/* Wallet Details */}
 
     <div className='px-8 w-full flex justify-between'>
         <div className='flex flex-col gap-4'>
@@ -264,6 +318,8 @@ const CustomerProfile = () => {
 
         <Divider mx="md" my='xl' />
 
+        {/* Upcomming Bookings */}
+
     <div className='px-8 w-full flex justify-between'>
         <div className='flex flex-col gap-4'>
    
@@ -277,6 +333,8 @@ const CustomerProfile = () => {
         </div>
 
         <Divider mx="md" my='xl' />
+
+        {/* Discount Details */}
 
 <div className='px-8 w-full flex justify-between'>
     <div className='flex flex-col gap-4'>
@@ -301,6 +359,8 @@ const CustomerProfile = () => {
         </div>
 
         {<Wallet opened={opened} close={close} />}
+
+        {<VerifyOTP opened={verifyOpened} close={closeVerify} type={verificationType} email={Detail.contact.email} closeAllModals={close} user={'Customer'}/>}
 
         </div>
 

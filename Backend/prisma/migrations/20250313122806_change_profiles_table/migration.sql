@@ -1,0 +1,19 @@
+-- AlterTable
+ALTER TABLE "CustomerProfile" ALTER COLUMN "name" SET DEFAULT '',
+ALTER COLUMN "description" SET DEFAULT '',
+ALTER COLUMN "image" SET DEFAULT '',
+ALTER COLUMN "phone" SET DEFAULT '',
+ALTER COLUMN "address" SET DEFAULT '',
+ALTER COLUMN "city" SET DEFAULT '',
+ALTER COLUMN "pincode" SET DEFAULT '',
+ALTER COLUMN "country" SET DEFAULT '';
+
+-- AlterTable
+ALTER TABLE "ProfessionalProfile" ALTER COLUMN "name" SET DEFAULT '',
+ALTER COLUMN "description" SET DEFAULT '',
+ALTER COLUMN "image" SET DEFAULT '',
+ALTER COLUMN "address" SET DEFAULT '',
+ALTER COLUMN "city" SET DEFAULT '',
+ALTER COLUMN "pincode" SET DEFAULT '',
+ALTER COLUMN "country" SET DEFAULT '',
+ALTER COLUMN "phone" SET DEFAULT '';

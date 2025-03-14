@@ -11,7 +11,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
 import { useProfile } from '../../Context/ProfileContext';
+import { useCart } from '../../Context/CartContext';
+import { useDisclosure } from "@mantine/hooks";
 
+import ForgotPassword from '../Verification/ForgotPassword';
 
 
 
@@ -21,6 +24,8 @@ const Signin = () => {
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
   const {updateAuth} = useProfile()
+  const {fetchCartItem, fetchFavorateItem, fetchUpcommingOrders, setLoading } = useCart()
+  const [opened, { open, close }] = useDisclosure(false);
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +44,7 @@ const Signin = () => {
        }
 
        try {
+        setLoading(true)
         const response = await axios({
           method: "post",
           url: "http://localhost:3000/customersign/signin",
@@ -52,9 +58,16 @@ const Signin = () => {
        
           navigate("/home");
           updateAuth(token,"Customer")
+           fetchCartItem(),
+           fetchFavorateItem(),
+           fetchUpcommingOrders()
+
+
       
       }  catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
+      } finally{
+        setLoading(false)
       }
 
   }
@@ -146,9 +159,10 @@ const Signin = () => {
                     </div>
 
                     <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
-                     <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 ' to={'/'}>Forgot Password ?</Link>
+                     <span onClick={() => open()} className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 cursor-pointer' >Forgot Password ?</span>
                     </div>
     
+                    {<ForgotPassword  opened={opened} close={close} user={'Customer'} />}
                     
           </div>           
   </div>

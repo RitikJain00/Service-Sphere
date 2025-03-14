@@ -144,7 +144,7 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
       </div>
       </Modal>
 
-      {slotModalOpen && <SlotAndPaymentModal opened={slotModalOpen} close={() => setSlotModalOpen(false)}  />}
+      {slotModalOpen && <SlotAndPaymentModal closeCheckOut={close}  opened={slotModalOpen} close={() => setSlotModalOpen(false) }  />}
   
     </div>
       

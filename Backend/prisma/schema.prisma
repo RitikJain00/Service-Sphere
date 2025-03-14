@@ -14,9 +14,19 @@ datasource db {
 }
 
 model Customer {
-  id              Int               @id @default(autoincrement())
-  username        String            @unique
-  password        String
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+
+  verifyOtp         String   @default("")
+  verifyOtpExpireAt DateTime @default(now())
+  isEmailVerified   Boolean  @default(false)
+  isPhoneVerified   Boolean  @default(false)
+
+  resetOtp         String   @default("")
+  resetOtpVerified Boolean  @default(false)
+  resetOtpExpireAt DateTime @default(now())
+
   profile         CustomerProfile? // One-to-One Relationship
   wallet          customerWallet?
   upcommingOrders UpcommingOrders[]
@@ -58,9 +68,19 @@ model Favorite {
 }
 
 model Professional {
-  id                Int                  @id @default(autoincrement())
-  username          String               @unique
-  password          String
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+
+  verifyOtp         String   @default("")
+  verifyOtpExpireAt DateTime @default(now())
+  isEmailVerified   Boolean  @default(false)
+  isPhoneVerified   Boolean  @default(false)
+
+  resetOtp         String   @default("")
+  resetOtpVerified Boolean  @default(false)
+  resetOtpExpireAt DateTime @default(now())
+
   createdAt         DateTime             @default(now())
   profile           ProfessionalProfile? // One-to-One Relationship
   wallet            ProfessionalWallet?
@@ -71,14 +91,14 @@ model Professional {
 
 model CustomerProfile {
   id          Int     @id @default(autoincrement())
-  name        String
-  description String?
-  image       String?
-  phone       String?
-  address     String?
-  city        String?
-  pincode     String?
-  country     String?
+  name        String  @default("")
+  description String? @default("")
+  image       String? @default("")
+  phone       String? @default("")
+  address     String? @default("")
+  city        String? @default("")
+  pincode     String? @default("")
+  country     String? @default("")
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique
@@ -86,14 +106,14 @@ model CustomerProfile {
 
 model ProfessionalProfile {
   id          Int     @id @default(autoincrement())
-  name        String
-  description String?
-  image       String?
-  phone       String?
-  address     String?
-  city        String?
-  pincode     String?
-  country     String?
+  name        String  @default("")
+  description String? @default("")
+  image       String? @default("")
+  phone       String? @default("")
+  address     String? @default("")
+  city        String? @default("")
+  pincode     String? @default("")
+  country     String? @default("")
 
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int          @unique
@@ -234,4 +254,11 @@ model ProfessionalWallet {
   Gst            Int          @default(0)
   professional   Professional @relation(fields: [professionalId], references: [id])
   professionalId Int          @unique
+}
+
+model ContactUs {
+  id      Int    @id @default(autoincrement())
+  name    String
+  email   String
+  message String
 }

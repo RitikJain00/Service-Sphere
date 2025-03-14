@@ -11,6 +11,7 @@ import { useStat } from "../../Context/StatsProvider";
 
 const DashBoard = () => {
 	const { statsProfessional} = useStat()
+	const ConversionRate = parseFloat(((statsProfessional.completedPastBookings / statsProfessional._count.PastBookings) * 100).toFixed(2)) | 0;
 	
 
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
@@ -30,7 +31,7 @@ const DashBoard = () => {
 					<StateCard name='Total Sales' icon={Zap} value={statsProfessional.completedPastBookings} color='#6366F1' />
 					<StateCard name='New Users' icon={Users} value={statsProfessional.newCustomers} color='#8B5CF6' />
 					<StateCard name='Total Services' icon={ShoppingBag} value={statsProfessional._count.services} color='#EC4899' />
-					<StateCard name='Conversion Rate %' icon={BarChart2} value={parseFloat(((statsProfessional.completedPastBookings / statsProfessional._count.PastBookings) * 100).toFixed(2))}
+					<StateCard name='Conversion Rate %' icon={BarChart2} value={ConversionRate}
 
   color='#10B981' />
 				</motion.div>

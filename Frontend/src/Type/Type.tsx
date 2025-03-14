@@ -84,11 +84,15 @@ export interface CartContextType {
   gst: number,
   discount: number,
   loading: boolean,
+  setLoading: (val: boolean) => void
   addToCart: (job: Job) => void,
   removeFromCart: (job: Job) => void
   addToFavorate: (job: Job) => void,
   removeFromFavorate: (job: Job) => void,
-  fetchUpcommingBookings: () => void
+  fetchUpcommingBookings: () => void,
+  fetchUpcommingOrders: () => void,
+  fetchCartItem: () => void,
+  fetchFavorateItem: () => void,
   BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => Promise<void>
 
  }
@@ -99,6 +103,7 @@ export interface CartContextType {
 export interface BasicInfo { name: string; about: string; }
 export interface ContactInfo { email: string, phone: string; }
 export interface AddressInfo { home: string; city: string; pin: string; country: string; }
+export interface verificationInfo {email: Boolean; phone: Boolean}
 
 export interface ProfileContextType {
   edit: boolean[];
@@ -106,14 +111,20 @@ export interface ProfileContextType {
   contact: ContactInfo;
   address: AddressInfo;
   walletAmount: number;
+  verify: verificationInfo;
+  errorBasic: string  | null;
+  errorContact: string  | null;
+  errorAddress: string  | null;
 
+   
   handleBasicChange: (field: string, value: string) => void;
   handleContactChange: (field: string, value: string) => void;
   handleAddressChange: (field: string, value: string) => void;
   handleWalletMoney: (amount: number) => void
   handleClick: (index: number) => void;
-  saveProfile: () => void;
+  saveProfile: (change: number) => void;
   updateAuth: (newToken: string, newType: string) => void
+  fetchProfile: () => void
   
 }
 

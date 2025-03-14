@@ -9,32 +9,38 @@ const prisma = new PrismaClient();
 router.get("/profile", LoginStatus, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.customerId; // Extract user ID from request
-    const email = (req as any).user.username;
+  
     
-    const userProfile = await prisma.customerProfile.findUnique({
-      where: { customerId: userId },
+    const userProfile = await prisma.customer.findUnique({
+      where: { id: userId },
       select: {
-        name: true,
-        description: true,
-        phone: true,
-        address: true,
-        city: true,
-        pincode: true,
-        country: true,
+
+        profile: {
+          select: {
+            name: true,
+            description: true,
+            image: true,
+            phone: true,
+            address: true,
+            city: true,
+            pincode: true,
+            country: true,
+          }
+        },
+        wallet: {
+          select: {
+            Total: true
+          }
+        },
+        username: true,
+        isEmailVerified: true,
+        isPhoneVerified: true
+       
       },
     });
-    if (!userProfile) {
-       res.status(404).json({ msg: "User profile not found" });
-       return
-    }
 
-    const walletAmount = await prisma.customerWallet.findUnique({
-      where: { customerId: userId },
-      select: {
-        Total: true
-      }
-    })
-      res.json({ ...userProfile, username: email, walletAmount  }); 
+
+      res.json({ msg: "Profile Fetch  Successfull",userProfile }); 
      
   } catch (error) {
     console.error("Error fetching profile:", error);

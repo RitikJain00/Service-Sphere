@@ -47,40 +47,48 @@ router.post("/addToCart", LoginStatus, async (req: Request, res: Response): Prom
   try {
     const userId = (req as any).user.customerId;
     const { id, price } = req.body;
-    
+
+    // Calculate GST and discount
     const gst = (18 / 100) * price;
     const discount = (10 / 100) * price;
 
-    const response = await prisma.cart.upsert({
-      where: { customerId: userId },
+    await prisma.$transaction(async (prisma) => {
+      // Fetch the current cart if it exists
+      const existingCart = await prisma.cart.findUnique({
+        where: { customerId: userId },
+        select: { total: true, gst: true, discount: true },
+      });
 
-      update: {
-        services: {
-          connect: { id: id },
-        },
-        total: {
-          increment: price,
-        },
-        gst: {
-          increment: gst, 
-        },
-        discount: {
-          increment: discount, 
-        }
-      },
-
-      create: {
-        customerId: userId, 
-        total: price, 
-        gst: gst, 
-        discount: discount, 
-        services: {
-          connect: { id: id }, 
-        }
+      if (existingCart) {
+        // Update existing cart
+        await prisma.cart.update({
+          where: { customerId: userId },
+          data: {
+            services: {
+              connect: { id: id },
+            },
+            total: existingCart.total + price,
+            gst: existingCart.gst + gst,
+            discount: existingCart.discount + discount,
+          },
+        });
+      } else {
+        // Create new cart
+        await prisma.cart.create({
+          data: {
+            customerId: userId,
+            total: price,
+            gst: gst,
+            discount: discount,
+            services: {
+              connect: { id: id },
+            },
+          },
+        });
       }
     });
 
-    res.status(200).json({ message: "Service added to cart successfully", response });
+    res.status(200).json({ message: "Service added to cart successfully" });
   } catch (error) {
     console.error("Error adding to cart:", error);
     res.status(500).json({ error: "Failed to add service to cart" });
@@ -88,35 +96,54 @@ router.post("/addToCart", LoginStatus, async (req: Request, res: Response): Prom
 });
 
 
-router.put("/deleteFromCart",LoginStatus, async (req: Request, res: Response): Promise<void> => {
+
+router.put("/deleteFromCart", LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = (req as any).user.customerId;
-    const { id,price } = req.body;
-    const gst = (18/100)*price;
-    const discount = (10/100)*price;
-    const response = await prisma.cart.update({
-      where: {customerId: userId}, 
-      data: {
-        services: {
-          disconnect: { id: id }, 
+    const { id, price } = req.body;
+
+    // Calculate GST and discount
+    const gst = (18 / 100) * price;
+    const discount = (10 / 100) * price;
+
+    await prisma.$transaction(async (prisma) => {
+      // Fetch existing cart details
+      const existingCart = await prisma.cart.findUnique({
+        where: { customerId: userId },
+        select: { total: true, gst: true, discount: true, services: true },
+      });
+
+      if (!existingCart) {
+        throw new Error("Cart not found");
+      }
+
+      // Ensure the service exists in the cart before attempting to remove
+      const isServiceInCart = existingCart.services.some(service => service.id === id);
+      if (!isServiceInCart) {
+        throw new Error("Service not found in cart");
+      }
+
+      // Update the cart
+      await prisma.cart.update({
+        where: { customerId: userId },
+        data: {
+          services: {
+            disconnect: { id: id },
+          },
+          total: existingCart.total > price ? { decrement: price } : 0,
+          gst: existingCart.gst > gst ? { decrement: gst } : 0,
+          discount: existingCart.discount > discount ? { decrement: discount } : 0,
         },
-        total: {
-          decrement: price
-        },
-        gst: {
-          decrement: gst
-        },
-        discount: {
-          decrement: discount
-        }
-      }  
-    })
-    res.status(200).json({ message: "Service deleted from cart successfully", response });
-  }catch(error){
+      });
+    });
+
+    res.status(200).json({ message: "Service deleted from cart successfully" });
+  } catch (error) {
     console.error("Error in deleting from cart:", error);
-    res.status(500).json({ error: "Failed to delete service from cart" });
+    res.status(500).json({ error: error|| "Failed to delete service from cart" });
   }
 });
+
 
 router.get("/cartItems",LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
@@ -145,7 +172,7 @@ router.get("/cartItems",LoginStatus, async (req: Request, res: Response): Promis
 router.post("/addToFavorate",LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = (req as any).user.customerId;
-    const { id, price } = req.body;
+    const { id } = req.body;
     const response = await prisma.cart.update({
       where: {customerId: userId}, 
       data: {
@@ -196,7 +223,7 @@ const data = await prisma.cart.findUnique({
   }
 })
 
-res.status(200).json({ message: "Favorate Items Fetch successfully", UpcommingBookingInfo: data });
+res.status(200).json({ message: "Favorate Items Fetch successfully", favorateInfo: data });
 
 }catch(error){
 console.error("Error in fetching Favorate Items:", error);

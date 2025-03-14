@@ -13,16 +13,17 @@ import '@mantine/dates/styles.css';
 
 interface SlotAndPaymentProps {
   opened: boolean;
+  closeCheckOut: () => void;
   close: () => void;
 }
 
-const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) => {
+const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, closeCheckOut}) => {
 
   const [selectedDate, setSelecteddate] = useState<{ [key: number]: Date | null }>({})
   const [paymentMode, setPaymentMode] = useState<'Online' | 'COD' |'Wallet' | ''>('');
   const [loader, setLoader] = useState(false);
-  const { cart,total,gst,discount, BookServices } = useCart()
-  const {basic, contact, walletAmount} = useProfile()
+  const { cart,total,gst,discount, BookServices, setLoading } = useCart()
+  const {basic, contact, walletAmount, fetchProfile} = useProfile()
   const token = localStorage.getItem('authToken')
 
 
@@ -116,21 +117,36 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close}) =>
 
     if (paymentMode === 'Online') {
       alert('Redirecting to online payment...');
-      handleOnlinePayment()
+      setLoading(true)
+      await handleOnlinePayment()
+      setTimeout(() => {
+        closeCheckOut(); 
+      }, 300); 
+    
     } else if(paymentMode === 'COD') {
+      setLoading(true)
       BookServices(paymentMode,selectedDate) 
       close();
+      setTimeout(() => {
+        closeCheckOut(); 
+      }, 300); 
     }
     else if(paymentMode === 'Wallet'){
       if((total + gst - discount) > walletAmount) {
         alert('Insufficient Balance')
         return
       }
-      handleWalletPayment()
+      setLoading(true)
+      await handleWalletPayment()
+      setTimeout(() => {
+        closeCheckOut(); 
+      }, 300); 
     }
     else {
       alert('Please Choose a Payment Mode')
     }
+    setLoading(false)
+    fetchProfile()
     
   };
 

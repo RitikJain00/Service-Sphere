@@ -245,6 +245,7 @@ useEffect(() => {
 
     const addToFavorate = async (job: Job) => {
       const token = localStorage.getItem('authToken')
+      console.log(job)
       if(!token) {
         navigate('/CustomerLogin')
          return
@@ -315,7 +316,7 @@ useEffect(() => {
       };
 
     return (
-      <CartContext.Provider value= {{cart, upcommingOrders,fetchUpcommingBookings,orders, upcommingBooking, pastBooking,  BookServices, Favorate, total,gst, discount, loading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,
+      <CartContext.Provider value= {{cart, upcommingOrders,fetchUpcommingBookings,orders, upcommingBooking, pastBooking,  BookServices, Favorate, total,gst, discount, loading,setLoading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,fetchCartItem,fetchFavorateItem, fetchUpcommingOrders 
        }}>
         {loading && (  
       <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">

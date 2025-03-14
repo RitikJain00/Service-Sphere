@@ -10,10 +10,11 @@ const prisma = new PrismaClient();
 router.get("/statsProfessional", LoginStatus, async (req: Request, res: Response): Promise<void> => {
 
   const professionalId = (req as any).user.professionalId;
+  const email = (req as any).user.username;
 
   try{
     const stats = await prisma.professional.findUnique({
-      where: { id: professionalId},
+      where: { id: professionalId, username: email},
       select: {
       wallet: {
         select: {

@@ -9,6 +9,7 @@ import { showNotification } from "@mantine/notifications";
 import ServiceHandler from "./Service";
 import { Loader } from '@mantine/core';
 import { IconCaretUpDown } from '@tabler/icons-react';
+import { useStat } from "../../../Context/StatsProvider";
 
 interface Service {
   id: string;
@@ -31,6 +32,7 @@ const ProductsTable = () => {
   const [filteredProducts, setFilteredProducts] = useState<Service[]>([]);
   const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
+  const {fetchStatsProfessional } = useStat()
 
   // Fetch Data
   const fetchData = async () => {
@@ -89,6 +91,7 @@ const ProductsTable = () => {
       );
 
       fetchData();
+      fetchStatsProfessional()
       showNotification({
         title: "Service Status Changed",
         message: "Your Service Status Changed Successfully!",

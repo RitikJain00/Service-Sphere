@@ -1,22 +1,48 @@
+import { useState } from 'react'
 
+import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser, IconMail,IconPencil,IconArrowLeft  } from '@tabler/icons-react';
 
+import { ActionIcon, Divider,  Button, TextInput, rem  } from '@mantine/core';
+import { useDisclosure } from "@mantine/hooks";
 
-import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser  } from '@tabler/icons-react';
-import { IconMail } from '@tabler/icons-react';
-import { IconPencil } from '@tabler/icons-react';
-import { ActionIcon } from '@mantine/core';
-import { Divider } from '@mantine/core';
-import {  IconArrowLeft } from '@tabler/icons-react';
-
-import { Button } from '@mantine/core';
-import { TextInput, rem  } from '@mantine/core';
 import { useProfile } from '../../Context/ProfileContext';
+import { useCart } from '../../Context/CartContext';
+
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import VerifyOTP from "../../components/Verification/VerifyOTP";
 
 const ProfessionalProfile = () => {
 
     const Detail = useProfile();
     const navigate = useNavigate();
+
+    const [verifyOpened, { open: openVerify, close: closeVerify }] = useDisclosure(false);
+    const [verificationType, setVerificationType] = useState(""); // "email" or "phone"
+    const {setLoading} = useCart();
+
+    
+  const handleSendOTP = async (verify: string) => {
+    const token = localStorage.getItem('authToken')
+    setVerificationType(verify)
+    try {
+      setLoading(true)
+      await axios.post(
+        "http://localhost:3000/professionalsign/sendOtp",
+        { emailOrphone: verify },
+        { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
+      );
+      alert(`OTP send to your ${verify}`)
+      openVerify(); 
+    }catch(error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
     return  <div className="min-h-[100vh] font-['poppins'] bg-mine-shaft-950 ">
 
 <Button className='!absolute m-4 z-10' variant="light" color="yellow" onClick={() => navigate('/Dashboard')} leftSection={<IconArrowLeft size={14} />}> Back </Button>
@@ -69,13 +95,13 @@ const ProfessionalProfile = () => {
         <div className='text-xl text-mine-shaft-500'>
         { Detail.basic.about }
         </div>
-
+        {Detail.errorBasic && <div className="text-red-500 text-sm text-center">{Detail.errorBasic}</div>}
 </div>
 }
   
            <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(0)}>
             
-            { Detail.edit[0] ? <div onClick={() => Detail.saveProfile()}>Save</div>  : <  IconPencil stroke={2} /> }
+            { Detail.edit[0] ? <div onClick={() => Detail.saveProfile(0)}>Save</div>  : <  IconPencil stroke={2} /> }
             </ActionIcon> 
     </div>
 
@@ -118,26 +144,40 @@ const ProfessionalProfile = () => {
 
           </div> : 
             <div>
+            <div className="flex justify-between gap-12">
             <div className='flex gap-16 text-2xl'>
               <div className='w-32'>Email:</div>
               <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center ">
               <div><IconMail stroke={2} /></div>
               {Detail.contact.email}</div>
               </div>
+              {Detail.verify.email===false && Detail.contact.email !== '' && 
+              <Button variant="light" color="orange"  onClick={() => { 
+                handleSendOTP("Email")
+              }}>Verify </Button>}
+              </div>
 
-
+            <div className="flex justify-between mt-4">
             <div className='flex gap-16  text-2xl'>
             <div className='w-32'>Mobile:</div>
             <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-cente  ">
             <IconPhone stroke={2} />
             {Detail.contact.phone}</div>
         </div>
+        {Detail.verify.phone===false &&Detail.contact.phone !== '' && 
+            <Button variant="light" color="orange" onClick={() => { 
+              handleSendOTP("Phone")
+            }}>Verify</Button>}
+
         </div>
+        {Detail.errorContact && <div className="text-red-500 text-sm text-center mt-4">{Detail.errorContact}</div>}
+        </div>
+        
 }
 </div>
 
    <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl'  onClick={() => Detail.handleClick(1)}>
-              { Detail.edit[1] ? <div onClick={() => Detail.saveProfile()}>Save</div>  : < IconPencil stroke={2} /> }
+              { Detail.edit[1] ? <div onClick={() => Detail.saveProfile(1)}>Save</div>  : < IconPencil stroke={2} /> }
           </ActionIcon> 
 
     </div>
@@ -228,15 +268,20 @@ const ProfessionalProfile = () => {
             <IconFlag stroke={2} />
             {Detail.address.country} </div>
         </div>
+        {Detail.errorAddress && <div className="text-red-500 text-sm text-center">{Detail.errorAddress}</div>}
         </>
 }
 </div>
 
    <ActionIcon variant="subtle" color="yellow" aria-label="Settings" size='xl' onClick={() => Detail.handleClick(2)}>
-          { Detail.edit[2] ? <div onClick={() => Detail.saveProfile()} >Save</div>  :  < IconPencil stroke={2} /> }
+          { Detail.edit[2] ? <div onClick={() => Detail.saveProfile(2)} >Save</div>  :  < IconPencil stroke={2} /> }
           </ActionIcon> 
           
     </div>
+
+    
+    {<VerifyOTP opened={verifyOpened} close={closeVerify} type={verificationType} email={Detail.contact.email} closeAllModals={close} user={'Professional'}/>}
+
     </div>
 
        

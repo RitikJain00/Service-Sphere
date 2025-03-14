@@ -1,5 +1,6 @@
 import express from 'express'
-
+import cookieParser from 'cookie-parser'
+import dotenv from "dotenv";
 
 import  customerSign  from './src/Routes/Customer/CustomerSign'
 import customerProfile from './src/Routes/Customer/CustomerProfile'
@@ -23,6 +24,7 @@ import booking from './src/Routes/Booking/Booking'
 import cors from "cors";
 
 const app = express();
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 
@@ -36,6 +38,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser())
 
 // Customer Servers
 app.use('/customersign', customerSign);

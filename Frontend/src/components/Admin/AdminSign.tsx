@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
 import { PasswordInput} from '@mantine/core';
+import { useStat } from '../../Context/StatsProvider';
 
 interface SigninProps {
   opened: boolean; // Whether the modal is open
@@ -18,6 +19,8 @@ const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
   const navigate = useNavigate()
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
+  const { fetchStatsAdmin } = useStat()
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   
@@ -47,6 +50,8 @@ const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
         localStorage.setItem("Type", "Admin");
         close();
         navigate("/Admin");
+        fetchStatsAdmin()
+
          
       
       }  catch(err : any) {

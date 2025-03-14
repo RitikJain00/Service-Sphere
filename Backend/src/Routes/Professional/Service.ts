@@ -232,29 +232,22 @@ router.get("/pastBookings", LoginStatus, async (req: Request, res: Response): Pr
 
 router.post('/completeBooking', LoginStatus, async (req: Request, res: Response): Promise<void> => {
   const currentDate = new Date();
-  const formattedDate = dateFormatter(currentDate)
+  const formattedDate = dateFormatter(currentDate);
 
   try {
     const userId = (req as any).user.professionalId; // Extract user ID from token
-    
-    const { Orderid, date, customerId, serviceId,amount,servicePrice, payment } = req.body;
-    console.log(customerId)
- 
-   
+    const { Orderid, date, customerId, serviceId, amount, servicePrice, payment } = req.body;
+
     await prisma.$transaction(async (prisma) => {
-      
-
-        // 1. Delete Upcomming Order
-        await prisma.upcommingOrders.delete({
-          where: {bookingId: Orderid}
-        });
-
+      // 1. Delete Upcoming Order
+      await prisma.upcommingOrders.delete({
+        where: { bookingId: Orderid },
+      });
 
       // 2. Delete Upcoming Booking
       await prisma.upcommingBookings.delete({
-        where: {id: Orderid}
-        })
-
+        where: { id: Orderid },
+      });
 
       // 3. Create Past Booking
       await prisma.pastBookings.create({
@@ -266,15 +259,13 @@ router.post('/completeBooking', LoginStatus, async (req: Request, res: Response)
           serviceId: serviceId,
           amount: amount,
           payment: payment,
-          status: 'Completed'
-        }
+          status: 'Completed',
+        },
       });
 
-  
       // 4. Create Past Order
       await prisma.pastOrders.create({
-
-        data: ({
+        data: {
           slotDate: date,
           completionDate: formattedDate,
           amount: amount,
@@ -282,106 +273,107 @@ router.post('/completeBooking', LoginStatus, async (req: Request, res: Response)
           status: 'Completed',
           customerId: customerId,
           serviceId: serviceId,
-        })
+        },
       });
 
-       // 5. Maintain Cash Flow
+      // 5. Maintain Cash Flow
+      if (payment !== 'COD') {
+        // Fetch the professional's current wallet balance
+        const wallet = await prisma.professionalWallet.findUnique({
+          where: { professionalId: userId },
+          select: { Pending: true },
+        });
 
-      if(payment !== 'COD'){
-        await prisma.professionalWallet.upsert({
-          where: {professionalId: userId},
-          update: {
-            Pending: {
-              increment: amount
-            }
-          },
-          create: {
-            professionalId: userId, 
-            Pending: amount
-          },
-        })
+        // Calculate the new pending balance
+        const newPending = (wallet?.Pending || 0) + amount;
 
-        await prisma.admin.update({
-          where: {id: 1},
-          data: {
-            pay: {
-              increment: amount
-            },
-            totalGst: {
-              increment: (serviceId*0.18)
-            },
-            wallet: {
-              increment: (serviceId - (0.10*serviceId))
-            }
-          }
-        })
-      } else{
+        // Update the professional's wallet balance
         await prisma.professionalWallet.upsert({
-          where: {professionalId: userId},
-          update: {
-            Pay: {
-              increment: (servicePrice*0.25)
-            },
-            Gst: {
-              increment: (servicePrice*0.18)
-            },
-            Total: {
-              increment: (servicePrice + (0.18*servicePrice) - (0.10*servicePrice))
-            }
-          },
-          create: {
-            professionalId: userId, 
-            Pay: (servicePrice*0.25),
-            Gst: (servicePrice*0.18)
-          },
-        })
-        
+          where: { professionalId: userId },
+          update: { Pending: newPending },
+          create: { professionalId: userId, Pending: amount },
+        });
+
+        // Fetch current admin balance
+        const admin = await prisma.admin.findUnique({
+          where: { id: 1 },
+          select: { pay: true, totalGst: true, wallet: true },
+        });
+
+        // Calculate the new values
+        const newPay = (admin?.pay || 0) + amount;
+        const newGst = (admin?.totalGst || 0) + serviceId * 0.18;
+        const newWallet = (admin?.wallet || 0) + (serviceId - serviceId * 0.10);
+
+        // Update the admin's balance
         await prisma.admin.update({
-          where: {id: 1},
-          data: {
-            recieve: {
-              increment: (servicePrice*0.25 + servicePrice*0.18)
-            }
-          }
-        })
+          where: { id: 1 },
+          data: { pay: newPay, totalGst: newGst, wallet: newWallet },
+        });
+      } else {
+        // Fetch the professional's wallet balance
+        const wallet = await prisma.professionalWallet.findUnique({
+          where: { professionalId: userId },
+          select: { Pay: true, Gst: true, Total: true },
+        });
+
+        // Calculate the new values
+        const newPay = (wallet?.Pay || 0) + servicePrice * 0.25;
+        const newGst = (wallet?.Gst || 0) + servicePrice * 0.18;
+        const newTotal = (wallet?.Total || 0) + servicePrice + servicePrice * 0.18 - servicePrice * 0.10;
+
+        // Update the professional's wallet balance
+        await prisma.professionalWallet.upsert({
+          where: { professionalId: userId },
+          update: { Pay: newPay, Gst: newGst, Total: newTotal },
+          create: { professionalId: userId, Pay: newPay, Gst: newGst, Total: newTotal },
+        });
+
+        // Fetch admin balance
+        const admin = await prisma.admin.findUnique({
+          where: { id: 1 },
+          select: { recieve: true },
+        });
+
+        // Calculate new receive amount
+        const newReceive = (admin?.recieve || 0) + servicePrice * 0.25 + servicePrice * 0.18;
+
+        // Update admin balance
+        await prisma.admin.update({
+          where: { id: 1 },
+          data: { recieve: newReceive },
+        });
       }
-
     });
 
-    res.json({ msg: 'Service Completed successfully ' });
-  }catch(error) {
+    res.json({ msg: 'Service Completed successfully' });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Something went wrong' });
   }
-})
+});
+
 
 router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): Promise<void> => {
   const currentDate = new Date();
-  const formattedDate = dateFormatter(currentDate)
+  const formattedDate = dateFormatter(currentDate);
 
   try {
     const userId = (req as any).user.professionalId; // Extract user ID from token
-    
-    const { Orderid, date, customerId, serviceId,servicePrice,amount, payment } = req.body;
+    const { Orderid, date, customerId, serviceId, servicePrice, amount, payment } = req.body;
 
- 
-   
     await prisma.$transaction(async (prisma) => {
-      
-
-        // 1. Delete Upcomming Order
-        await prisma.upcommingOrders.delete({
-          where: {bookingId: Orderid}
-        });
-
+      // 1. Delete Upcoming Order
+      await prisma.upcommingOrders.delete({
+        where: { bookingId: Orderid },
+      });
 
       // 2. Delete Upcoming Booking
       await prisma.upcommingBookings.delete({
-        where: {id: Orderid}
-        })
+        where: { id: Orderid },
+      });
 
-
-      // 3. Create Past Booking
+      // 3. Create Past Booking (Mark as Rejected)
       await prisma.pastBookings.create({
         data: {
           slotdate: date,
@@ -391,15 +383,13 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
           serviceId: serviceId,
           amount: amount,
           payment: payment,
-          status: 'Rejected'
-        }
+          status: 'Rejected',
+        },
       });
 
-  
-      // 4. Create Past Order
+      // 4. Create Past Order (Mark as Rejected)
       await prisma.pastOrders.create({
-
-        data: ({
+        data: {
           slotDate: date,
           completionDate: formattedDate,
           amount: amount,
@@ -407,72 +397,73 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
           status: 'Rejected',
           customerId: customerId,
           serviceId: serviceId,
-        })
+        },
       });
 
       // 5. Maintain Cash Flow
+      if (payment !== 'COD') {
+        // Fetch current admin balance
+        const admin = await prisma.admin.findUnique({
+          where: { id: 1 },
+          select: { pay: true },
+        });
 
-      if(payment !== 'COD'){
+        // Calculate new pay balance
+        const newPay = (admin?.pay || 0) + (servicePrice + servicePrice * 0.18 - servicePrice * 0.10);
+
+        // Update admin balance
         await prisma.admin.update({
-          where: {id: 1},
-          data: {
-            pay: {
-              increment: (servicePrice+(0.18*servicePrice)-(0.10*servicePrice))
-            }
-          }
-        })
+          where: { id: 1 },
+          data: { pay: newPay },
+        });
 
+        // Fetch customer wallet balance
+        const customerWallet = await prisma.customerWallet.findUnique({
+          where: { customerId: customerId },
+          select: { Pending: true },
+        });
+
+        // Calculate new pending balance
+        const newPending = (customerWallet?.Pending || 0) + servicePrice;
+
+        // Update customer wallet balance
         await prisma.customerWallet.upsert({
-          where: {customerId: customerId},
-          update: {
-            Pending: {
-              increment: servicePrice
-            }
-          },
-          create: {
-            customerId: customerId, 
-            Pending: servicePrice
-          },
-        })
-      } 
-      
-
+          where: { customerId: customerId },
+          update: { Pending: newPending },
+          create: { customerId: customerId, Pending: servicePrice },
+        });
+      }
     });
 
-    res.json({ msg: 'Order Rejected successfully ' });
-  }catch(error) {
+    res.json({ msg: 'Order Rejected successfully' });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Something went wrong' });
   }
-})
+});
+
 
 router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): Promise<void> => {
   const currentDate = new Date();
-  const formattedDate = dateFormatter(currentDate)
+  const formattedDate = dateFormatter(currentDate);
 
   try {
     const userId = (req as any).user.customerId; // Extract user ID from token
-    
-    const { id, date,amount, payment, serviceId, professionalId, servicePrice } = req.body;
-   
+    const { id, date, amount, payment, serviceId, professionalId, servicePrice } = req.body;
 
     await prisma.$transaction(async (prisma) => {
-      
-
-        // 1. Delete Upcomming Order
-        const deletedOrder = await prisma.upcommingOrders.delete({
-          where: {bookingId: id},
-          select: { bookingId: true } 
-        });
-
+      // 1. Delete Upcoming Order
+      const deletedOrder = await prisma.upcommingOrders.delete({
+        where: { bookingId: id },
+        select: { bookingId: true },
+      });
 
       // 2. Delete Upcoming Booking
       await prisma.upcommingBookings.delete({
-        where: {id: deletedOrder.bookingId}
-        })
+        where: { id: deletedOrder.bookingId },
+      });
 
-
-      // 3. Create Past Booking
+      // 3. Create Past Booking (Mark as Cancelled)
       await prisma.pastBookings.create({
         data: {
           slotdate: date,
@@ -482,15 +473,13 @@ router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): 
           serviceId: serviceId,
           amount: amount,
           payment: payment,
-          status: 'Cancelled'
-        }
+          status: 'Cancelled',
+        },
       });
 
-  
-      // 4. Create Past Order
+      // 4. Create Past Order (Mark as Cancelled)
       await prisma.pastOrders.create({
-
-        data: ({
+        data: {
           slotDate: date,
           completionDate: formattedDate,
           amount: amount,
@@ -498,44 +487,51 @@ router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): 
           status: 'Cancelled',
           customerId: userId,
           serviceId: serviceId,
-        })
+        },
       });
 
-    // 5. Maintain Cash Flow
+      // 5. Maintain Cash Flow
+      if (payment !== 'COD') {
+        // Fetch current admin balance
+        const admin = await prisma.admin.findUnique({
+          where: { id: 1 },
+          select: { pay: true },
+        });
 
-    if(payment !== 'COD'){
-      await prisma.admin.update({
-        where: {id: 1},
-        data: {
-          pay: {
-            increment: (servicePrice+(0.18*servicePrice)-(0.10*servicePrice))
-          }
-        }
-      })
+        // Calculate new pay balance
+        const newPay = (admin?.pay || 0) + (servicePrice + servicePrice * 0.18 - servicePrice * 0.10);
 
-      await prisma.customerWallet.upsert({
-        where: {customerId: userId},
-        update: {
-          Pending: {
-            increment: servicePrice
-          }
-        },
-        create: {
-          customerId: userId, 
-          Pending: servicePrice
-        },
-      })
-    } 
-      
+        // Update admin balance
+        await prisma.admin.update({
+          where: { id: 1 },
+          data: { pay: newPay },
+        });
 
+        // Fetch customer wallet balance
+        const customerWallet = await prisma.customerWallet.findUnique({
+          where: { customerId: userId },
+          select: { Pending: true },
+        });
+
+        // Calculate new pending balance
+        const newPending = (customerWallet?.Pending || 0) + servicePrice;
+
+        // Update customer wallet balance
+        await prisma.customerWallet.upsert({
+          where: { customerId: userId },
+          update: { Pending: newPending },
+          create: { customerId: userId, Pending: servicePrice },
+        });
+      }
     });
 
-    res.json({ msg: 'Order Rejected successfully ' });
-  }catch(error) {
+    res.json({ msg: 'Booking Cancelled successfully' });
+  } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Something went wrong' });
   }
-})
+});
+
 
 
 

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { createService } from '../../../../../Shared/Validation/ServiceSchema'
 import {  IconCheck } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
+import { useStat } from '../../../Context/StatsProvider';
 
 import { IconBrandSlack,IconBriefcase, IconCategory2 , IconCurrencyRupee, IconFileDescription  } from '@tabler/icons-react';
 
@@ -25,6 +26,7 @@ const isEditMode = Boolean(service);
 const [error, setError] = useState<string | null>(null);
 const [data , setData] = useState({id: '',name: '',  description: '', category: '', expireince: '',price: undefined});
 
+const {fetchStatsProfessional } = useStat()
 
 useEffect(() => {
   if (service) {
@@ -99,7 +101,9 @@ const  handleServiceSubmit = async () => {
     
     if(response){
     fetchAgain()
+    fetchStatsProfessional()
       close();
+
     showNotification({
      title: isEditMode ? 'Service Edited' : 'Service Added',
      message: `Your service has been ${isEditMode ? 'edited' : 'added'} successfully!`,

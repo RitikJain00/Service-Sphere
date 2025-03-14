@@ -13,6 +13,8 @@ import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
 import { useProfile } from '../../Context/ProfileContext';
 import { useStat } from '../../Context/StatsProvider';
 
+import ForgotPassword from '../Verification/ForgotPassword';
+import { useDisclosure } from "@mantine/hooks";
 
 const Signin = () => {
 
@@ -21,6 +23,8 @@ const Signin = () => {
   const [error, setError] = useState<string | null>(null);
   const {updateAuth} = useProfile()
   const {fetchStatsProfessional} = useStat()
+
+  const [opened, { open, close }] = useDisclosure(false);
  
 
 
@@ -32,7 +36,6 @@ const Signin = () => {
 
   const handleSignIn = async () => {
 
-    console.log(data);
     
        const checkSchema =  signinSchema.safeParse(data);
 
@@ -152,11 +155,11 @@ const Signin = () => {
                       Don't Have An Account ?  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/ProfessionalSignup'}>Sign Up</Link>
                     </div>
 
-                    <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
-                     <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 ' to={'/'}>Forgot Password ?</Link>
+                    <div  className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
+                     <span onClick={() => open()} className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 cursor-pointer' >Forgot Password ?</span>
                     </div>
                     
-
+                    {<ForgotPassword  opened={opened} close={close} user={'Professional'} />}
                     
                     
           </div>           

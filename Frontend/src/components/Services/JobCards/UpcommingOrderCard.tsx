@@ -8,13 +8,14 @@ import { useCart } from "../../../Context/CartContext";
 
 const UpcommingOrder = (   {job }  : any) => {
 
-  const {fetchUpcommingBookings} = useCart()
+  const {fetchUpcommingBookings, fetchUpcommingOrders, setLoading} = useCart()
   const token = localStorage.getItem('authToken')
 
 const handleCancel = async () => {
-  console.log(job)
+
   if (window.confirm("Are you sure you want to cancel the service")) {
     try{
+      setLoading(true)
        await axios.post("http://localhost:3000/service/cancelBooking", 
         { 
           id: job.id,
@@ -33,9 +34,12 @@ const handleCancel = async () => {
       );
       alert('Service Cancelled Successfully');
       fetchUpcommingBookings();
+      fetchUpcommingOrders()
 
     } catch(error){
       console.log(error)
+    }finally{
+      setLoading(false)
     }
   }
 }
@@ -85,9 +89,6 @@ const handleCancel = async () => {
       
      {/* Info and image */}
     
-
-        
-     
   
       <Divider mx="md" color='mine-shaft.7'/>
 
