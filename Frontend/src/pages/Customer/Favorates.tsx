@@ -6,31 +6,33 @@ import { Divider } from "@mantine/core"
 import { Grid } from '@mantine/core';
 
 
-const Favorate = () => {
-
+const Favorite = () => {
   const { Favorate } = useCart();
 
-  return <div className="flex flex-col min-h-[100vh] bg-mine-shaft-950">
-   <Header></Header>
-   <Divider mx="md" mb='xl' />
-   <div className="px-8 flex-grow">
+  return (
+    <div className="flex flex-col min-h-screen bg-mine-shaft-950">
+      <Header />
+      <Divider mx="md" mb="xl" />
+
+      <div className="px-2 sm:px-4 xs:px-8 flex-grow">
         {Favorate.length > 0 ? (
-          <Grid>
-            {Favorate.map((job) =>  <Grid.Col span={4}>
-               <ServiceCard key={job.id} job={job} /> 
-               </Grid.Col>)}
-            
+          <Grid gutter="lg" className="w-full">
+            {Favorate.map((job) => (
+              <Grid.Col key={job.id} span={{ base: 12, sm: 6, md: 4, lg: 3 }} className="flex">
+                <ServiceCard job={job} className="w-full" />
+              </Grid.Col>
+            ))}
           </Grid>
-       
         ) : (
           <div className="text-center font-bold text-mine-shaft-300 text-4xl mt-8">
             No Favorites Added Yet.
           </div>
         )}
       </div>
-   <Footer></Footer>
 
-  </div>
-}
+      <Footer />
+    </div>
+  );
+};
 
-export default Favorate;
+export default Favorite;

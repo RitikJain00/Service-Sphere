@@ -44,13 +44,13 @@ const handleCancel = async () => {
   }
 }
 
-  return <div className=' mt-8  p-4  bg-mine-shaft-900 rounded-xl hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300'>
+  return <div className='min-w-max mt-8  p-4  bg-mine-shaft-900 rounded-xl hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300'>
 
     <div className='flex flex-col gap-4'>
 
       {/* Head Section */}
 
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-4">
     
           <div className="flex gap-4">
             <img className='w-20 h-20' src={job.image} alt="" />

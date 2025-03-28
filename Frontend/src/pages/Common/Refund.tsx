@@ -7,15 +7,15 @@ const Refund = () => {
     <Header></Header>
     <Divider mx="md" mb='xl' />
 
-    <div className="mt-8 mx-32">
+    <div className="mt-8 mx-8 sm:mx-16 md:mx-24 lg:mx-32">
 
-<div className="text-5xl font-bold text-mine-shaft-100 text-center  mb-3">Refund & <span className="text-bright-sun-500">Cancellation </span> Policy</div>
+<div className="text-4xl md:text-5xl  font-bold text-mine-shaft-100 text-center  mb-3">Refund & <span className="text-bright-sun-500">Cancellation </span> Policy</div>
 
-       <div className="text-md text-mine-shaft-400 text-center w-7/12 mx-auto">
+       <div className="text-sm md:text-md text-mine-shaft-400 text-center w-7/12 mx-auto">
          Effective Date:     21st December 2024
       </div>
 
-<div className="text-xl text-mine-shaft-100 mt-12">
+<div className="text-lg md:text-xl text-mine-shaft-100 mt-12">
 At Service Sphere, we strive to provide the best possible services to our customers. However, we understand that situations may arise where you need to cancel a service or request a refund. Below are the terms and conditions governing refunds and cancellations:
 </div>
 

@@ -10,6 +10,7 @@ router.get("/profile", LoginStatus, async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.professionalId; // Extract user ID from request
  
+
     const userProfile = await prisma.professional.findUnique({
       where: { id: userId },
       select: {

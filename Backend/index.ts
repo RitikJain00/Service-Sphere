@@ -12,8 +12,10 @@ import service from './src/Routes/Professional/Service'
 import stats from './src/Routes/Professional/Stats'
 
 import adminSign from './src/Routes/Admin/AdminSign'
+import adminContact from './src/Routes/Admin/Contact'
 import customerData from './src/Routes/Admin/CustomerData'
 import professionalData from './src/Routes/Admin/ProfessionalData'
+
 
 
 import payment from './src/Routes/Payment/Payment'
@@ -57,6 +59,7 @@ app.use('/statistics', stats)
 app.use('/adminsign',adminSign);
 app.use('/adminsDashboard/customers',customerData);
 app.use('/adminsDashboard/professional',professionalData);
+app.use('/adminContact',adminContact)
 
 app.use('/payment', payment)
 app.use('/booking', booking)

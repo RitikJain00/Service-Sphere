@@ -47,25 +47,25 @@ const ProfessionalProfile = () => {
 
 <Button className='!absolute m-4 z-10' variant="light" color="yellow" onClick={() => navigate('/Dashboard')} leftSection={<IconArrowLeft size={14} />}> Back </Button>
 
-         <div className="mx-32">
+<div className="xs-mx:mx-2 md-mx:mx-8 lg-mx:mx-16 xl-mx:mx-24 mx-32">
       
       {/*   Image Section */}
 
         <div  className="w-full relative">
           <img className='rounded-t-2xl w-full ' src="/Profile/ServiceSphereBanner.png" alt="" />
-          <img className="w-48 h-48 rounded-full absolute -bottom-24 left-4 border-mine-shaft-900 border-8" src="/Home/avatar-9.png" alt="" />
+          <img className="w-48 h-48 md-mx:w-40 md-mx:h-40  sm-mx:w-32 sm-mx:h-32 xs-mx:w-28 xs-mx:h-28 rounded-full absolute -bottom-24 left-4 border-mine-shaft-900 border-8" src="/Home/avatar-9.png" alt="" />
         </div>
 
       {/* Basic Detail */}
 
-        <div className="mt-28 px-8 w-full flex justify-between">
+      <div className="mt-28 md-mx:px-2 px-8 w-full flex justify-between">
 
           {Detail.edit[0] ? 
           <div className='flex flex-col gap-2 '>
             
             <div className='w-full'>
             <TextInput
-              className='w-96'
+              className='w-96 xs-mx:w-72'
               leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} />}
               label="Full Name"
               withAsterisk
@@ -86,13 +86,13 @@ const ProfessionalProfile = () => {
             </div>
 
           </div> :  
-          <div className=" flex flex-col gap-2">
+         <div className=" flex flex-col md-mx:px-8 gap-2">
 
-        <div className="text-5xl font-semibold items-center flex hover:text-bright-sun-400 transition-all duration-300">
+        <div className="xs-mx:text-3xl md-mx:text-4xl text-5xl font-semibold items-center flex hover:text-bright-sun-400 transition-all duration-300">
         { Detail.basic.name }
         </div>
 
-        <div className='text-xl text-mine-shaft-500'>
+        <div className='md-mx:text-lg text-xl text-mine-shaft-500'>
         { Detail.basic.about }
         </div>
         {Detail.errorBasic && <div className="text-red-500 text-sm text-center">{Detail.errorBasic}</div>}
@@ -109,10 +109,10 @@ const ProfessionalProfile = () => {
 
     {/* Contact Details */}
 
-    <div className='px-8 w-full flex justify-between'>
+    <div className='px-8 md-mx:px-2 w-full flex justify-between'>
         <div className='flex flex-col gap-4'>
    
-        <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Contact Details :</div>
+        <div className='xs-mx:text-2xl  md-mx:text-3xl text-4xl mb-4 font-semibold text-bright-sun-400'>Contact Details :</div>
 
             
         { Detail.edit[1] ? 
@@ -120,7 +120,7 @@ const ProfessionalProfile = () => {
             
             <div className='w-full'>
             <TextInput
-              className='w-96'
+              className='w-96 xs-mx:w-72'
               disabled
               leftSection={<IconMail style={{ width: rem(16), height: rem(16) }} />}
               label="Your Email"
@@ -143,11 +143,11 @@ const ProfessionalProfile = () => {
             </div>
 
           </div> : 
-            <div>
-            <div className="flex justify-between gap-12">
-            <div className='flex gap-16 text-2xl'>
-              <div className='w-32'>Email:</div>
-              <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center ">
+            <div className="flex flex-col md-mx:px-4">
+            <div className="flex xs-mx:flex-col justify-between gap-12 xs-mx:gap-2 bs-mx:gap-6">
+            <div className='flex sm-mx:flex-col justify-center item-center gap-16 bs-mx:gap-8 sm-mx:gap-2  bs-mx:text-xl xs-mx:text-base  text-2xl '>
+              <div className='w-32 md-mx:w-16 '>Email:</div>
+              <div  className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center ">
               <div><IconMail stroke={2} /></div>
               {Detail.contact.email}</div>
               </div>
@@ -157,9 +157,9 @@ const ProfessionalProfile = () => {
               }}>Verify </Button>}
               </div>
 
-            <div className="flex justify-between mt-4">
-            <div className='flex gap-16  text-2xl'>
-            <div className='w-32'>Mobile:</div>
+            <div className="flex xs-mx:flex-col justify-between mt-4 xs-mx:gap-2">
+            <div  className='flex sm-mx:flex-col gap-16 bs-mx:gap-8 sm-mx:gap-2  bs-mx:text-xl xs-mx:text-base text-2xl'>
+            <div  className='w-32 md-mx:w-16 '>Mobile:</div>
             <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-cente  ">
             <IconPhone stroke={2} />
             {Detail.contact.phone}</div>
@@ -186,17 +186,17 @@ const ProfessionalProfile = () => {
 
     {/* Address Details */}
 
-    <div className='px-8 w-full flex justify-between'>
+    <div className='px-8 md-mx:px-2 w-full flex justify-between'>
         <div className='flex flex-col gap-4'>
    
-        <div className='text-4xl mb-4 font-semibold text-bright-sun-400'>Address Details :</div>
+        <div className='xs-mx:text-2xl  md-mx:text-3xl text-4xl mb-4 font-semibold text-bright-sun-400'>Address Details :</div>
 
         {Detail.edit[2] ? 
           <div className='flex flex-col gap-2 '>
             
             <div className='w-full'>
             <TextInput
-              className='w-96'
+              className='w-96 xs-mx:w-72'
               leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} />}
               label="Your Address"
               withAsterisk
@@ -239,30 +239,30 @@ const ProfessionalProfile = () => {
             />
             </div>
 
-          </div> :  <>
-            <div className='flex gap-16 text-2xl'>
-              <div className='w-32'>Address:</div>
+          </div> :   <>
+            <div className='flex gap-16 sm-mx:text-lg bs-mx:text-xl text-2xl'>
+              <div className='w-32 shrink-0 '>Address:</div>
               <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
-              <IconHome stroke={2} />
+              <IconHome style={{ minWidth: "24px", minHeight: "24px" }} stroke={2} />
               { Detail.address.home }</div>
               </div>
        
 
-        <div className='flex gap-16 text-2xl'>
+        <div className='flex gap-16 sm-mx:text-lg bs-mx:text-xl text-2xl'>
             <div className='w-32'>City:</div>
             <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
             <IconBuildings  stroke={2} />
             { Detail.address.city }</div>
         </div>
 
-        <div className='flex gap-16 text-2xl'>
+        <div className='flex gap-16 sm-mx:text-lg bs-mx:text-xl text-2xl'>
             <div className='w-32'>Pin Code:</div>
             <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
             <IconMapPinCode stroke={2} />
             {Detail.address.pin} </div>
         </div>
 
-        <div className='flex gap-16 text-2xl'>
+        <div className='flex gap-16 sm-mx:text-lg bs-mx:text-xl text-2xl'>
             <div className='w-32'>Country:</div>
             <div className="text flex gap-2 text-mine-shaft-400 hover:text-bright-sun-400  transition-all duration-300 items-center justify-center">
             <IconFlag stroke={2} />

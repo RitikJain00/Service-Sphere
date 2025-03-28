@@ -3,21 +3,33 @@ import { IconBellRinging } from '@tabler/icons-react';
 
 import { IconMapPin } from '@tabler/icons-react';
 import { Indicator } from '@mantine/core';
-import Navlinks from './Navlinks';
 import MenuItem from './MenuItem';
 import { useCart } from '../../../Context/CartContext';
 import {  useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { Button } from '@mantine/core';
 import axios from 'axios';
 
-
+import { Burger } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { Drawer, Button } from '@mantine/core';
+import { Link, useLocation} from 'react-router-dom';
 
 const Header = () => {
   
  
   const  { cart }  = useCart();
   const navigate = useNavigate();
+const [opened, { open, close }] = useDisclosure(false);
+const location = useLocation(); 
+
+const links = [
+  {name: 'Home', url: '/home'},
+  {name: 'Professional', url: '/ProfessionalLogin'},
+  {name: 'Contact', url: '/contact'},
+  {name: 'About Us', url: '/about'},
+  // {name: 'Customer', url: '/CustomerLogin'}
+]
+
   const [user, setUser] = useState<{ token: string | null; type: string | null }>({
     token: localStorage.getItem("authToken"),
     type: localStorage.getItem("Type")
@@ -54,7 +66,12 @@ const Header = () => {
 
           {/* Navbar */}
           <div className='hidden md:flex gap-8  text-mine-shaft-300 h-full  items-center'>
-          <Navlinks></Navlinks>
+          {links.map((link,index) => 
+             <div key = {index} className={`${location.pathname ==  link.url ? `border-bright-sun-400 text-bright-sun-400` : 'border-transparent'} border-t-2 h-full flex items-center`}>
+                <Link  to = {link.url}>{link.name}</Link> 
+            </div>
+           )
+            }
           </div>
 
 
@@ -64,7 +81,7 @@ const Header = () => {
           <div>Location</div>
             </div>
 
-            
+            <div className='flex gap-8 items-center'>
           { (user.type === 'Customer' && user.token )? 
         
           ( <div className='flex gap-4 items-center'>
@@ -88,8 +105,20 @@ const Header = () => {
          }
            
 
+<Burger className='md:hidden' opened={opened} onClick={open} aria-label="Toggle navigation" />
 
-         
+<Drawer size={`xs`} opened={opened} onClose={close} overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} position='right'>
+  <div className='flex flex-col gap-5 items-center'>
+        {links.map((link,index) => 
+             <div key = {index} className={` h-full flex items-center`}>
+                <Link className='text-xl hover:text-bright-sun-400'  to = {link.url}>{link.name}</Link> 
+            </div>
+           )
+            }
+      </div>
+      </Drawer>
+      </div>
+
       </div>
      
  

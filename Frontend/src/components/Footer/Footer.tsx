@@ -27,9 +27,11 @@ const Footer = () => {
         </div>
       </div>
 
+      <div className="flex gap-24 lg:flex-row flex-col">
+
       <div className='flex flex-col md:flex-row gap-16'>
 
-      <div className='flex flex-col gap-4 hover:scale-105 transition duration-200'>
+      <div className='flex flex-col gap-4 hover:scale-105 transition duration-200 max-w-80'>
 
         <div className='text-mine-shaft-50 hover:text-bright-sun-400'>
             Head Office
@@ -81,13 +83,13 @@ const Footer = () => {
         <div className='flex flex-col gap-2'>
         <div className='hover:text-bright-sun-400'><Link to = '/contact'>Contact Us</Link></div>
         <div className='hover:text-bright-sun-400'><Link to = '/about'>Chat</Link></div>
-        <div className='hover:text-bright-sun-400'><Link to = '/about'>FAQ</Link></div>
+        <div className='hover:text-bright-sun-400'><Link to = '/Faqs'>FAQ</Link></div>
         </div>
         
       </div>
     </div>
 
-      <div className='flex flex-col gap-4 hover:scale-105 transition duration-200'>
+      <div className='flex flex-col gap-4 hover:scale-105 transition duration-200 max-w-80'>
         <div className='text-mine-shaft-50 hover:text-bright-sun-400'>
             Newsletter
             <div className='w-20 mt-2 h-1.5 bg-[#767676] rounded relative overflow-hidden'>
@@ -126,7 +128,8 @@ const Footer = () => {
             </div>
    
       </div>
-
+      </div>
+             
       </div>
 
       <AdminSign opened={opened} close={close} ></AdminSign>

@@ -19,8 +19,8 @@ const MyOrders = () => {
    <div className="px-8 flex-grow">
         {upcommingOrders.length > 0 ? (
          
-          <Grid>
-            {upcommingOrders.map((job) =>  <Grid.Col span={4}>
+          <Grid gutter="xl" className="w-full">
+            {upcommingOrders.map((job) =>  <Grid.Col span={{ base: 8,md: 7, lg: 5 }}>
                <UpcommingOrder key={job.service.id} job={job} /> 
                </Grid.Col>)}
             

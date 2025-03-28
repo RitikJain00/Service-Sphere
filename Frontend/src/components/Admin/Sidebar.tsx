@@ -7,7 +7,7 @@ import Navlinks from './Header/NavLinks';
 const SideBar = () => {
 
 
-  return <div className="w-1/5 min-h-full bg-mine-shaft-900 flex flex-col items-center">
+  return <div className="min-w-48 w-1/5 min-h-full bg-mine-shaft-900 flex flex-col items-center">
     
     {/* Logo */}
     <div className='flex gap-3 items-center text-amber-400 mt-6 mx-3'>

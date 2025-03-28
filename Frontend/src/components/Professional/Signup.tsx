@@ -56,11 +56,11 @@ const Signup = () => {
   }
 
   
-  return <div className="w-1/2 flex flex-col  bg-mine-shaft-950">
+  return <div className="w-1/2 md-mx:w-full px-32 xl-mx:px-20 bs-mx:px-10 sm-mx:px-5 flex flex-col  bg-mine-shaft-950">
     
-    <div className="text-4xl text-bright-sun-400 mt-24 font-semibold text-center  hover:scale-110 transition-all duration-300">Professional Account</div>
+    <div className="text-3xl bs:text-4xl text-bright-sun-400 mt-24 font-semibold text-center  hover:scale-110 transition-all duration-300">Professional Account</div>
 
-    <div className=" ml-16 flex flex-col gap-6 w-auto pr-32 mt-16" >
+    <div className="flex flex-col gap-6 mt-16" >
 
  
                       <div>

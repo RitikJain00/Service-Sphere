@@ -31,7 +31,7 @@ const Jobs = () => {
 
   return <div className="mx-4">
     <div className="flex justify-between items-center">
-      <div className="text-4xl text-mine-shaft-300 font-semibold m-4"> Recommeded Job</div>
+      <div className="text-3xl bs:text-4xl text-mine-shaft-300 font-semibold m-4"> Recommeded Job</div>
       <Relevance></Relevance>
     </div>
 

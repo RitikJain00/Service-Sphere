@@ -26,7 +26,7 @@ const ServiceCard = (   {job }  : any) => {
   };
 
 
-  return <div className='  mt-8  p-4  bg-mine-shaft-900 rounded-xl hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300'>
+  return <div className='min-w-96  mt-8  p-4  bg-mine-shaft-900 rounded-xl hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300'>
 
     <div className='flex flex-col gap-4'>
 

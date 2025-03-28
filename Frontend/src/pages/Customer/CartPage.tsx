@@ -32,11 +32,11 @@ const CartPage = () => {
          <div className="text-2xl text-mine-shaft-300 font-semibold"> No Items In Your Cart  </div>
       </div>
       : 
-      <div className="w-full flex mx-8 gap-4">
-        <div className="w-4/5">
+      <div className="w-full flex flex-col lg:flex-row  items-center lg:items-start  mx-8 gap-4">
+        <div className="w-full">
         <Table striped highlightOnHover withTableBorder withColumnBorders>
       <Table.Thead>
-          <Table.Tr className="text-2xl font-bold  text-bright-sun-300">
+          <Table.Tr className="text-xl md:text-2xl font-bold  text-bright-sun-300">
             <Table.Th className="!text-center">Service</Table.Th>
             <Table.Th className="!text-center">Service Name</Table.Th>
             <Table.Th className="!text-center">Company Name</Table.Th>
@@ -47,7 +47,7 @@ const CartPage = () => {
   
         <Table.Tbody> 
           { cart.map((job,index) =>  
-            <Table.Tr key={index} className="text-xl font-bold text-center">
+            <Table.Tr key={index} className="text-lg md:text-xl font-bold text-center">
             <Table.Td className="flex items-center justify-center"> <img className="w-24 h-24 " src={job.image} alt="" /> </Table.Td>
             <Table.Td>{job.name}</Table.Td>
             <Table.Td>{job.company}</Table.Td>
@@ -60,7 +60,7 @@ const CartPage = () => {
         </div>
          
             
-            <div className="w-1/5 h-[360px] flex flex-col gap-2 bg-mine-shaft-900 p-4 rounded-lg sticky top-8 hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300">
+            <div className="w-80 h-[360px] flex flex-col gap-2 bg-mine-shaft-900 p-4 rounded-lg sticky top-8 hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300">
         <div className="text-3xl font-bold text-bright-sun-400 text-center">Summary</div>
 
         <div className="text-xl mt-5 flex justify-between">

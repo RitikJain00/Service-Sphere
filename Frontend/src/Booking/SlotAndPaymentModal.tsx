@@ -160,10 +160,10 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
   return (
     <Modal opened={opened} onClose={close} centered>
       <div className='flex flex-col gap-3'>
-        <div className='text-bright-sun-400 text-3xl font-bold text-center mb-2'>Select Slot & Payment</div>
+        <div className='text-bright-sun-400 text-2xl sm:text-3xl font-bold text-center mb-2'>Select Slot & Payment</div>
 
-        {cart.map((service) => <div key={service.id} className='flex justify-between items-center mb-4'>
-          <div className='text-xl font-semibold text-mine-shaft-300'>{service.name}</div>
+        {cart.map((service) => <div key={service.id} className='flex flex-col gap-2 xs:flex-row xs:justify-between xs:items-center mb-4'>
+          <div className='text-lg sm:text-xl font-semibold text-mine-shaft-300'>{service.name}</div>
           <div> <DateInput
              minDate={new Date()}
              maxDate={dayjs(new Date()).add(2, 'month').toDate()}
@@ -185,7 +185,7 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
          size='md'
           value={paymentMode} 
           onChange={(value: string) => setPaymentMode(value as "Online" | "COD" | "Wallet" | "")}  >
-             <Group mt="md" gap={16}>
+             <Group  mt="md" gap={16}>
              <Radio value="COD" size='md' label="Pay By Cash" />
              <Radio value="Wallet" size='md' label="Pay By Wallet " />
              <Radio value="Online" size='md' label="Pay Online" />

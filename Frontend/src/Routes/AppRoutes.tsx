@@ -12,11 +12,12 @@ import Contact from "../pages/Common/Contact";
 import Privacy from "../pages/Common/Privacy";
 import Terms from "../pages/Common/Terms";
 import Refund from "../pages/Common/Refund";
+import FAQPage from "../pages/Common/Faq";
 
 
 import CustomerSign from "../pages/Customer/CustomerSign";
 import Explore from "../pages/Customer/Explore";
-import SpecificService from "../pages/Customer/SpecificService";
+
 
 import CustomerProfile from "../pages/Customer/CustomerProfile";
 import CartPage from "../pages/Customer/CartPage";
@@ -36,6 +37,7 @@ import Admin from "../pages/Admin/Admin";
 import Customers from "../pages/Admin/Customers";
 import Professionals from "../pages/Admin/Professionals";
 import Accounts from "../pages/Admin/Accounts"
+import Messages from "../pages/Admin/Message";
 
 
 const AppRoutes = () => {
@@ -54,18 +56,20 @@ const AppRoutes = () => {
             <Route path="/PrivacyPolicy" element={<Privacy />} />
             <Route path="/TermsAndConditions" element={<Terms />} />
             <Route path="/RefundAndCancellation" element={<Refund />} />
+            <Route path="/Faqs" element={<FAQPage/>} />
+
             
 
             {/* Customer Routes */}
             <Route path="/Explore" element={<Explore />} />
-            <Route path="/Electrician" element={<SpecificService />} />
-            <Route path="/Carpenter" element={<SpecificService />} />
-            <Route path="/Painter" element={<SpecificService />} />
-            <Route path="/Plumber" element={<SpecificService />} />
-            <Route path="/PestControl" element={<SpecificService />} />
-            <Route path="/HouseKeeping" element={<SpecificService/>} />
-            <Route path="/Contractor" element={<SpecificService />} />
-            <Route path="/Technician" element={<SpecificService />} />
+            <Route path="/Electrician" element={<Explore  />} />
+            <Route path="/Carpenter" element={<Explore  />} />
+            <Route path="/Painter" element={<Explore  />} />
+            <Route path="/Plumber" element={<Explore  />} />
+            <Route path="/PestControl" element={<Explore  />} />
+            <Route path="/HouseKeeping" element={<Explore />} />
+            <Route path="/Contractor" element={<Explore  />} />
+            <Route path="/Technician" element={<Explore  />} />
             <Route path="/CustomerSignup" element={<CustomerSign />} />
             <Route path="/CustomerLogin" element={<CustomerSign />} />
             <Route path="/CustomerProfile" element={<CustomerProfile />} />
@@ -91,6 +95,7 @@ const AppRoutes = () => {
               <Route path="/Customers" element={<Customers />} />
               <Route path="/Professionals" element={<Professionals />} />
               <Route path="/Accounts" element={<Accounts/>} />
+              <Route path="/Messages" element={<Messages/>} />
 
             {/* Catch-All Route (Redirect to Home) */}
             <Route path="*" element={<Home />} />
