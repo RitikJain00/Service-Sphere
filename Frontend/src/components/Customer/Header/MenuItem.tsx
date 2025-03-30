@@ -12,7 +12,7 @@ import {
   IconInfoSquare,
   IconLogout2,
   IconUserCircle,
- 
+  IconBook,
   IconHeart,
   IconShoppingCart
 } from '@tabler/icons-react';
@@ -62,6 +62,12 @@ const MenuItem = ( {setUser}: any ) =>  {
         <Link to={'/Favorate'}>
         <Menu.Item leftSection={<IconHeart style={{ width: rem(14), height: rem(14) }} />}>
         Favorites
+        </Menu.Item>
+        </Link>
+
+        <Link to={'/customerBookings'}>
+        <Menu.Item leftSection={<IconBook style={{ width: rem(14), height: rem(14) }} />}>
+        Bookings
         </Menu.Item>
         </Link>
 

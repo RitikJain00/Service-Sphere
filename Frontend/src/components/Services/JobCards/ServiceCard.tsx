@@ -77,7 +77,7 @@ const ServiceCard = (   {job }  : any) => {
       {/* Price and Time */}
       <div className='flex justify-between '>
         <div className='font-semibold text-xl text-mine-shaft-200'>&#8377; {job.price}</div>
-        <div className='flex gap-1 items-center text-sm text-mine-shaft-300'><IconClock size={20} stroke={2} /> {job.Time}</div>
+        <div className='flex gap-2 items-center text-sm text-mine-shaft-300'>{job.time}  <IconClock size={20} stroke={2} /> </div>
       </div>
 
     </div>

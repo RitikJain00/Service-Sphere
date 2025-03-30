@@ -8,7 +8,7 @@ import { useCart } from "../../../Context/CartContext";
 
 const UpcommingOrder = (   {job }  : any) => {
 
-  const {fetchUpcommingBookings, fetchUpcommingOrders, setLoading} = useCart()
+  const { fetchUpcommingOrders,fetchPastOrders, setLoading} = useCart()
   const token = localStorage.getItem('authToken')
 
 const handleCancel = async () => {
@@ -33,8 +33,8 @@ const handleCancel = async () => {
         }
       );
       alert('Service Cancelled Successfully');
-      fetchUpcommingBookings();
-      fetchUpcommingOrders()
+      fetchUpcommingOrders(),
+      fetchPastOrders()
 
     } catch(error){
       console.log(error)

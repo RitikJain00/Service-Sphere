@@ -41,6 +41,16 @@ router.post('/order', LoginStatus, async (req: Request, res: Response): Promise<
               professionalId: service.professionalId // Ensure frontend sends professionalId
             }
           });
+
+          await prisma.services.update({
+            where: { id: service.id },
+            data: {
+              booking: {
+                increment: 1 
+              }
+            }
+          });
+          
       
           // Create Upcoming Order (with corrected amount)
           return prisma.upcommingOrders.create({
@@ -55,9 +65,11 @@ router.post('/order', LoginStatus, async (req: Request, res: Response): Promise<
           });
         })
       );
+
+    
       
 
-      // 3. Create Order
+     // Create Order
       const order = await prisma.orders.create({
         data: {
           total,
@@ -78,6 +90,7 @@ router.post('/order', LoginStatus, async (req: Request, res: Response): Promise<
           serviceId: service.id
         }))
       });
+
 
       // 5. Add Money To Admin Account
 

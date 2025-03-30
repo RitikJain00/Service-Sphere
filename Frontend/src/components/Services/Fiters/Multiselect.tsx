@@ -5,7 +5,8 @@ import { IconSelector } from '@tabler/icons-react';
 
 const MAX_DISPLAYED_VALUES = 2;
 
-const SearchableMultiSelect = ( {Data} : any ) => {
+const SearchableMultiSelect = ({ Data, onChange }: { Data: any; onChange: (selected: string[]) => void }) => {
+
  
     useEffect(() => {
       setData(Data.options)
@@ -20,12 +21,19 @@ const SearchableMultiSelect = ( {Data} : any ) => {
     const [data, setData] = useState<string[]>([]);
   
     const handleValueSelect = (val: string) => {
-      setValue((current) =>
-        current.includes(val) ? current.filter((v) => v !== val) : [...current, val]
-      ); 
-
+      setValue((current) => {
+        const newValues = current.includes(val)
+          ? current.filter((v) => v !== val)
+          : [...current, val];
+    
+        onChange(newValues);
+    
+        return newValues;
+      });
+    
       setSearch('');
-    }
+    };
+    
       
   
     const handleValueRemove = (val: string) =>

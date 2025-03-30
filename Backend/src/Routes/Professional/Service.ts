@@ -35,7 +35,6 @@ router.post("/createservice", LoginStatus, async (req: Request, res: Response): 
         location,
         price,
         rating: 4.5,
-        booking: "0",
         professionalId: userId, 
         time: formattedDate , 
       },

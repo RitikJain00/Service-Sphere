@@ -255,6 +255,64 @@ res.status(500).json({ error: "Error in fetching Upcomming Bookings:" });
 }
 });
 
+router.get("/PastOrders",LoginStatus, async (req: Request, res: Response): Promise<void> => {
+  try {
+  const userId = (req as any).user.customerId;
+  
+  const data = await prisma.pastOrders.findMany({
+    where: {customerId: userId}, 
+    select: {
+      id: true,
+      slotDate: true,
+      completionDate: true,
+      amount: true,
+      status: true,
+      payment: true,
+      service: true,
+    }
+  })
+
+res.status(200).json({ message: "PastOrders Fetch successfully", PastOrders: data });
+}catch(error){
+console.error("Error in fetching PastOrders:", error);
+res.status(500).json({ error: "Error in fetching PastOrders" });
+}
+});
+
+router.get("/Orders",LoginStatus, async (req: Request, res: Response): Promise<void> => {
+  try {
+  const userId = (req as any).user.customerId;
+  
+  const data = await prisma.orders.findMany({
+    where: {customerId: userId}, 
+    orderBy: {
+      bookedDate: "desc"
+    },
+    select: {
+      id: true,
+     total: true,
+     gst: true,
+     discount: true,
+     grandTotal: true,
+     payment:    true,
+     bookedDate: true,
+
+      services: {
+        select: {
+          date: true,
+          service: true
+          }
+        }
+      }
+    })
+
+res.status(200).json({ message: "Orders Fetch successfully", Orders: data });
+}catch(error){
+console.error("Error in fetching Orders:", error);
+res.status(500).json({ error: "Error in fetching Orders:" });
+}
+});
+
 
 
 export default router;

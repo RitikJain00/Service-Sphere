@@ -4,7 +4,7 @@ import { IconSelector } from '@tabler/icons-react';
 
 
 
-const SelectComboboxData = ( {Data} : any ) => {
+const SelectComboboxData = ( {Data, onChange} :  { Data: any; onChange: (selected: string) => void } ) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
   });
@@ -34,6 +34,7 @@ const SelectComboboxData = ( {Data} : any ) => {
       store={combobox}
       onOptionSubmit={(val) => {
         setValue(val);
+        onChange(val)
         combobox.closeDropdown();
       }}
     >

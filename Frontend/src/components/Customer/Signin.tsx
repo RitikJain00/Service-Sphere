@@ -24,7 +24,7 @@ const Signin = () => {
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
   const {updateAuth} = useProfile()
-  const {fetchCartItem, fetchFavorateItem, fetchUpcommingOrders, setLoading } = useCart()
+  const {fetchCartItem, fetchFavorateItem, fetchUpcommingOrders,fetchPastOrders, fetchOrders, setLoading } = useCart()
   const [opened, { open, close }] = useDisclosure(false);
 
 
@@ -61,6 +61,8 @@ const Signin = () => {
            fetchCartItem(),
            fetchFavorateItem(),
            fetchUpcommingOrders()
+           fetchPastOrders(),
+           fetchOrders()
 
 
       

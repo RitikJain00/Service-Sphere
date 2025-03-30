@@ -1,11 +1,12 @@
 import React  from "react";
 import { createContext, useContext, useState,useEffect, ReactNode } from "react";
-import { Job, UpcommingBookingCustomer, CartContextType  } from "../Type/Type";
+import { Job, Booking,PastOrder,OrderProp, CartContextType  } from "../Type/Type";
 import { showNotification } from '@mantine/notifications';
 import { IconX, IconCheck,IconAlertTriangle } from '@tabler/icons-react';
 import axios from "axios"
 import { Loader } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 
 
@@ -19,16 +20,49 @@ import { useNavigate } from "react-router-dom";
 
     
     const [cart, setCart] = useState<Job[]>([]);
-    const [upcommingBooking, setUpCommingBooking] = useState<UpcommingBookingCustomer[]>([]);
-    const [pastBooking, setPastBooking] = useState<UpcommingBookingCustomer[]>([]);
-    const [upcommingOrders, setUpCommingOrders] = useState<UpcommingBookingCustomer[]>([]);
-    const [orders, setOrders] = useState<Job[]>([]);
+   
+    const [upcommingOrders, setUpCommingOrders] = useState<Booking[]>([]);
+    const [pastOrders, setPastOrders] = useState<PastOrder[]>([]);
+    const [orders, setOrders] = useState<OrderProp[]>([]);
     const [Favorate, setFavorate] = useState<Job[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [gst, setGst] = useState<number>(0.0);
     const [discount, setDiscount] = useState<number>(0.0);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate()
+
+    const location = useLocation();
+    const ServiceType = location.pathname.slice(1);
+    const [data, setData] = useState<Job[]>([]);
+    const [filteredServices, setFilteredServices] = useState<Job[]>([]);
+   
+
+
+
+    // Fetching Jobs
+
+    const fetchJobs = async () => {
+      try {
+        setLoading(true); // Set loading before making the request
+    
+        const response = await axios.get<{ service: Job[] }>(
+          "http://localhost:3000/shopService/allService",
+          { params: { category: ServiceType } }
+        );
+    
+        setData(response.data.service);
+        setFilteredServices(response.data.service);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      } finally {
+        setLoading(false); // Ensure loading is false after completion
+      }
+    };
+    
+    useEffect(() => {
+      fetchJobs();
+    }, [ServiceType]);
+    
 
 
       //  Fetching Cart
@@ -82,27 +116,7 @@ import { useNavigate } from "react-router-dom";
     fetchFavorateItem();
   }, [])
 
-  const fetchUpcommingBookings = async () => {
-    const token = localStorage.getItem('authToken')
-      if(!token) return
-    setLoading(true); 
 
-    try{
-      const response = await axios({
-        method: 'get',
-        url: 'http://localhost:3000/service/allBookings',
-        headers: {Authorization: `Bearer ${token}`}
-      })
-      setUpCommingBooking(response.data.UpcommingBookingInfo.services);  // Update  Favorate
-    } catch(error){
-      console.log('Error in Fetching UpcommingBookings', error)
-    }
-    setLoading(false); 
-}
-
-useEffect(() => {
-  fetchUpcommingBookings();
-}, [])
 
 const fetchUpcommingOrders = async () => {
   const token = localStorage.getItem('authToken')
@@ -126,6 +140,55 @@ const fetchUpcommingOrders = async () => {
 
 useEffect(() => {
   fetchUpcommingOrders();
+}, [])
+
+const fetchPastOrders = async () => {
+  const token = localStorage.getItem('authToken')
+    if(!token) return
+  setLoading(true); 
+
+  try{
+    const response = await axios({
+      method: 'get',
+      url: 'http://localhost:3000/shopService/PastOrders',
+      headers: {Authorization: `Bearer ${token}`}
+    })
+
+    setPastOrders(response.data.PastOrders);  
+  
+  } catch(error){
+    console.log('Error in Fetching PastOrders', error)
+  }
+  setLoading(false); 
+}
+
+useEffect(() => {
+  fetchPastOrders();
+}, [])
+
+
+const fetchOrders = async () => {
+  const token = localStorage.getItem('authToken')
+    if(!token) return
+  setLoading(true); 
+
+  try{
+    const response = await axios({
+      method: 'get',
+      url: 'http://localhost:3000/shopService/Orders',
+      headers: {Authorization: `Bearer ${token}`}
+    })
+
+    setOrders(response.data.Orders);  
+  
+  } catch(error){
+    console.log('Error in Fetching Orders', error)
+  }
+  setLoading(false); 
+}
+
+useEffect(() => {
+  fetchOrders();
 }, [])
   
   
@@ -234,6 +297,7 @@ useEffect(() => {
           alert('Booking confirmed!');
           fetchUpcommingOrders()
           fetchCartItem();
+          fetchOrders()
         }catch(error){
           console.log(error)
           alert('Booking not confirmed!')
@@ -316,7 +380,7 @@ useEffect(() => {
       };
 
     return (
-      <CartContext.Provider value= {{cart, upcommingOrders,fetchUpcommingBookings,orders, upcommingBooking, pastBooking,  BookServices, Favorate, total,gst, discount, loading,setLoading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,fetchCartItem,fetchFavorateItem, fetchUpcommingOrders 
+      <CartContext.Provider value= {{cart, upcommingOrders,pastOrders, orders, BookServices, Favorate, total,gst, discount, loading,setLoading, addToCart, removeFromCart ,addToFavorate,removeFromFavorate,fetchCartItem,fetchFavorateItem, fetchUpcommingOrders, fetchPastOrders, fetchOrders , filteredServices, setFilteredServices, data, setData
        }}>
         {loading && (  
       <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">

@@ -217,7 +217,7 @@ model Services {
   expireince  String
   location    String
   rating      Float?
-  booking     String?
+  booking     Int     @default(0)
   price       Int
   time        String
   isActive    String  @default("Active")

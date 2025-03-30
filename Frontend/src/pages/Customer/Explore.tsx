@@ -18,13 +18,15 @@ import { IconPlant2 } from '@tabler/icons-react';
 const Explore = () => {
 
   const [opened, { open, close }] = useDisclosure(false);
+
+
   
   return <div className="min-h-[100vh] bg-mine-shaft-950">
    <Header></Header>
     <Divider mx="md" mb='xl' />
 
       {/* Filters */}
-      <div className="flex justify-center mx-12 ">
+      <div className="flex justify-center mx-6 ">
 
       <Burger className='md:hidden  xs:mr-2 sm:mr-6 ' opened={opened} onClick={open} aria-label="Toggle navigation" />
       <Drawer size={`xs`} opened={opened} onClose={close} overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} 
@@ -34,18 +36,19 @@ const Explore = () => {
          <IconPlant2 stroke={1.8} className='h-10 w-10'/>
           <div className='text-2xl font-semibold'>Service Sphere</div>
           </div>
-
-          <SearchBox></SearchBox>
+      
+          <SearchBox ></SearchBox>
+      
       </div>
-       
+ 
           </Drawer>
         <div className="mt-4 hidden min-w-80 sticky top-[30px] h-[calc(100vh-100px)] md:block">
-          <SearchBox></SearchBox>
+          <SearchBox ></SearchBox>
         </div>
 
         {/* Services */}
         <div>
-          <Jobs ></Jobs>
+          <Jobs></Jobs>
         </div>
 
 

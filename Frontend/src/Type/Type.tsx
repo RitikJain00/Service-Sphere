@@ -60,39 +60,71 @@ export interface Job {
   expireince: string;
   location: string;
   rating:  number;
-  booking: string;
+  booking: number;
   price: number;
   time: string;
 }
 
-export interface UpcommingBookingCustomer {
-  date: Date,
+export interface Booking {
+  date: string,
   amount: number,
   payment: string,
   service: Job
 }
 
+export interface PastOrder {
+
+  id: number,
+  slotDate: string,
+  completionDate: string,
+  amount: number,
+  status: string,
+  payment: string,
+  service: Job
+}
+
+export interface OrderProp {
+  id: number,
+  total: string,
+  gst: string,
+  discount: string,
+  grandTotal: string,
+  payment:    string,
+  bookedDate: string,
+  services: {
+    date: string,
+    service: Job
+  }[]
+}
+
 export interface CartContextType {
   Favorate : Job[],
   cart : Job[],
-  upcommingBooking: UpcommingBookingCustomer[],
-  upcommingOrders: UpcommingBookingCustomer[],
-  orders: Job[],
-  pastBooking: UpcommingBookingCustomer[],
+  upcommingOrders: Booking[],
+  pastOrders: PastOrder[],
+  orders: OrderProp[],
+ 
 
   total: number,
   gst: number,
   discount: number,
   loading: boolean,
+  data: Job[],
+  filteredServices: Job[],
+  setData:  React.Dispatch<React.SetStateAction<Job[]>>,
+  setFilteredServices: React.Dispatch<React.SetStateAction<Job[]>>,
   setLoading: (val: boolean) => void
   addToCart: (job: Job) => void,
   removeFromCart: (job: Job) => void
   addToFavorate: (job: Job) => void,
   removeFromFavorate: (job: Job) => void,
-  fetchUpcommingBookings: () => void,
+
   fetchUpcommingOrders: () => void,
+  fetchPastOrders: ()=> void,
+  fetchOrders: () => void,
   fetchCartItem: () => void,
   fetchFavorateItem: () => void,
+
   BookServices: (paymentType: string, dates: { [key: number]: Date | null }) => Promise<void>
 
  }
