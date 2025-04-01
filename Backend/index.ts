@@ -17,9 +17,10 @@ import customerData from './src/Routes/Admin/CustomerData'
 import professionalData from './src/Routes/Admin/ProfessionalData'
 
 
-
 import payment from './src/Routes/Payment/Payment'
 import booking from './src/Routes/Booking/Booking'
+
+import uploadImage from './src/Routes/Claudinary/upload'
 
 
 
@@ -63,6 +64,9 @@ app.use('/adminContact',adminContact)
 
 app.use('/payment', payment)
 app.use('/booking', booking)
+
+
+app.use('/uploadImage', uploadImage)
 
 
 

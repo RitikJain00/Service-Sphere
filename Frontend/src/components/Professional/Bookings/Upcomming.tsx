@@ -5,12 +5,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
 import { upcommingService } from "../../../Type/Type";
+
 import { useStat } from "../../../Context/StatsProvider";
+import { useProfile } from "../../../Context/ProfileContext";
 
 import { Loader } from '@mantine/core';
 import CustomerDetails from "./CustomerDetails";
 
-
+import PaginatedList from "../../Services/JobCards/Pagetable";
 
 
 const BookingTable = () => {
@@ -23,7 +25,7 @@ const BookingTable = () => {
   const token = localStorage.getItem("authToken");
 
   const { fetchStatsProfessional,statsProfessional  } = useStat()
-
+  const {basic} = useProfile()
   // Fetch Data
   const fetchData = async () => {
     try {
@@ -48,13 +50,12 @@ const BookingTable = () => {
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
     const filtered = productData.filter(
       (product) =>
-        product.date.toLowerCase().includes(term) || product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term) || product.amount.toLowerCase().includes(term)
+        product.service.name.toLowerCase().includes(term) || product.payment.toLowerCase().includes(term) ||  Number(product.amount) <= Number(term) ||   product.date.toLowerCase().includes(term) 
     );
     setFilteredProducts(filtered);
   };
@@ -101,7 +102,11 @@ const BookingTable = () => {
           Orderid: service.id,
           date: service.date,
           customerId: service.customer.id,
+          customerName: service.customer.profile.name,
+          customerEmail: service.customer.username,
           serviceId: service.service.id,
+          serviceName: service.service.name,
+          company: basic.name,
           amount: service.amount,
           payment: service.payment,
           servicePrice: service.service.price
@@ -210,7 +215,12 @@ const BookingTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredProducts.map((product: upcommingService) => (
+
+            <PaginatedList
+                data={filteredProducts}
+                itemsPerPage={4} // 4 services per page
+                renderItem={(product) => (
+
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -235,7 +245,9 @@ const BookingTable = () => {
                     </button>
                   </td>
                 </motion.tr>
-              ))}
+                   )}
+                   />
+
             </tbody>
           </table>
           <Divider mx="md" mb="xl" />

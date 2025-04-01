@@ -1,18 +1,21 @@
 import { motion } from "framer-motion";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
+ interface props {
+	DATA: {
+	name: string |"",
+	value: number | 0
+	}[]
+}
 
-const categoryData = [
-	{ name: "Electronics", value: 4500 },
-	{ name: "Clothing", value: 3200 },
-	{ name: "Home & Garden", value: 2800 },
-	{ name: "Books", value: 2100 },
-	{ name: "Sports & Outdoors", value: 1900 },
-];
+const CategoryDistributionChart = ({ DATA = [] }: props) => {
 
-const COLORS = ["#6366F1", "#8B5CF6", "#EC4899", "#10B981", "#F59E0B"];
 
-const CategoryDistributionChart = () => {
+	console.log(DATA)
+	
+	
+	const COLORS = ["#10B981","#F59E0B", "#8B5CF6", "#EC4899",  "#6366F1"];
+
 	return (
 		<motion.div
 			className='bg-mine-shaft-900 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700'
@@ -20,12 +23,12 @@ const CategoryDistributionChart = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.3 }}
 		>
-			<h2 className='text-lg font-medium mb-4 text-gray-100'>Category Distribution</h2>
+			<h2 className='text-lg font-medium mb-4 text-gray-100'>Distribution</h2>
 			<div className='h-80'>
 				<ResponsiveContainer width={"100%"} height={"100%"}>
 					<PieChart>
 						<Pie
-							data={categoryData}
+							data={DATA}
 							cx={"50%"}
 							cy={"50%"}
 							labelLine={false}
@@ -34,7 +37,7 @@ const CategoryDistributionChart = () => {
 							dataKey='value'
 							label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
 						>
-							{categoryData.map((_, index) => (
+							{DATA.map((_, index) => (
 								<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
 							))}
 						</Pie>

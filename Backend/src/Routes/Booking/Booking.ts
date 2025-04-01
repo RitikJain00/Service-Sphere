@@ -3,6 +3,8 @@ import Razorpay from 'razorpay';
 import { PrismaClient } from "@prisma/client";
 import LoginStatus from "../../Middleware/CheckLoginStatus";
 
+import { transporter } from '../../Verification/Verification';
+
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -22,7 +24,9 @@ router.post('/order', LoginStatus, async (req: Request, res: Response): Promise<
   
   try {
     const userId = (req as any).user.customerId;
+    const username = (req as any).user.username
     const { cart, paymentMode, total, gst, discount } = req.body;
+  
 
 
 
@@ -122,7 +126,39 @@ router.post('/order', LoginStatus, async (req: Request, res: Response): Promise<
           discount: 0
         }
       });
+
     });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: username,
+      Subject: 'Your Service Sphere Booking is Confirmed! 🎉',
+      text: `Dear Customer,
+
+      Thank you for choosing Service Sphere! Your booking has been successfully confirmed.
+      
+      Order Details:
+
+      Services:  
+      ${(await Promise.all(cart.map(async (service: any) => `${service.name} - ${service.company}`))).join("\n")}
+      
+      
+      Total       ${total},
+      Gst         ${gst},
+      Discount    ${discount}
+      Greand Total ${total + gst - discount}
+      Payment     ${paymentMode},
+      
+      💡 Need assistance? Our support team is here to help! Contact us anytime at ${process.env.SENDER_EMAIL}.
+
+      Thank you for trusting Service Sphere we look forward to serving you!
+      
+      Best regards,
+      The Service Sphere Team`
+    }
+
+    await transporter.sendMail(mailOptions)    // send the mail
+
 
     res.json({ msg: 'Order placed successfully ' });
   } catch (error) {

@@ -11,7 +11,7 @@ import ProfessionalDetails from "./ProfessionalDetails";
 
 
 import { ProfessionalData } from "../../../Type/Type";
-
+import PaginatedList from "../../Services/JobCards/Pagetable";
 
 
 
@@ -140,7 +140,11 @@ const AllProfessionalTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredProfessional.map((product: ProfessionalData) => (
+
+            <PaginatedList
+                data={filteredProfessional}
+                itemsPerPage={4} // 4 services per page
+                renderItem={(product) => (
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -169,7 +173,8 @@ const AllProfessionalTable = () => {
            </td>}
 
                 </motion.tr>
-              ))}
+             )}
+             />
             </tbody>
           </table>
           <Divider mx="md" mb="xl" />

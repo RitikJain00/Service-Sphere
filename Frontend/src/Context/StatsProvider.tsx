@@ -14,6 +14,7 @@ import { StatsContextType, StatsProfessional, StatsAdmin } from "../Type/Type";
  export const StatProvider: React.FC<StatProviderProps> =  ({ children } ) => {
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [categoryProfessional, setCategoryProfessional] = useState([{  category: '', totalBookings: 0}])
   const [statsProfessional, setStatsProfessional] = useState<StatsProfessional>({
     wallet: {
       Total: 0,
@@ -76,6 +77,33 @@ import { StatsContextType, StatsProfessional, StatsAdmin } from "../Type/Type";
     fetchStatsProfessional();
   }, [])
 
+
+  const fetchCategoryDataProfessional = async () => {
+    const token = localStorage.getItem('authToken')
+    if(!token) return
+
+    setLoading(true); 
+    try{
+      const response = await axios({
+        method: 'get',
+        url: 'http://localhost:3000/statistics/categoryChartProfessional',
+        headers: {Authorization: `Bearer ${token}`}
+      })
+     
+      setCategoryProfessional(response.data.formattedData)
+      
+    } catch(error){
+      console.log('Error in Fetching Cart', error)
+    }
+    setLoading(false);      
+  }
+  
+  useEffect(() => {
+    fetchCategoryDataProfessional();
+  }, [])
+
+
+
   const fetchStatsAdmin = async () => {
     const token = localStorage.getItem('authToken')
     if(!token) return
@@ -105,7 +133,7 @@ import { StatsContextType, StatsProfessional, StatsAdmin } from "../Type/Type";
   
 
   return (
-    <StatContext.Provider value= {{ statsProfessional,statsAdmin, loading, fetchStatsProfessional, fetchStatsAdmin }}>
+    <StatContext.Provider value= {{ statsProfessional,statsAdmin, loading, categoryProfessional, fetchStatsProfessional, fetchStatsAdmin }}>
       {loading && (  
     <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">
     <Loader color="blue" size="xl" />

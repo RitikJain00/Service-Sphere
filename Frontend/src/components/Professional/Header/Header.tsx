@@ -1,8 +1,5 @@
 
-import { IconBellRinging } from '@tabler/icons-react';
 
-
-import { Indicator } from '@mantine/core';
 import MenuItem from './MenuItem';
 import { useLocation } from 'react-router-dom';
 
@@ -21,12 +18,6 @@ const Header = () => {
         </div>
           <div className='flex gap-4 items-center'>
               <MenuItem></MenuItem>
-
-               <Indicator inline processing color="red"  offset={6} size={8}>
-               <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>  
-                    <IconBellRinging stroke={2} />
-               </div>
-               </Indicator>
 
             </div>
       </div>

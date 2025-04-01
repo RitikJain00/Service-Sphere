@@ -5,14 +5,22 @@ import StateCard from "../../components/Professional/StateCard"
 import { motion } from "framer-motion";
 import { AlertTriangle, BarChart2, Users, TrendingUp,UserRoundCheck } from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
-import SalesTrendChart from "../../components/Admin/DashBoard/LineChart";
+import SalesChannelChart from "../../components/Admin/DashBoard/BarChart";
 import CustomerTable from '../../components/Admin/Customer/CustomerTable'
 import { useStat } from "../../Context/StatsProvider";
 
 
 const Customers = () => {
 	const {statsAdmin} = useStat();
-
+	const DATA = statsAdmin
+  ? [
+      { name: "Customers", value: statsAdmin.totalCustomers},
+      { name: "New Customers", value: statsAdmin.newCustomers },
+			{ name: "Cancelled ", value: statsAdmin.totalCancelledBookings },
+      { name: "Completed ", value: statsAdmin.totalCompletedBookings },
+      
+    ]
+  : [];
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
       <SideBar></SideBar>
     <div className="w-full">
@@ -38,8 +46,8 @@ const Customers = () => {
 
 				{/* CHARTS */}
 				<div className='grid grid-col-1 lg:grid-cols-2 gap-8'>
-					<SalesTrendChart />
-					<CategoryDistributionChart />
+				<SalesChannelChart DATA={DATA} />
+ 				 <CategoryDistributionChart DATA={DATA} />
 				</div>
 			</main>
 

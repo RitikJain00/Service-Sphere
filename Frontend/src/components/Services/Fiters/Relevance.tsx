@@ -65,7 +65,7 @@ const Relevance = () => {
       >
         <Combobox.Target>
           <div
-            className="border border-bright-sun-400 flex gap-2 text-bright-sun-300 px-2 py-1 mt-2 cursor-pointer rounded-xl items-center h-8 w-auto hover:scale-105 transition duration-300"
+            className="border border-bright-sun-400 flex gap-2 text-bright-sun-300 px-2 md:py-1 mt-2 cursor-pointer rounded-xl items-center h-16 xl:h-8 w-auto hover:scale-105 transition duration-300"
             onClick={() => combobox.toggleDropdown()}
           >
             {selectedItem} <IconAdjustments className="h-5 w-5" stroke={2} />

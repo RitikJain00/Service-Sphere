@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser, IconMail,IconPencil,IconArrowLeft  } from '@tabler/icons-react';
 
-import { ActionIcon, Divider,  Button, TextInput, rem  } from '@mantine/core';
+import { ActionIcon, Divider,  Button, TextInput, rem, Indicator, Avatar, FileInput   } from '@mantine/core';
 import { useDisclosure } from "@mantine/hooks";
 
 import { useProfile } from '../../Context/ProfileContext';
@@ -22,6 +22,29 @@ const ProfessionalProfile = () => {
     const [verificationType, setVerificationType] = useState(""); // "email" or "phone"
     const {setLoading} = useCart();
 
+
+
+
+
+    const handleFileChange = async (file: File | null) => {
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('image', file); // 🔥 Ensure the field name is exactly 'image'
+      formData.append("type", 'Professional');
+      try {
+        const { data } = await axios.post('http://localhost:3000/uploadImage/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem("authToken")}` },
+          
+        });
+        Detail.fetchProfile()
+        console.log("Uploaded Image URL:", data.imageUrl);
+      } catch (err) {
+        console.error('Error uploading image', err);
+      }
+    };
+    
     
   const handleSendOTP = async (verify: string) => {
     const token = localStorage.getItem('authToken')
@@ -53,12 +76,36 @@ const ProfessionalProfile = () => {
 
         <div  className="w-full relative">
           <img className='rounded-t-2xl w-full ' src="/Profile/ServiceSphereBanner.png" alt="" />
-          <img className="w-48 h-48 md-mx:w-40 md-mx:h-40  sm-mx:w-32 sm-mx:h-32 xs-mx:w-28 xs-mx:h-28 rounded-full absolute -bottom-24 left-4 border-mine-shaft-900 border-8" src="/Home/avatar-9.png" alt="" />
+
+          <div className='absolute left-3 -bottom-1/3 sm-mx:-bottom-1/4 xs-mx:-bottom-1/5 xsm-mx:-bottom-1/6 '>
+          <Indicator className='[&_.mantine-Indicator-indicator]:!border-4 [&_img]:hover:opacity-80' inline autoContrast size={45} offset={30} label={<IconPencil className='w-4/5 h-4/5 [&_img]:hover:opacity-80' />} position="bottom-end" color="bright-sun.4" withBorder>
+          <Avatar
+          className='
+            !w-48 !h-48 
+            md-mx:!w-40 md-mx:!h-40 
+            sm-mx:!w-32 sm-mx:!h-32 
+            xs-mx:!w-28 xs-mx:!h-28 
+            xsm-mx:!w-24 xsm-mx:!h-24,
+            border-mine-shaft-900 border-8 rounded-full
+          '
+          src={Detail.image || "Model/user.png"}
+          alt=''
+        />
+
+            <FileInput
+              className='absolute bottom-2 right-2 z-[201] w-12 [&-div]:text-transparent'
+              size='lg'
+              radius={'xl'}
+              accept="image/png,image/jpeg"
+              variant="unstyled"
+              onChange={handleFileChange}
+            />
+    </Indicator>
+          </div>
         </div>
 
       {/* Basic Detail */}
-
-      <div className="mt-28 md-mx:px-2 px-8 w-full flex justify-between">
+      <div className="xs-mx:mt-12 sm-mx:mt-20 md-mx:mt-28 xl-mx:mt-36 mt-40  md:px-8 w-full flex justify-between">
 
           {Detail.edit[0] ? 
           <div className='flex flex-col gap-2 '>

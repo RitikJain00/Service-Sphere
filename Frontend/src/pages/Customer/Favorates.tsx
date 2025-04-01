@@ -14,11 +14,12 @@ const Favorite = () => {
       <Header />
       <Divider mx="md" mb="xl" />
 
-      <div className="px-2 sm:px-4 xs:px-8 flex-grow">
+      <div className="px-2 sm:px-4 xs:px-8 flex-grow ">
         {Favorate.length > 0 ? (
-          <Grid gutter="lg" className="w-full">
+          <Grid gutter="2xl" className="w-full">
             {Favorate.map((job) => (
-              <Grid.Col key={job.id} span={{ base: 12, sm: 6, md: 4, lg: 3 }} className="flex">
+              <Grid.Col key={job.id} span={{ 
+                 sm: 9, md: 6, xl: 4 }} className="flex">
                 <ServiceCard job={job} className="w-full" />
               </Grid.Col>
             ))}

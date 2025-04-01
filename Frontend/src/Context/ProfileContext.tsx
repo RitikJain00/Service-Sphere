@@ -3,7 +3,7 @@ import axios from 'axios';
 import {BasicInfo,ContactInfo,AddressInfo,verificationInfo, ProfileContextType } from '../Type/Type';
 import { BasicDetail, Contact, Address } from "../../../Shared/Validation/ProfileSchema";
 import { Loader } from "@mantine/core";
-import { useDisclosure } from '@mantine/hooks';
+
 
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
@@ -14,6 +14,7 @@ interface ProfileProviderProps {
 
 export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) => {
   const [edit, setEdit] = useState([false, false, false, false]);
+  const [image, setImage] = useState('')
   const [basic, setBasic] = useState<BasicInfo>({ name: '', about: '' });
   const [contact, setContact] = useState<ContactInfo>({email: '', phone: '' });
   const [address, setAddress] = useState<AddressInfo>({ home: '', city: '', pin: '', country: '' });
@@ -49,7 +50,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
         .then(response => {
           const data = response.data.userProfile;
           console.log(data)
-        
+          
+          setImage(data.profile.image)
           setBasic({ name: data.profile.name, about: data.profile.description});
           setContact({email: data.username, phone: data.profile.phone });
           setAddress({ home: data.profile.address, city: data.profile.city, pin: data.profile.pincode, country: data.profile.country });
@@ -154,7 +156,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   };
 
   return (
-    <ProfileContext.Provider value={{ edit, basic, contact, address,verify, handleBasicChange, handleContactChange, handleAddressChange,  handleClick,handleWalletMoney, saveProfile, updateAuth, walletAmount, fetchProfile, errorBasic,errorContact,errorAddress}}>
+    <ProfileContext.Provider value={{ edit,image, basic, contact, address,verify, handleBasicChange, handleContactChange, handleAddressChange,  handleClick,handleWalletMoney, saveProfile, updateAuth, walletAmount, fetchProfile, errorBasic,errorContact,errorAddress}}>
       {loading && (  
       <div className="fixed top-0 left-0 w-full h-screen  bg-mine-shaft-500 bg-opacity-10 backdrop-blur-sm flex items-center justify-center z-[9999]">
       <Loader color="blue" size="xl" />

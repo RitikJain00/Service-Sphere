@@ -12,11 +12,12 @@ import {
 
 } from '@tabler/icons-react';
 import Feedback from '../../Customer/Header/Feedback';
-
+import { useProfile } from '../../../Context/ProfileContext';
 
 const MenuItem = () =>  {
   
   const navigate = useNavigate();
+  const Detail = useProfile();
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
@@ -34,7 +35,7 @@ const MenuItem = () =>  {
      
       <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} >
       <Menu.Target>
-      <Avatar src="Home/avatar-9.png" alt="it's me" />
+      <Avatar src={Detail.image || "Model/user.png"} alt="it's me" />
       </Menu.Target>
 
       <Menu.Dropdown>

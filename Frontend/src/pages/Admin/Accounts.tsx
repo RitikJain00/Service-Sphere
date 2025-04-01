@@ -5,7 +5,6 @@ import StateCard from '../../components/Professional/StateCard'
 import { motion } from "framer-motion";
 import { TrendingUp, Package, IndianRupee, AlertTriangle, Zap} from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
-import SalesOverviewChart from "../../components/Admin/DashBoard/LineChart";
 import SalesChannelChart from "../../components/Admin/DashBoard/BarChart";
 import { useStat } from "../../Context/StatsProvider";
 import PaymentPendingCustomers from "../../components/Admin/Accounts/CustomerPendingPayment";
@@ -13,7 +12,16 @@ import PaymentPendingProfessional from "../../components/Admin/Accounts/Professi
 
 const Admin = () => {
 	const {statsAdmin} = useStat();
-  console.log(statsAdmin)
+	const DATA = statsAdmin
+  ? [
+      { name: "Revenue", value:statsAdmin.adminWallet.wallet},
+			{ name: "Profit ", value: statsAdmin.adminWallet.wallet-statsAdmin.adminWallet.totalGst+statsAdmin.adminWallet.recieve-statsAdmin.adminWallet.pay },  
+      { name: "GST", value: statsAdmin.adminWallet.totalGst },
+			{ name: "Pending", value: statsAdmin.adminWallet.recieve },
+      { name: "Due ", value: statsAdmin.adminWallet.pay },
+       
+    ]
+  : [];
 
 
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
@@ -43,11 +51,10 @@ const Admin = () => {
 
 				{/* CHARTS */}
 
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-					<SalesOverviewChart />
-					<CategoryDistributionChart />
-					<SalesChannelChart />
-				</div>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+ 				 <SalesChannelChart DATA={DATA} />
+ 				 <CategoryDistributionChart DATA={DATA} />
+			</div>
 			</main>
     </div>
    

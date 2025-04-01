@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import LoginStatus from "../../Middleware/CheckLoginStatus";
 
+import { transporter } from '../../Verification/Verification';
+
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -359,7 +361,7 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
 
   try {
     const userId = (req as any).user.professionalId; // Extract user ID from token
-    const { Orderid, date, customerId, serviceId, servicePrice, amount, payment } = req.body;
+    const { Orderid, date, customerId,customerName,customerEmail,serviceName,company, serviceId, servicePrice, amount, payment } = req.body;
 
     await prisma.$transaction(async (prisma) => {
       // 1. Delete Upcoming Order
@@ -434,6 +436,29 @@ router.post('/rejectBooking', LoginStatus, async (req: Request, res: Response): 
       }
     });
 
+ 
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: customerEmail,
+      Subject: 'Your Service Sphere Booking Has Been Rejected',
+      text: `Dear ${customerName},
+
+      We regret to inform you that your booking request for ${serviceName} - ${company} has been rejected by the professional.
+
+      If you have already made a payment, a refund will be initiated and processed within 3-5 business days.
+      
+      We understand this may be inconvenient, and we encourage you to explore other available professionals on Service Sphere to find the right fit for your needs.
+      
+      💡 Need assistance? Our support team is always here to help! Contact us anytime at ${process.env.SENDER_EMAIL}.
+      
+      Thank you for choosing Service Sphere. We hope to assist you with another booking soon!
+      
+      Best regards,
+      The Service Sphere Team`
+    }
+
+    await transporter.sendMail(mailOptions)    // send the mail
+
     res.json({ msg: 'Order Rejected successfully' });
   } catch (error) {
     console.error(error);
@@ -448,7 +473,8 @@ router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): 
 
   try {
     const userId = (req as any).user.customerId; // Extract user ID from token
-    const { id, date, amount, payment, serviceId, professionalId, servicePrice } = req.body;
+    const username = (req as any).user.username
+    const { id, date, amount, payment, serviceId,serviceName,serviceCompany, professionalId, servicePrice } = req.body;
 
     await prisma.$transaction(async (prisma) => {
       // 1. Delete Upcoming Order
@@ -523,6 +549,26 @@ router.post('/cancelBooking', LoginStatus, async (req: Request, res: Response): 
         });
       }
     });
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: username,
+      Subject:  'Your Service Sphere Booking Has Been Canceled',
+      text: `Dear Customer,
+
+      We’re sorry to see your booking canceled. Your request for ${serviceName} - ${serviceCompany} has been successfully canceled.
+      
+      If this was a mistake or if you need to reschedule, feel free to book again anytime.
+      
+      💡 Need assistance? Our support team is always here to help! Contact us anytime at ${process.env.SENDER_EMAIL}.
+      
+      Thank you for considering Service Sphere. We hope to serve you in the future!
+      
+      Best regards,
+      The Service Sphere Team`
+    }
+
+    await transporter.sendMail(mailOptions)    // send the mail
 
     res.json({ msg: 'Booking Cancelled successfully' });
   } catch (error) {

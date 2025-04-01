@@ -23,6 +23,8 @@ const handleCancel = async () => {
           payment: job.payment,
           date: job.date,
           serviceId: job.service.id,
+          serviceName: job.service.name,
+          serviceCompany: job.service.company,
           professionalId: job.service.professionalId,
           servicePrice: job.service.price
 
@@ -53,7 +55,7 @@ const handleCancel = async () => {
       <div className="flex justify-between gap-4">
     
           <div className="flex gap-4">
-            <img className='w-20 h-20' src={job.image} alt="" />
+          <img className='w-16 h-16' src={'ServicePages/' + job.service.category.toLowerCase() + '.png'} alt="" />
         <div className="ml-4">
           <div className='text-2xl font-semibold text-mine-shaft-300 font-[poppins]'>{job.service.name}</div>
           <div className='mt-1'>{job.service.company} &#x2022; &#x2B50; 4.26</div>

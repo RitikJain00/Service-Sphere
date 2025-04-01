@@ -4,8 +4,6 @@ import { Divider } from "@mantine/core"
 import StateCard from "../../components/Professional/StateCard"
 import { motion } from "framer-motion";
 import { AlertTriangle, IndianRupee, Package, TrendingUp } from "lucide-react";
-import CategoryDistributionChart from "../../components/Professional/DashBoard/PiChart";
-import SalesTrendChart from "../../components/Professional/Services/SalesTrendChart";
 import PastBooking from "../../components/Professional/History/PastBookings";
 import { useStat } from "../../Context/StatsProvider";
 
@@ -34,11 +32,6 @@ const History = () => {
 
 				<PastBooking></PastBooking>
 
-				{/* CHARTS */}
-				<div className='grid grid-col-1 lg:grid-cols-2 gap-8'>
-					<SalesTrendChart />
-					<CategoryDistributionChart />
-				</div>
 			</main>
 
     </div>

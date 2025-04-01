@@ -5,13 +5,24 @@ import StateCard from "../../components/Professional/StateCard"
 import { motion } from "framer-motion";
 import { AlertTriangle, BarChart2, Users, TrendingUp,UserRoundCheck } from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
-import SalesTrendChart from "../../components/Admin/DashBoard/BarChart";
+import SalesChannelChart from "../../components/Admin/DashBoard/BarChart";
+
 import ProfessionalTable from '../../components/Admin/Professional/ProfessionalTable'
 import { useStat } from "../../Context/StatsProvider";
 
 
 const Professionals = () => {
 	const {statsAdmin} = useStat();
+
+	const DATA = statsAdmin
+  ? [
+      { name: "Professionals", value: statsAdmin.totalProfessionals},
+      { name: "New Professionals", value: statsAdmin.newProfessionals },
+			{ name: "Cancelled ", value: statsAdmin.totalRejectedBookings },
+      { name: "Completed ", value: statsAdmin.totalCompletedBookings },
+      
+    ]
+  : [];
 
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
       <SideBar></SideBar>
@@ -37,10 +48,10 @@ const Professionals = () => {
 				<ProfessionalTable/>
 
 				{/* CHARTS */}
-				<div className='grid grid-col-1 lg:grid-cols-2 gap-8'>
-					<SalesTrendChart />
-					<CategoryDistributionChart />
-				</div>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+ 				 <SalesChannelChart DATA={DATA} />
+ 				 <CategoryDistributionChart DATA={DATA} />
+			</div>
 			</main>
 
     </div>

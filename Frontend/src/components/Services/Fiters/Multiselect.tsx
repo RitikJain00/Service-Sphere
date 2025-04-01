@@ -37,7 +37,11 @@ const SearchableMultiSelect = ({ Data, onChange }: { Data: any; onChange: (selec
       
   
     const handleValueRemove = (val: string) =>
-      setValue((current) => current.filter((v) => v !== val));
+    setValue((current) => {
+      const newValues = current.filter((v) => v !== val);
+      onChange(newValues); // ✅ Update filters in SearchBox
+      return newValues;
+    });
   
     const values =  value
     .slice(

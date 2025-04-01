@@ -1,11 +1,11 @@
 import { IconPlant2 } from '@tabler/icons-react';
 import { Avatar } from '@mantine/core';
 import Navlinks from './Header/NavLinks';
-
+import { useProfile } from '../../Context/ProfileContext';
 
 
 const SideBar = () => {
-
+  const Detail = useProfile();
 
   return <div className="min-w-48 w-1/5 min-h-full bg-mine-shaft-900 flex flex-col items-center">
     
@@ -16,9 +16,9 @@ const SideBar = () => {
           </div>
 
           <div className='mt-12 p-1 bg-white rounded-full shadow-xl '>
-          <Avatar size={'xl'} src="Home/avatar-9.png" alt="it's me" />
+          <Avatar size={'xl'}  src={Detail.image || "Model/user.png"} alt="it's me" />
           </div>
-          <span className='text-xl mt-2 text-mine-shaft-300'>Ritik Jain</span>
+          <span className='text-xl mt-2 text-mine-shaft-300'>{Detail.basic.name}</span>
 
 
         

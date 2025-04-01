@@ -4,6 +4,7 @@ import { Avatar } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
+import { useProfile } from '../../../Context/ProfileContext';
 
 
 import {
@@ -37,6 +38,7 @@ const MenuItem = ( {setUser}: any ) =>  {
   }
 
   const [opened, { open, close }] = useDisclosure(false);
+  const Detail = useProfile();
 
   return ( 
    
@@ -44,7 +46,7 @@ const MenuItem = ( {setUser}: any ) =>  {
      
         <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} >
       <Menu.Target>
-      <Avatar src="Home/avatar-9.png" alt="it's me" />
+      <Avatar  src={Detail.image || "Model/user.png"} alt="it's me" />
       </Menu.Target>
 
       <Menu.Dropdown>

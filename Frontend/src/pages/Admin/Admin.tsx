@@ -5,13 +5,21 @@ import StateCard from '../../components/Professional/StateCard'
 import { motion } from "framer-motion";
 import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
-import SalesOverviewChart from "../../components/Admin/DashBoard/LineChart";
 import SalesChannelChart from "../../components/Admin/DashBoard/BarChart";
 import { useStat } from "../../Context/StatsProvider";
 
 const Admin = () => {
 	const {statsAdmin} = useStat();
-	console.log(statsAdmin)
+	const DATA = statsAdmin
+  ? [
+      { name: "Revenue (k)", value: (statsAdmin.adminWallet.wallet) / 1000 },
+      { name: "Professionals", value: statsAdmin.totalProfessionals },
+      { name: "Services", value: statsAdmin.totalServices },
+      { name: "Customers", value: statsAdmin.totalCustomers },
+    ]
+  : [];
+
+
 
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
     <SideBar></SideBar>
@@ -35,11 +43,12 @@ const Admin = () => {
 
 				{/* CHARTS */}
 
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-					<SalesOverviewChart />
-					<CategoryDistributionChart />
-					<SalesChannelChart />
-				</div>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+ 				 <SalesChannelChart DATA={DATA} />
+ 				 <CategoryDistributionChart DATA={DATA} />
+			</div>
+
+
 			</main>
     </div>
    

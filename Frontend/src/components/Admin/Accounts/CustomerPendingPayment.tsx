@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
 
+import PaginatedList from "../../Services/JobCards/Pagetable";
 
 
 import { Loader } from '@mantine/core';
@@ -159,7 +160,11 @@ const PaymentPendingCustomers = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredCustomer.map((product: customerPendingPayment) => (
+            <PaginatedList
+                data={filteredCustomer}
+                itemsPerPage={4} // 4 services per page
+                renderItem={(product) => (
+                  
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -180,7 +185,9 @@ const PaymentPendingCustomers = () => {
                   <Button onClick={() => handlePayment(product.wallet.Pending, product.id)} variant="light" color="lime" >Payment</Button></td>
                   
                 </motion.tr>
-              ))}
+              )}
+              />
+    
             </tbody>
           </table>
           <Divider mx="md" mb="xl" />

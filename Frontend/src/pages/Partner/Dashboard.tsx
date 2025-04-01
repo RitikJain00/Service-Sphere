@@ -4,14 +4,24 @@ import { Divider } from "@mantine/core"
 import StateCard from '../../components/Professional/StateCard'
 import { motion } from "framer-motion";
 import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
-import CategoryDistributionChart from "../../components/Professional/DashBoard/PiChart";
-import SalesOverviewChart from "../../components/Professional/DashBoard/LineChart";
-import SalesChannelChart from "../../components/Professional/DashBoard/BarChart";
+import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";
+import SalesChannelChart from "../../components/Admin/DashBoard/BarChart";
 import { useStat } from "../../Context/StatsProvider";
 
 const DashBoard = () => {
 	const { statsProfessional} = useStat()
 	const ConversionRate = parseFloat(((statsProfessional.completedPastBookings / statsProfessional._count.PastBookings) * 100).toFixed(2)) | 0;
+
+	const DATA =  statsProfessional
+  ? [
+      { name: "Catagories", value: (statsProfessional.serviceCategories)},
+			{ name: "Services", value: statsProfessional._count.services },
+      { name: "Sales", value: statsProfessional.completedPastBookings},
+      { name: "Customers", value: statsProfessional.newCustomers },
+      { name: "Revenue (k)", value: statsProfessional.wallet.Total/1000},
+
+    ]
+  : [];
 	
 
   return <div className="w-full min-h-[100vh] bg-mine-shaft-950 flex ">
@@ -38,11 +48,10 @@ const DashBoard = () => {
 
 				{/* CHARTS */}
 
-				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-					<SalesOverviewChart />
-					<CategoryDistributionChart />
-					<SalesChannelChart />
-				</div>
+				<div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+ 				 <SalesChannelChart DATA={DATA} />
+ 				 <CategoryDistributionChart DATA={DATA} />
+			</div>
 			</main>
     </div>
    

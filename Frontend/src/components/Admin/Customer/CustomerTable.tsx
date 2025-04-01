@@ -11,7 +11,7 @@ import { Loader } from '@mantine/core';
 
 import { CustomerData } from "../../../Type/Type";
 
-
+import PaginatedList from "../../Services/JobCards/Pagetable";
 
 
 const AllCustomerTable = () => {
@@ -134,7 +134,11 @@ const AllCustomerTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {filteredCustomer.map((product: CustomerData) => (
+
+            <PaginatedList
+                data={filteredCustomer}
+                itemsPerPage={4} // 4 services per page
+                renderItem={(product) => (
                 <motion.tr key={product.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100 flex gap-2 items-center">
                     <img
@@ -161,7 +165,9 @@ const AllCustomerTable = () => {
                  
 
                 </motion.tr>
-              ))}
+                )}
+                />
+      
             </tbody>
           </table>
           <Divider mx="md" mb="xl" />

@@ -26,13 +26,13 @@ const Explore = () => {
     <Divider mx="md" mb='xl' />
 
       {/* Filters */}
-      <div className="flex justify-center mx-6 ">
+      <div className="flex justify-between  bs:mx-16 md:mx-24 lg:mx-32">
 
-      <Burger className='md:hidden  xs:mr-2 sm:mr-6 ' opened={opened} onClick={open} aria-label="Toggle navigation" />
+      <Burger className='md:hidden mx-8  xs:mr-2 sm:mr-6 ' opened={opened} onClick={open} aria-label="Toggle navigation" />
       <Drawer size={`xs`} opened={opened} onClose={close} overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} 
     >
       <div className="flex flex-col gap-16">
-      <div className='flex gap-3 items-center text-amber-400 mt-6 mx-3'>
+      <div className='flex gap-3 items-center text-amber-400 mt-6 '>
          <IconPlant2 stroke={1.8} className='h-10 w-10'/>
           <div className='text-2xl font-semibold'>Service Sphere</div>
           </div>
@@ -42,7 +42,7 @@ const Explore = () => {
       </div>
  
           </Drawer>
-        <div className="mt-4 hidden min-w-80 sticky top-[30px] h-[calc(100vh-100px)] md:block">
+        <div className="mt-4 hidden w-80 sticky top-[30px] h-[calc(100vh-100px)] md:block">
           <SearchBox ></SearchBox>
         </div>
 
@@ -53,7 +53,7 @@ const Explore = () => {
 
 
         {/* Cart & offers */}
-        <div className="sticky  top-[30px] h-[calc(100vh-100px)] overflow-y-auto hidden xl:block 2xl:block">
+        <div className="sticky  top-[30px] h-[calc(100vh-100px)] overflow-y-auto hidden lg:block 2xl:block">
             <Cart></Cart> 
             <Offer></Offer>
             <Promise></Promise>

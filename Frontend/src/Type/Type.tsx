@@ -1,6 +1,7 @@
 
 ///////////////////Upcomming Bookung //////////////////////
 
+
 interface CustomerProfile{
   name: string;
   phone: string;
@@ -139,6 +140,7 @@ export interface verificationInfo {email: Boolean; phone: Boolean}
 
 export interface ProfileContextType {
   edit: boolean[];
+  image: string
   basic: BasicInfo;
   contact: ContactInfo;
   address: AddressInfo;
@@ -218,10 +220,16 @@ export interface StatsAdmin {
 
 }
 
+export interface categorychart {
+  category: string,
+  totalBookings: number
+}
+
 export interface StatsContextType {
   statsProfessional: StatsProfessional
   statsAdmin: StatsAdmin 
   loading: boolean,
+  categoryProfessional: categorychart[],
   fetchStatsProfessional: () => void
   fetchStatsAdmin: () => void
 }

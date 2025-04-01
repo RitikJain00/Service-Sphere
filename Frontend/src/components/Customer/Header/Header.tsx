@@ -1,5 +1,4 @@
 import { IconPlant2, IconShoppingCart } from '@tabler/icons-react';
-import { IconBellRinging } from '@tabler/icons-react';
 
 import { IconMapPin } from '@tabler/icons-react';
 import { Indicator } from '@mantine/core';
@@ -13,6 +12,7 @@ import { Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Drawer, Button } from '@mantine/core';
 import { Link, useLocation} from 'react-router-dom';
+
 
 const Header = () => {
   
@@ -85,13 +85,10 @@ const links = [
           { (user.type === 'Customer' && user.token )? 
         
           ( <div className='flex gap-4 items-center'>
+        
            <MenuItem setUser={setUser} ></MenuItem>
 
-            <Indicator inline processing color="red"  offset={6} size={8}>
-            <div className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>  
-                 <IconBellRinging stroke={2} />
-            </div>
-            </Indicator>
+            
 
             <Indicator label={cart.length} size={20} color="bright-sun.7" offset={6}>
                 <div onClick={() => navigate('/Cart')} className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
@@ -107,16 +104,38 @@ const links = [
 
 <Burger className='md:hidden' opened={opened} onClick={open} aria-label="Toggle navigation" />
 
-<Drawer size={`xs`} opened={opened} onClose={close} overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} position='right'>
-  <div className='flex flex-col gap-5 items-center'>
-        {links.map((link,index) => 
-             <div key = {index} className={` h-full flex items-center`}>
-                <Link className='text-xl hover:text-bright-sun-400'  to = {link.url}>{link.name}</Link> 
-            </div>
-           )
-            }
-      </div>
-      </Drawer>
+<Drawer 
+  size="xs" 
+  opened={opened} 
+  onClose={close} 
+  overlayProps={{ backgroundOpacity: 0.5, blur: 4 }} 
+  position="right"
+  // Prevents scrolling
+>
+  <div className="flex flex-col items-center gap-8">
+  
+  <div className="flex gap-3 items-center text-amber-400 pb-4">
+      <IconPlant2 stroke={1.8} className="h-10 w-10" />
+      <div className="text-2xl font-semibold">Service Sphere</div>
+    </div>
+
+
+    <div className="flex flex-col gap-5 items-center flex-grow overflow-auto">
+      {links.map((link, index) => (
+        <div key={index} className="flex items-center">
+          <Link className="text-xl hover:text-bright-sun-400" to={link.url}>
+            {link.name}
+          </Link>
+        </div>
+      ))}
+    </div>
+
+    {/* Bottom Section - Branding */}
+ 
+  </div>
+</Drawer>
+
+
       </div>
 
       </div>

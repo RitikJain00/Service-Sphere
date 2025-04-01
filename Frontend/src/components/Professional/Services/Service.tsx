@@ -54,19 +54,20 @@ const token = localStorage.getItem('authToken')
 const  handleServiceSubmit = async () => {
   
   try {
-    const professional = await await axios ({     // to get the location and company name
+    const professional =  await axios ({     // to get the location and company name
       method: 'get',
       url: 'http://localhost:3000/professionalprofile/profile',
       headers: {Authorization: `Bearer ${token}`},
     })
 
+    const proffessionalData = professional.data.userProfile.profile
     
-    if (!professional.data.name ) {
+    if (!proffessionalData.name ) {
       setError('Update Company Name in your Profile first');
       return;
     }
 
-    if (!professional.data.city ) {
+    if (!proffessionalData.city ) {
       setError('Update Location in your Profile first');
       return;
     }
@@ -74,8 +75,8 @@ const  handleServiceSubmit = async () => {
    
     const updatedData = {
       ...data,
-      company: professional.data.name,
-      location: professional.data.city,
+      company: proffessionalData.name,
+      location: proffessionalData.city,
       price: Number(data.price) || 0, 
     };
 
