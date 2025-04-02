@@ -1,7 +1,6 @@
 
-import { Divider } from "@mantine/core"
+import { Divider, Button } from "@mantine/core"
 import { IconMapPin,  IconRecharging,IconBriefcase, IconClock, IconCreditCardPay } from "@tabler/icons-react";
-import { Button } from '@mantine/core';
 import axios from "axios";
 import { useCart } from "../../../Context/CartContext";
 
@@ -16,7 +15,7 @@ const handleCancel = async () => {
   if (window.confirm("Are you sure you want to cancel the service")) {
     try{
       setLoading(true)
-       await axios.post("http://localhost:3000/service/cancelBooking", 
+       await axios.post("https://service-sphere-j7vd.onrender.com/service/cancelBooking", 
         { 
           id: job.id,
           amount: job.amount,

@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from "recharts";
 
-
 const COLORS = ["#10B981","#F59E0B", "#8B5CF6", "#EC4899",  "#6366F1"];
-
 
 interface props {
 	DATA: {
@@ -14,9 +12,6 @@ interface props {
 
 
 const SalesChannelChart = ({ DATA = [] }: props) => {
-
-
-
 
 	return (
 		<motion.div
@@ -50,7 +45,6 @@ const SalesChannelChart = ({ DATA = [] }: props) => {
     </ResponsiveContainer>
   </div>
 </motion.div>
-
 	);
 };
 export default SalesChannelChart;

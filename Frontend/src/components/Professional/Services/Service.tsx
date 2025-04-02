@@ -1,14 +1,12 @@
-
-import { Modal, Button,TextInput} from '@mantine/core';
-import { Select } from '@mantine/core';
-import axios from 'axios';
 import { useState, useEffect } from 'react'
+import { Modal, Button,TextInput, Select} from '@mantine/core';
+import axios from 'axios';
 import { createService } from '../../../../../Shared/Validation/ServiceSchema'
-import {  IconCheck } from '@tabler/icons-react';
 import { showNotification } from '@mantine/notifications';
 import { useStat } from '../../../Context/StatsProvider';
+import { useCart } from "../../../Context/CartContext";
 
-import { IconBrandSlack,IconBriefcase, IconCategory2 , IconCurrencyRupee, IconFileDescription  } from '@tabler/icons-react';
+import { IconBrandSlack,IconBriefcase, IconCategory2 , IconCurrencyRupee, IconFileDescription, IconCheck  } from '@tabler/icons-react';
 
 
 interface CheckOutProps {
@@ -18,8 +16,6 @@ interface CheckOutProps {
   service?: any;
 }
 
-
-
 const ServiceHandler: React.FC<CheckOutProps>  = ({ opened, close, fetchAgain, service}) => {
 
 const isEditMode = Boolean(service);
@@ -27,6 +23,7 @@ const [error, setError] = useState<string | null>(null);
 const [data , setData] = useState({id: '',name: '',  description: '', category: '', expireince: '',price: undefined});
 
 const {fetchStatsProfessional } = useStat()
+const {setLoading } = useCart()
 
 useEffect(() => {
   if (service) {
@@ -54,20 +51,23 @@ const token = localStorage.getItem('authToken')
 const  handleServiceSubmit = async () => {
   
   try {
+    setLoading(true)
     const professional =  await axios ({     // to get the location and company name
       method: 'get',
-      url: 'http://localhost:3000/professionalprofile/profile',
+      url: 'https://service-sphere-j7vd.onrender.com/professionalprofile/profile',
       headers: {Authorization: `Bearer ${token}`},
     })
 
     const proffessionalData = professional.data.userProfile.profile
     
     if (!proffessionalData.name ) {
+      setLoading(false)
       setError('Update Company Name in your Profile first');
       return;
     }
 
     if (!proffessionalData.city ) {
+      setLoading(false)
       setError('Update Location in your Profile first');
       return;
     }
@@ -83,13 +83,14 @@ const  handleServiceSubmit = async () => {
 
     const checkSchema = createService.safeParse(updatedData);
     if (!checkSchema.success) {
+      setLoading(false)
       setError(checkSchema.error.errors[0].message);
       return;
     }
 
     const apiUrl = isEditMode
-        ? 'http://localhost:3000/service/editService'
-        : 'http://localhost:3000/service/createservice';
+        ? 'https://service-sphere-j7vd.onrender.com/service/editService'
+        : 'https://service-sphere-j7vd.onrender.com/service/createservice';
       const method = isEditMode ? 'put' : 'post';
 
 
@@ -116,6 +117,8 @@ const  handleServiceSubmit = async () => {
   } catch (error) {
     console.error(error);
     setError('Internal server error');
+  }finally{
+    setLoading(false)
   }
 };
 
@@ -216,8 +219,6 @@ const  handleServiceSubmit = async () => {
                       </span>
                    </Button>
                 </div>
-
-              
 
     </div>
     </Modal>

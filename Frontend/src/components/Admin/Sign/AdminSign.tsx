@@ -1,31 +1,29 @@
+import React from 'react'
 import { useState } from 'react';
-import { TextInput, rem } from '@mantine/core';
-import { IconAt } from '@tabler/icons-react';
-
-import { PasswordInput} from '@mantine/core';
-import { IconLock } from '@tabler/icons-react';
-
-import { Button } from '@mantine/core';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { IconAt, IconLock } from '@tabler/icons-react';
+import { Modal,Button, TextInput,rem, PasswordInput} from '@mantine/core';
 
 import axios from "axios";
-import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
-import { useProfile } from '../../Context/ProfileContext';
-import { useStat } from '../../Context/StatsProvider';
 
-import ForgotPassword from '../Verification/ForgotPassword';
-import { useDisclosure } from "@mantine/hooks";
+import { signinSchema } from "../../../../../Shared/Validation/AuthSchema";
+import { useStat } from '../../../Context/StatsProvider';
+import { useCart } from '../../../Context/CartContext';
 
-const Signin = () => {
+
+interface SigninProps {
+  opened: boolean; // Whether the modal is open
+  close: () => void; // Function to close the modal
+
+}
+const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
 
   const navigate = useNavigate()
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
-  const {updateAuth} = useProfile()
-  const {fetchStatsProfessional} = useStat()
+  const { fetchStatsAdmin } = useStat()
+  const {loading,setLoading } = useCart()
 
-  const [opened, { open, close }] = useDisclosure(false);
- 
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,50 +34,50 @@ const Signin = () => {
 
   const handleSignIn = async () => {
 
-    
        const checkSchema =  signinSchema.safeParse(data);
 
        if(!checkSchema.success){
         setError(checkSchema.error.errors[0].message);
         return;
        }
-       
-      
-      
-      try{
+
+       try {
+        setLoading(true)
         const response = await axios({
-          method: 'post',
-          url: 'http://localhost:3000/professionalsign/signin',
+          method: "post",
+          url: "https://service-sphere-j7vd.onrender.com/adminsign/signin",
           data: data,
           withCredentials: true,
         });
-        localStorage.setItem("authToken", response.data.token)
-        localStorage.setItem("Type" , 'Professional')
-        fetchStatsProfessional()
-        navigate('/DashBoard')
-        updateAuth(response.data.token,"Professional")
-      } catch(err : any) {
+    
+        const token = response.data.token;
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("Type", "Admin");
+        close();
+        navigate("/Admin");
+        fetchStatsAdmin()
+
+      }  catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
+      }finally{
+        setLoading(false)
       }
 
   }
 
+  return (
+   <Modal opened={opened} onClose={close}  centered>
 
-  return <div className="w-full  md-mx:w-full md:w-1/2 px-32 xl-mx:px-20 bs-mx:px-10 sm-mx:px-5 flex flex-col  bg-mine-shaft-950">
-    
-  <div className="text-3xl bs:text-4xl text-bright-sun-400 mt-24 font-semibold text-center  hover:scale-110 transition-all duration-300">Professional Account</div>
+<div className='text-bright-sun-400 text-3xl font-bold text-center mb-2'>Admin Login</div>
 
-  <div className=" flex flex-col gap-8 w-auto  mt-20 " >
-                 
-
-                    <div>
-                    <TextInput
+          <div className='flex flex-col gap-4'>
+          <TextInput
                     variant="unstyled"
                     required
                       leftSection={<IconAt style={{ width: rem(16), height: rem(16) }} />}
-                      name='username'
                      label="Email"
                      placeholder="Your Email"
+                     name='username'
                      value={data.username}
                      onChange={handleChange}
                    styles={{
@@ -102,19 +100,17 @@ const Signin = () => {
                          
                          }
                     }} />
-                    </div>
+               
 
-
-                    <div>
                     <PasswordInput
                    variant="unstyled"
                    leftSection={<IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
-                   name='password'
                    label="Password"
-                   onChange={handleChange}
-                   value={data.password}
                    withAsterisk
                    placeholder="Password"
+                   name='password'
+                   onChange={handleChange}
+                   value={data.password}
                    styles={{
                     input: {
                      backgroundColor: '#2d2d2d', 
@@ -135,7 +131,7 @@ const Signin = () => {
                      
                      }
                 }}/>
-                    </div>
+                    
 
                     {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
@@ -143,27 +139,15 @@ const Signin = () => {
                           label: {
                             fontSize: '20px',
                             color: '#454545',
-                          },
-                        }}
-                        onClick={handleSignIn}
-                        >
-                          Login Account
-                          </Button>
-                      
-
-                    <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
-                      Don't Have An Account ?  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/ProfessionalSignup'}>Sign Up</Link>
-                    </div>
-
-                    <div  className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
-                     <span onClick={() => open()} className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 cursor-pointer' >Forgot Password ?</span>
-                    </div>
-                    
-                    {<ForgotPassword  opened={opened} close={close} user={'Professional'} />}
-                    
-                    
-          </div>           
-  </div>
+                          },}}
+                          onClick={handleSignIn}
+                          disabled={loading}
+                          >Login Account
+                    </Button>
+          </div>
+              
+    </Modal>
+  )
 }
 
-export default Signin
+export default AdminSign

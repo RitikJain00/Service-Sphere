@@ -10,10 +10,6 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recha
 
 const CategoryDistributionChart = ({ DATA = [] }: props) => {
 
-
-	console.log(DATA)
-	
-	
 	const COLORS = ["#10B981","#F59E0B", "#8B5CF6", "#EC4899",  "#6366F1"];
 
 	return (

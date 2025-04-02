@@ -2,16 +2,12 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Button, Divider } from "@mantine/core";
-import axios from "axios";
+import { Button, Divider,  Loader  } from "@mantine/core";
 import CustomerDetails from "./CustomerDetail";
-
-
-import { Loader } from '@mantine/core';
-
 import { CustomerData } from "../../../Type/Type";
-
 import PaginatedList from "../../Services/JobCards/Pagetable";
+import axios from "axios";
+
 
 
 const AllCustomerTable = () => {
@@ -26,7 +22,7 @@ const AllCustomerTable = () => {
   // Fetch Data
   const fetchDataCustomers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/adminsDashboard/customers/allCustomers", {
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/adminsDashboard/customers/allCustomers", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -125,8 +121,6 @@ const AllCustomerTable = () => {
                   Balance
                 </th>
 
-              
-
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                  Status
                 </th>
@@ -162,8 +156,7 @@ const AllCustomerTable = () => {
                <td className="whitespace-nowrap text-md text-center font-semibold text-green-400">
                {'Cleared'}
            </td>}
-                 
-
+          
                 </motion.tr>
                 )}
                 />

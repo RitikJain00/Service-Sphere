@@ -1,7 +1,7 @@
 import Header from "../../components/Professional/Header/Header"
-import SideBar from "../../components/Professional/SideBar"
+import SideBar from "../../components/Professional/Header/SideBar"
 import { Divider } from "@mantine/core"
-import StateCard from "../../components/Professional/StateCard"
+import StateCard from "../../components/Professional/Services/StateCard"
 import { motion } from "framer-motion";
 import { AlertTriangle, IndianRupee, Package, TrendingUp } from "lucide-react";
 import BookingTable from "../../components/Professional/Bookings/Upcomming";

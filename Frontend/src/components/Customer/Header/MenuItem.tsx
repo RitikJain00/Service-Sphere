@@ -1,15 +1,11 @@
 
-import { Menu,  rem } from '@mantine/core';
-import { Avatar } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Menu,  rem, Avatar } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,  Link } from 'react-router-dom';
 import { useProfile } from '../../../Context/ProfileContext';
-
+import Feedback from './Feedback';
 
 import {
- 
-
   IconInfoSquare,
   IconLogout2,
   IconUserCircle,
@@ -17,14 +13,12 @@ import {
   IconHeart,
   IconShoppingCart
 } from '@tabler/icons-react';
-import Feedback from './Feedback';
 
 
 const MenuItem = ( {setUser}: any ) =>  {
   
   const navigate = useNavigate();
  
-
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
     localStorage.removeItem('Type')
@@ -59,7 +53,6 @@ const MenuItem = ( {setUser}: any ) =>  {
         </Menu.Item>
         </Link>
               
-        
   
         <Link to={'/Favorate'}>
         <Menu.Item leftSection={<IconHeart style={{ width: rem(14), height: rem(14) }} />}>
@@ -79,14 +72,9 @@ const MenuItem = ( {setUser}: any ) =>  {
         </Menu.Item>
         </Link>
 
-   
-      
         <Menu.Item  onClick={open}  leftSection={<IconInfoSquare style={{ width: rem(14), height: rem(14) }} />}>
           Send Feedback
         </Menu.Item>
-
-        
-       
 
         <Menu.Divider />
 
@@ -104,7 +92,6 @@ const MenuItem = ( {setUser}: any ) =>  {
 
     { <Feedback opened={opened} close={close} /> }
     </div>
-    
 
     
   );

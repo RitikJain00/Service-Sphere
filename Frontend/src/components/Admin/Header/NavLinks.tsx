@@ -10,10 +10,7 @@ const Navlinks = () => {
         {name: 'Accounts', url: '/Accounts', icon: <IconDatabaseDollar stroke={2} />},
         {name: 'Messages', url: '/Messages', icon: <IconBrandMessenger  stroke={2} />},
 
-      
-        // {name: 'Customer', url: '/CustomerLogin'}
     ]
-
 
     return (
           <>
@@ -21,11 +18,9 @@ const Navlinks = () => {
                <NavLink  to = {link.url} key={index} className={ ({isActive}) => `flex items-center gap-3 w-full font-medium rounded-lg px-8 py-3 ${isActive ? 'bg-mine-shaft-700' : 'hover:bg-mine-shaft-800'}    `  }>
                   {link.icon} {link.name}
                   </NavLink>
-          
-           )
+                )
             }
         </>
-        
     )
 }
 

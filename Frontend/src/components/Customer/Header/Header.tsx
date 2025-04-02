@@ -1,17 +1,12 @@
-import { IconPlant2, IconShoppingCart } from '@tabler/icons-react';
-
-import { IconMapPin } from '@tabler/icons-react';
-import { Indicator } from '@mantine/core';
+import { useState, useEffect } from "react";
+import {  useNavigate, Link, useLocation } from 'react-router-dom';
+import { IconPlant2, IconShoppingCart, IconMapPin } from '@tabler/icons-react';
+import { Indicator,  Drawer, Button, Burger } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import MenuItem from './MenuItem';
 import { useCart } from '../../../Context/CartContext';
-import {  useNavigate } from 'react-router-dom';
-import { useState, useEffect } from "react";
-import axios from 'axios';
 
-import { Burger } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { Drawer, Button } from '@mantine/core';
-import { Link, useLocation} from 'react-router-dom';
+import axios from 'axios';
 
 
 const Header = () => {
@@ -19,8 +14,8 @@ const Header = () => {
  
   const  { cart }  = useCart();
   const navigate = useNavigate();
-const [opened, { open, close }] = useDisclosure(false);
-const location = useLocation(); 
+  const [opened, { open, close }] = useDisclosure(false);
+  const location = useLocation(); 
 
 const links = [
   {name: 'Home', url: '/home'},
@@ -39,7 +34,7 @@ const links = [
     if (!user.token) return; 
   
     axios
-      .get("http://localhost:3000/customersign/checkLogin", {
+      .get("https://service-sphere-j7vd.onrender.com/customersign/checkLogin", {
         headers: { Authorization: `Bearer ${user.token}` },
         withCredentials: true,
       })
@@ -88,8 +83,6 @@ const links = [
         
            <MenuItem setUser={setUser} ></MenuItem>
 
-            
-
             <Indicator label={cart.length} size={20} color="bright-sun.7" offset={6}>
                 <div onClick={() => navigate('/Cart')} className='p-2 rounded-full bg-mine-shaft-900 cursor-pointer'>
                 <IconShoppingCart stroke={2} />
@@ -135,12 +128,8 @@ const links = [
   </div>
 </Drawer>
 
-
       </div>
-
       </div>
-     
- 
     ) 
 }
 

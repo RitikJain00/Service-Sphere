@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Modal, TextInput, Button} from '@mantine/core';
 import { IconCurrencyRupee } from '@tabler/icons-react';
 
-import { useProfile } from '../../Context/ProfileContext';
-import axios from 'axios';
+import { useProfile } from '../../../Context/ProfileContext';
+import { useCart } from '../../../Context/CartContext';
 
+import axios from 'axios';
 
 interface WalletProps {
   opened: boolean; // Whether the modal is open
@@ -19,6 +20,7 @@ const Wallet: React.FC<WalletProps> = ({ opened, close}) => {
   const [error , setError] = useState<string | null>(null)
   const {basic, contact, handleWalletMoney} = useProfile()
   const token = localStorage.getItem('authToken')
+  const {  setLoading,loading } = useCart()
 
   const handleAmountChange = (e: any) => {
     setError(null);
@@ -34,13 +36,14 @@ const Wallet: React.FC<WalletProps> = ({ opened, close}) => {
 
     try {
       // Get Razorpay key
-      const { data } = await axios.get("http://localhost:3000/payment/getKey");
+      setLoading(true)
+      const { data } = await axios.get("https://service-sphere-j7vd.onrender.com/payment/getKey");
       const key = data.key;
      
 
       // Create an order in the backend
       const { data: orderData } = await axios.post(
-        "http://localhost:3000/payment/process",
+        "https://service-sphere-j7vd.onrender.com/payment/process",
         { Grandtotal: amount },
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
@@ -90,6 +93,8 @@ const Wallet: React.FC<WalletProps> = ({ opened, close}) => {
     } catch (error) {
       console.error("Payment error:", error);
       alert("Error in processing payment");
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -119,7 +124,7 @@ const Wallet: React.FC<WalletProps> = ({ opened, close}) => {
     {error && <div className="text-red-500 text-sm text-center mt-4">{error}</div>}
 
     <div className='flex justify-center w-full mt-4'>
-    <Button onClick={handleWalletRecharge}  variant="light" color="lime">Add Amount</Button>
+    <Button onClick={handleWalletRecharge} disabled={loading}  variant="light" color="lime">Add Amount</Button>
     </div>
 
    

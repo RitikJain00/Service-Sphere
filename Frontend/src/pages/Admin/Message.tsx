@@ -1,5 +1,5 @@
 import Header from "../../components/Admin/Header/Header";
-import SideBar from "../../components/Admin/Sidebar";
+import SideBar from "../../components/Admin/Header/Sidebar";
 import { Divider } from "@mantine/core";
 import { useState, useEffect } from "react";
 import { useCart } from "../../Context/CartContext";
@@ -32,7 +32,7 @@ const Messages = () => {
       setLoading(true);
 
       const response = await axios.get<{ messages: Message[] }>(
-        "http://localhost:3000/adminContact/allMessage",
+        "https://service-sphere-j7vd.onrender.com/adminContact/allMessage",
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,

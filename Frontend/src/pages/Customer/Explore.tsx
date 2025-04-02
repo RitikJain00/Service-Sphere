@@ -1,15 +1,14 @@
 import Header from "../../components/Customer/Header/Header"
 import Footer from "../../components/Footer/Footer"
-import { Divider } from "@mantine/core"
+
 import SearchBox from "../../components/Services/Fiters/SearchBox"
 import Cart from "../../components/Services/Others/Cart"
 import Offer from "../../components/Services/Others/Offers"
 import Promise from "../../components/Services/Others/OurPromise"
 import Jobs from "../../components/Services/JobCards/Jobs"
 
-import { Burger } from '@mantine/core';
+import { Burger, Drawer, Divider } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Drawer } from '@mantine/core';
 
 import { IconPlant2 } from '@tabler/icons-react';
 

@@ -46,7 +46,7 @@ import { useLocation } from "react-router-dom";
         setLoading(true); // Set loading before making the request
     
         const response = await axios.get<{ service: Job[] }>(
-          "http://localhost:3000/shopService/allService",
+          "https://service-sphere-j7vd.onrender.com/shopService/allService",
           { params: { category: ServiceType } }
         );
     
@@ -74,7 +74,7 @@ import { useLocation } from "react-router-dom";
       try{
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:3000/shopService/cartItems',
+          url: 'https://service-sphere-j7vd.onrender.com/shopService/cartItems',
           headers: {Authorization: `Bearer ${token}`}
         })
        
@@ -102,7 +102,7 @@ import { useLocation } from "react-router-dom";
       try{
         const response = await axios({
           method: 'get',
-          url: 'http://localhost:3000/shopService/favorateItems',
+          url: 'https://service-sphere-j7vd.onrender.com/shopService/favorateItems',
           headers: {Authorization: `Bearer ${token}`}
         })
         setFavorate(response.data.favorateInfo.services);  // Update  Favorate
@@ -126,7 +126,7 @@ const fetchUpcommingOrders = async () => {
   try{
     const response = await axios({
       method: 'get',
-      url: 'http://localhost:3000/shopService/UpcommingOrders',
+      url: 'https://service-sphere-j7vd.onrender.com/shopService/UpcommingOrders',
       headers: {Authorization: `Bearer ${token}`}
     })
 
@@ -150,7 +150,7 @@ const fetchPastOrders = async () => {
   try{
     const response = await axios({
       method: 'get',
-      url: 'http://localhost:3000/shopService/PastOrders',
+      url: 'https://service-sphere-j7vd.onrender.com/shopService/PastOrders',
       headers: {Authorization: `Bearer ${token}`}
     })
 
@@ -175,7 +175,7 @@ const fetchOrders = async () => {
   try{
     const response = await axios({
       method: 'get',
-      url: 'http://localhost:3000/shopService/Orders',
+      url: 'https://service-sphere-j7vd.onrender.com/shopService/Orders',
       headers: {Authorization: `Bearer ${token}`}
     })
 
@@ -218,7 +218,7 @@ useEffect(() => {
         try{
            await axios({      // add item in cart
             method: 'post',
-            url: 'http://localhost:3000/shopService/addToCart',
+            url: 'https://service-sphere-j7vd.onrender.com/shopService/addToCart',
             headers: {Authorization: `Bearer ${token}`},
             data: job
           })
@@ -253,7 +253,7 @@ useEffect(() => {
       try{
         await axios({         // Remove item from cart
           method: 'put',
-          url: 'http://localhost:3000/shopService/deleteFromCart',
+          url: 'https://service-sphere-j7vd.onrender.com/shopService/deleteFromCart',
           headers: {Authorization: `Bearer ${token}`},
           data: job
         })
@@ -290,7 +290,7 @@ useEffect(() => {
         try{
           await axios({
             method: 'post',
-            url: 'http://localhost:3000/booking/order',
+            url: 'https://service-sphere-j7vd.onrender.com/booking/order',
             headers: {Authorization: `Bearer ${token}`},
             data: {cart: updatedCart, paymentMode,total,gst,discount}
           })
@@ -309,7 +309,6 @@ useEffect(() => {
 
     const addToFavorate = async (job: Job) => {
       const token = localStorage.getItem('authToken')
-      console.log(job)
       if(!token) {
         navigate('/CustomerLogin')
          return
@@ -319,7 +318,7 @@ useEffect(() => {
       try{
          await axios({        // Add item to favorates list
           method: 'post',
-          url: 'http://localhost:3000/shopService/addToFavorate',
+          url: 'https://service-sphere-j7vd.onrender.com/shopService/addToFavorate',
           headers: {Authorization: `Bearer ${token}`},
           data: job
         })
@@ -354,7 +353,7 @@ useEffect(() => {
       try{
        await axios({          // Remove item from Favorate List
           method: 'put',
-          url: 'http://localhost:3000/shopService/deleteFromFavorate',
+          url: 'https://service-sphere-j7vd.onrender.com/shopService/deleteFromFavorate',
           headers: {Authorization: `Bearer ${token}`},
           data: job
         })

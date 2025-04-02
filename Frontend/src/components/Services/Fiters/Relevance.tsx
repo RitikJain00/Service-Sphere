@@ -26,12 +26,18 @@ const Relevance = () => {
 
     switch (val) {
       case "Popular":
-        sortedData.sort((a, b) => b.rating - a.rating);
+        sortedData.sort((a, b) => b.booking - a.booking);
         break;
 
-      case "Most Recent":
-        sortedData.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
-        break;
+        case "Most Recent":
+          const parseDate = (dateStr: string) => {
+            const [day, month, year] = dateStr.split('/').map(Number);
+            const fullYear = year < 50 ? 2000 + year : 1900 + year; 
+            return new Date(fullYear, month - 1, day); 
+          };
+        
+          sortedData.sort((a, b) => parseDate(b.time).getTime() - parseDate(a.time).getTime());
+          break;
 
       case "Price: Low to High":
         sortedData.sort((a, b) => a.price - b.price);

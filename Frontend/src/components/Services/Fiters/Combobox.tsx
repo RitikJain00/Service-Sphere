@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { Input, InputBase, Combobox, useCombobox ,Checkbox, Group, ScrollArea, } from '@mantine/core';
 import { IconSelector } from '@tabler/icons-react';
 
-
-
 const SelectComboboxData = ( {Data, onChange} :  { Data: any; onChange: (selected: string) => void } ) => {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),

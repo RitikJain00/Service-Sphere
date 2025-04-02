@@ -1,10 +1,8 @@
-
-import { Modal, Button,TextInput} from '@mantine/core';
-import { useProfile } from '../Context/ProfileContext';
-import { IconUserCircle, IconMail,  IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode,  } from '@tabler/icons-react';
-
-import SlotAndPaymentModal from './SlotAndPaymentModal';
 import { useState } from 'react';
+import { Modal, Button,TextInput} from '@mantine/core';
+import { useProfile } from '../../Context/ProfileContext';
+import SlotAndPaymentModal from './SlotAndPaymentModal';
+import { IconUserCircle, IconMail,  IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode,  } from '@tabler/icons-react';
 
 interface CheckOutProps {
   opened: boolean; // Whether the modal is open
@@ -14,9 +12,9 @@ interface CheckOutProps {
 const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
  
   const Detail = useProfile();
-
   const [slotModalOpen, setSlotModalOpen] = useState(false);
   const [error, setError] = useState<string | null>('Check Your Details');
+
 
   const handleClick = () => {
 
@@ -48,9 +46,7 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.basic.name}
-                       
-                        
+                        value={Detail.basic.name}                       
                          />
                      
                       </div>
@@ -63,8 +59,7 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.contact.email}
-                      
+                        value={Detail.contact.email}                    
                          />
                      
                       </div>
@@ -77,8 +72,7 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.contact.phone}
-                     
+                        value={Detail.contact.phone}                   
                          />
                      
                       </div>
@@ -91,50 +85,39 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.address.home}
-                      
+                        value={Detail.address.home}                   
                          />
-                
-                 
+                                
                      <TextInput
                         leftSectionPointerEvents="none"
                         leftSection={< IconBuildings stroke={2} />}
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.address.city}
-                      
+                        value={Detail.address.city}                     
                          />
-                     
-                     
-                 
+                                     
                      <TextInput
                         leftSectionPointerEvents="none"
                         leftSection={< IconMapPinCode stroke={2} />}
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.address.pin}
-                       
+                        value={Detail.address.pin}                      
                          />
                      
-                     
-                    
                      <TextInput
                         leftSectionPointerEvents="none"
                         leftSection={< IconFlag stroke={2} />}
                         color='mine-shaft.3'
                         disabled
                         placeholder="Your Name"
-                        value={Detail.address.country}
-                       
+                        value={Detail.address.country}                      
                          />
                      
                       </div>
                     
-
                        <div className='w-full  mt-4'>
-
                         <Button  fullWidth  size='md'variant="filled" color="lime" 
                          onClick={handleClick}>
                         <span className='text-xl font-bold'>Book Slot</span>
@@ -146,10 +129,7 @@ const CheckOut: React.FC<CheckOutProps> = ({ opened, close}) => {
 
       {slotModalOpen && <SlotAndPaymentModal closeCheckOut={close}  opened={slotModalOpen} close={() => setSlotModalOpen(false) }  />}
   
-    </div>
-      
-
-     
+    </div>  
     </>
   );
 }

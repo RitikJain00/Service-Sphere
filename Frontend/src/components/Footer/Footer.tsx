@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
-import { IconPlant2 } from '@tabler/icons-react';
-import { IconMail } from '@tabler/icons-react';
-import { IconArrowRightDashed } from '@tabler/icons-react';
-
+import { IconPlant2, IconMail, IconArrowRightDashed  } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import AdminSign from '../Admin/AdminSign';
+import AdminSign from '../Admin/Sign/AdminSign';
 
 
 const Footer = () => {
@@ -82,7 +79,6 @@ const Footer = () => {
 
         <div className='flex flex-col gap-2'>
         <div className='hover:text-bright-sun-400'><Link to = '/contact'>Contact Us</Link></div>
-        <div className='hover:text-bright-sun-400'><Link to = '/about'>Chat</Link></div>
         <div className='hover:text-bright-sun-400'><Link to = '/Faqs'>FAQ</Link></div>
         </div>
         

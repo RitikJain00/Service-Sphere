@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
-
 import { Button, Divider } from "@mantine/core";
-import axios from "axios";
-
 import PaginatedList from "../../Services/JobCards/Pagetable";
 
+import axios from "axios";
 
-import { Loader } from '@mantine/core';
+import { useStat } from "../../../Context/StatsProvider";
+import { useCart } from "../../../Context/CartContext";
+
 
 
 interface Profile{
@@ -31,23 +31,27 @@ const PaymentPendingCustomers = () => {
   const [customerPendingpayment, setCustomerPendingpayment] = useState<customerPendingPayment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomer, setFilteredCustomers] = useState<customerPendingPayment[]>([]);
-  const [loader, setLoader] = useState(true);
+  const {loading,setLoading } = useCart()
   const token = localStorage.getItem("authToken");
+
+  const { fetchStatsAdmin } = useStat()
 
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/adminsDashboard/customers/customersPendingPayment", {
+      setLoading(true)
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/adminsDashboard/customers/customersPendingPayment", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
  
-      setLoader(false);
+     
       setCustomerPendingpayment(response.data.customers);
       setFilteredCustomers(response.data.customers);
     } catch (error) {
       console.error("Error fetching services:", error);
-      setLoader(false);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -63,32 +67,34 @@ const PaymentPendingCustomers = () => {
 
     const filtered = customerPendingpayment.filter(
       (customer) =>
-    
       customer.profile.name.toLowerCase().includes(term) ||
       customer.wallet.Pending >= Number(term) // Compare numerically
     );
     setFilteredCustomers(filtered);
   };
 
-  const handlePayment = async (amount: number, customerId: number) => {
+  const handlePayment = async (amount: number, customerId: number, email: string, name: string) => {
     if (window.confirm("Are you sure you want to pay the due?")) {
-      setLoader(true); // Ensure the loader is set before API call
+    
       try {
+        setLoading(true)
         await axios.post(
-          "http://localhost:3000/adminsDashboard/customers/customersPayment",
-          { amount, customerId }, 
+          "https://service-sphere-j7vd.onrender.com/adminsDashboard/customers/customersPayment",
+          { amount, customerId, email, name }, 
           {
             headers: { Authorization: `Bearer ${token}` }, 
             withCredentials: true,
           }
         );
   
-        await fetchData(); 
+        fetchStatsAdmin() ;
+        await fetchData();
         alert('Payment Successfull')
+
       } catch (error) {
         console.error("Error in Payment:", error);
-      } finally {
-        setLoader(false); 
+      }finally{
+        setLoading(false)
       }
     }
   };
@@ -104,13 +110,7 @@ const PaymentPendingCustomers = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      {/* Full-Screen Loader with Blur */}
-      {loader && (
-        <div className="fixed inset-0 flex items-center justify-center bg-mine-shaft-950 bg-opacity-50 backdrop-blur-lg z-50">
-          <Loader color="blue" size="xl" />
-        </div>
-      )}
-
+     
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Customers Balances</h2>
@@ -127,7 +127,7 @@ const PaymentPendingCustomers = () => {
       </div>
 
       {/* Table */}
-      {customerPendingpayment.length === 0 && !loader ? (
+      {customerPendingpayment.length === 0 && !loading ? (
         <div className="flex justify-center items-center min-h-[20vh] text-2xl text-mine-shaft-300">
           No Customer Balance Available
         </div>
@@ -182,7 +182,7 @@ const PaymentPendingCustomers = () => {
                   <td className="px-6 py-4  whitespace-nowrap text-lg text-gray-300 font-semibold">₹  {product.wallet.Pending + (product.wallet.Pending*0.18)-(product.wallet.Pending*0.10)}</td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <Button onClick={() => handlePayment(product.wallet.Pending, product.id)} variant="light" color="lime" >Payment</Button></td>
+                  <Button onClick={() => handlePayment(product.wallet.Pending, product.id, product.username, product.profile.name)} disabled={loading} variant="light" color="lime" >Payment</Button></td>
                   
                 </motion.tr>
               )}
@@ -193,8 +193,6 @@ const PaymentPendingCustomers = () => {
           <Divider mx="md" mb="xl" />
         </div>
       )}
-
-
     </motion.div>
   );
 };

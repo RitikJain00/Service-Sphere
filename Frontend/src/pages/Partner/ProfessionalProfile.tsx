@@ -33,13 +33,13 @@ const ProfessionalProfile = () => {
       formData.append('image', file); // 🔥 Ensure the field name is exactly 'image'
       formData.append("type", 'Professional');
       try {
-        const { data } = await axios.post('http://localhost:3000/uploadImage/upload', formData, {
+       await axios.post('https://service-sphere-j7vd.onrender.com/uploadImage/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem("authToken")}` },
           
         });
         Detail.fetchProfile()
-        console.log("Uploaded Image URL:", data.imageUrl);
+    
       } catch (err) {
         console.error('Error uploading image', err);
       }
@@ -52,7 +52,7 @@ const ProfessionalProfile = () => {
     try {
       setLoading(true)
       await axios.post(
-        "http://localhost:3000/professionalsign/sendOtp",
+        "https://service-sphere-j7vd.onrender.com/professionalsign/sendOtp",
         { emailOrphone: verify },
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
@@ -183,7 +183,8 @@ const ProfessionalProfile = () => {
               label="Mobile No"
               leftSection={<IconPhone style={{ width: rem(16), height: rem(16) }} />}
               withAsterisk
-              placeholder="Mobile"
+              placeholder="7836086508"
+              disabled={Detail.verify.phone}
               value={`${Detail.contact.phone}`}
               onChange={(e) => Detail.handleContactChange("phone", e.target.value)}
             />
@@ -211,7 +212,7 @@ const ProfessionalProfile = () => {
             <IconPhone stroke={2} />
             {Detail.contact.phone}</div>
         </div>
-        {Detail.verify.phone===false &&Detail.contact.phone !== '' && 
+        {Detail.verify.phone===false &&Detail.contact.phone !== null && 
             <Button variant="light" color="orange" onClick={() => { 
               handleSendOTP("Phone")
             }}>Verify</Button>}

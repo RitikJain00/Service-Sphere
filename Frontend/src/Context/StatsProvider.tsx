@@ -61,7 +61,7 @@ import { StatsContextType, StatsProfessional, StatsAdmin } from "../Type/Type";
     try{
       const response = await axios({
         method: 'get',
-        url: 'http://localhost:3000/statistics/statsProfessional',
+        url: 'https://service-sphere-j7vd.onrender.com/statistics/statsProfessional',
         headers: {Authorization: `Bearer ${token}`}
       })
      
@@ -86,7 +86,7 @@ import { StatsContextType, StatsProfessional, StatsAdmin } from "../Type/Type";
     try{
       const response = await axios({
         method: 'get',
-        url: 'http://localhost:3000/statistics/categoryChartProfessional',
+        url: 'https://service-sphere-j7vd.onrender.com/statistics/categoryChartProfessional',
         headers: {Authorization: `Bearer ${token}`}
       })
      
@@ -112,7 +112,7 @@ import { StatsContextType, StatsProfessional, StatsAdmin } from "../Type/Type";
     try{
       const response = await axios({
         method: 'get',
-        url: 'http://localhost:3000/statistics/statsAdmin',
+        url: 'https://service-sphere-j7vd.onrender.com/statistics/statsAdmin',
         headers: {Authorization: `Bearer ${token}`}
       })
      

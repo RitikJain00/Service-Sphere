@@ -2,14 +2,11 @@ import { motion } from "framer-motion";
 import {Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Button, Divider } from "@mantine/core";
+import { Button, Divider, Loader  } from "@mantine/core";
+
 import axios from "axios";
 
-
-import { Loader } from '@mantine/core';
 import ProfessionalDetails from "./ProfessionalDetails";
-
-
 import { ProfessionalData } from "../../../Type/Type";
 import PaginatedList from "../../Services/JobCards/Pagetable";
 
@@ -27,7 +24,7 @@ const AllProfessionalTable = () => {
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/adminsDashboard/professional/allProfessionals", {
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/adminsDashboard/professional/allProfessionals", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -43,12 +40,10 @@ const AllProfessionalTable = () => {
 
   useEffect(() => {
     fetchData();
-    console.log(professionalData)
   }, []);
 
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(professionalData)
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
@@ -64,9 +59,6 @@ const AllProfessionalTable = () => {
     open();
   }
 
-
-
-  
 
   return (
     <motion.div

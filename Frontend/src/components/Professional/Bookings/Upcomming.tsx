@@ -4,15 +4,13 @@ import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
 import axios from "axios";
-import { upcommingService } from "../../../Type/Type";
 
+import { upcommingService } from "../../../Type/Type";
 import { useStat } from "../../../Context/StatsProvider";
 import { useProfile } from "../../../Context/ProfileContext";
-
-import { Loader } from '@mantine/core';
 import CustomerDetails from "./CustomerDetails";
-
 import PaginatedList from "../../Services/JobCards/Pagetable";
+import { useCart } from "../../../Context/CartContext";
 
 
 const BookingTable = () => {
@@ -21,7 +19,7 @@ const BookingTable = () => {
   const [productData, setProductData] = useState<upcommingService[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<upcommingService[]>([]);
-  const [loader, setLoader] = useState(true);
+  const { loading , setLoading} = useCart()
   const token = localStorage.getItem("authToken");
 
   const { fetchStatsProfessional,statsProfessional  } = useStat()
@@ -29,17 +27,17 @@ const BookingTable = () => {
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/service/allBookings", {
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/service/allBookings", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
-      setLoader(false);
+      setLoading(false);
       setProductData(response.data.service);
       setFilteredProducts(response.data.service);
       
     } catch (error) {
       console.error("Error fetching services:", error);
-      setLoader(false);
+      setLoading(false);
     }
   };
 
@@ -68,7 +66,7 @@ const BookingTable = () => {
   const handleComplete = async (service: upcommingService) => {
     if (window.confirm("Are you sure you want to complete the service")) {
     try{
-      await axios.post("http://localhost:3000/service/completeBooking", 
+      await axios.post("https://service-sphere-j7vd.onrender.com/service/completeBooking", 
         { 
           Orderid: service.id,
           date: service.date,
@@ -97,7 +95,7 @@ const BookingTable = () => {
   const handleReject = async (service: upcommingService) => {
     if (window.confirm("Are you sure you want to reject the service")) {
     try{
-       await axios.post("http://localhost:3000/service/rejectBooking", 
+       await axios.post("https://service-sphere-j7vd.onrender.com/service/rejectBooking", 
         { 
           Orderid: service.id,
           date: service.date,
@@ -126,14 +124,15 @@ const BookingTable = () => {
   }};
 
   const handlePayment = async () => {
-    if(statsProfessional.wallet.Pending === 0){
+    console.log(statsProfessional)
+    if((statsProfessional.wallet.Pay + statsProfessional.wallet.Gst) === 0){
       alert('No Payment Due');
       return
     }
     if (window.confirm("Are you sure you want to pay the Due")) {
     try{
-      setLoader(true); 
-       await axios.post("http://localhost:3000/payment/professionalPayment", 
+      setLoading(true); 
+       await axios.post("https://service-sphere-j7vd.onrender.com/payment/professionalPayment", 
        {},
         {
           headers: { Authorization: `Bearer ${token}` }, 
@@ -145,7 +144,7 @@ const BookingTable = () => {
     } catch(error){
       console.log(error)
     }finally {
-      setLoader(false); // Stop loading indicator
+      setLoading(false); // Stop loading indicator
     }
   }};
 
@@ -156,18 +155,13 @@ const BookingTable = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      {/* Full-Screen Loader with Blur */}
-      {loader && (
-        <div className="fixed inset-0 flex items-center justify-center bg-mine-shaft-950 bg-opacity-50 backdrop-blur-lg z-50">
-          <Loader color="blue" size="xl" />
-        </div>
-      )}
+  
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Bookings List</h2>
         <div className="flex gap-4">
-        <Button onClick={handlePayment} variant="light" color="orange">Pay Due</Button>
+        <Button onClick={handlePayment} disabled={loading} variant="light" color="orange">Pay Due</Button>
         <div className="relative">
           <input
             type="text"
@@ -182,7 +176,7 @@ const BookingTable = () => {
       </div>
 
       {/* Table */}
-      {productData.length === 0 && !loader ? (
+      {productData.length === 0 && !loading ? (
         <div className="flex justify-center items-center min-h-[20vh] text-2xl text-mine-shaft-300">
           No Bookings Available
         </div>
@@ -231,7 +225,7 @@ const BookingTable = () => {
                    {product.service.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.service.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.service.price + (product.service.price*0.18) - (product.service.price*0.10) }</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.amount}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 font-semibold">{product.payment}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">

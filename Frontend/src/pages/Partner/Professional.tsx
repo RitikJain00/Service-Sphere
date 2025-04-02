@@ -1,6 +1,6 @@
 import { IconPlant2, IconArrowLeft } from '@tabler/icons-react';
-import  Signup  from '../../components/Professional/Signup'
-import  Signin  from '../../components/Professional/Signin'
+import  Signup  from '../../components/Professional/Sign/Signup'
+import  Signin  from '../../components/Professional/Sign/Signin'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@mantine/core';
 

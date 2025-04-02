@@ -40,8 +40,8 @@ const PasswordChange: React.FC<PasswordChangeProps> = ({ opened, close, otp, ema
     try {
       const apiUrl =
       user === "Customer"
-        ? `http://localhost:3000/customersign/resetPassword`
-        : `http://localhost:3000/professionalsign/resetPassword`;
+        ? `https://service-sphere-j7vd.onrender.com/customersign/resetPassword`
+        : `https://service-sphere-j7vd.onrender.com/professionalsign/resetPassword`;
 
       setLoading(true);
       await axios.post(apiUrl, {

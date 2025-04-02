@@ -1,11 +1,9 @@
 import { IconPlant2 } from '@tabler/icons-react';
 import { Avatar } from '@mantine/core';
-import Navlinks from './Header/NavLinks';
-
+import Navlinks from './NavLinks';
 
 
 const SideBar = () => {
-
 
   return <div className="min-w-48 w-1/5 min-h-full bg-mine-shaft-900 flex flex-col items-center">
     
@@ -26,8 +24,7 @@ const SideBar = () => {
            <Navlinks></Navlinks>
           </div>
   </div>
-
-  
+ 
 }
 
 export default SideBar

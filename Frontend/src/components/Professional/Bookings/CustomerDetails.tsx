@@ -2,7 +2,6 @@
 import { Modal, TextInput, Textarea} from '@mantine/core';
 import {  IconMail, IconPhone , IconMapPin } from '@tabler/icons-react';
 
-
 interface CheckOutProps {
   opened: boolean; // Whether the modal is open
   close: () => void; // Function to close the modal
@@ -10,9 +9,7 @@ interface CheckOutProps {
 }
 
 
-
 const CustomerDetails: React.FC<CheckOutProps>  = ({ opened, close, booking }) => {
-
 
   return <>
   <div className='flex'>
@@ -70,8 +67,6 @@ const CustomerDetails: React.FC<CheckOutProps>  = ({ opened, close, booking }) =
                        />
                    
                     </div>
-
-              
 
     </div>
     </Modal>

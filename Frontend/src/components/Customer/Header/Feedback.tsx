@@ -1,11 +1,9 @@
-import { Modal } from '@mantine/core';
-import { Button } from '@mantine/core';
-import { Radio, Group } from '@mantine/core';
+import { useState } from 'react';
+import { Modal, Button, Radio, Group  } from '@mantine/core';
 
 import { contactUsSchema } from "../../../../../Shared/Validation/AuthSchema";
-
 import { useCart } from "../../../Context/CartContext";
-import { useState } from 'react';
+
 import axios from "axios";
 
 interface FeedbackProps {
@@ -33,7 +31,7 @@ const Feedback: React.FC<FeedbackProps> = ({ opened, close }) => {
 
     try {
       setLoading(true);
-      await axios.post(`http://localhost:3000/adminContact/contactUsMessage`, 
+      await axios.post(`https://service-sphere-j7vd.onrender.com/adminContact/contactUsMessage`, 
       data,
        {
         headers: {

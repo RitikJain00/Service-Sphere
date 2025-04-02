@@ -1,25 +1,25 @@
-import React from 'react'
 import { useState } from 'react';
-import { Modal,Button, TextInput,rem} from '@mantine/core';
+import { TextInput, rem, PasswordInput, Button } from '@mantine/core';
+import { useDisclosure } from "@mantine/hooks";
+
 import { IconAt, IconLock } from '@tabler/icons-react';
-
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { signinSchema } from "../../../../Shared/Validation/AuthSchema";
-import { PasswordInput} from '@mantine/core';
-import { useStat } from '../../Context/StatsProvider';
+import { signinSchema } from "../../../../../Shared/Validation/AuthSchema";
+import { useProfile } from '../../../Context/ProfileContext';
+import { useCart } from '../../../Context/CartContext';
+import ForgotPassword from '../../Verification/ForgotPassword';
 
-interface SigninProps {
-  opened: boolean; // Whether the modal is open
-  close: () => void; // Function to close the modal
 
-}
-const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
+
+const Signin = () => {
 
   const navigate = useNavigate()
   const [data , setData] = useState({username: '', password: ''});
   const [error, setError] = useState<string | null>(null);
-  const { fetchStatsAdmin } = useStat()
+  const {updateAuth} = useProfile()
+  const {fetchCartItem, fetchFavorateItem, fetchUpcommingOrders,fetchPastOrders, fetchOrders, loading,setLoading } = useCart()
+  const [opened, { open, close }] = useDisclosure(false);
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,35 +38,43 @@ const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
        }
 
        try {
+        setLoading(true)
         const response = await axios({
           method: "post",
-          url: "http://localhost:3000/adminsign/signin",
+          url: "https://service-sphere-j7vd.onrender.com/customersign/signin",
           data: data,
           withCredentials: true,
         });
     
         const token = response.data.token;
         localStorage.setItem("authToken", token);
-        localStorage.setItem("Type", "Admin");
-        close();
-        navigate("/Admin");
-        fetchStatsAdmin()
+        localStorage.setItem("Type", "Customer");
+       
+          navigate("/home");
+          updateAuth(token,"Customer")
+           fetchCartItem(),
+           fetchFavorateItem(),
+           fetchUpcommingOrders()
+           fetchPastOrders(),
+           fetchOrders()
 
-         
-      
       }  catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
+      } finally{
+        setLoading(false)
       }
 
   }
 
-  return (
-   <Modal opened={opened} onClose={close}  centered>
+  return <div className={"w-full  md-mx:w-full md:w-1/2 px-32 xl-mx:px-20  bs-mx:px-10 sm-mx:px-5 flex flex-col  bg-mine-shaft-950 "}>
+    
+  <div className="text-3xl bs:text-4xl text-bright-sun-400 mt-24 font-semibold text-center  hover:scale-110 transition-all duration-300">Customer Account</div>
 
-<div className='text-bright-sun-400 text-3xl font-bold text-center mb-2'>Admin Login</div>
+  <div className=" flex flex-col gap-8 w-auto  mt-20 ">
+                 
 
-          <div className='flex flex-col gap-4'>
-          <TextInput
+                    <div>
+                    <TextInput
                     variant="unstyled"
                     required
                       leftSection={<IconAt style={{ width: rem(16), height: rem(16) }} />}
@@ -95,8 +103,9 @@ const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
                          
                          }
                     }} />
-               
+                    </div>
 
+                    <div>
                     <PasswordInput
                    variant="unstyled"
                    leftSection={<IconLock style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
@@ -126,7 +135,7 @@ const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
                      
                      }
                 }}/>
-                    
+                    </div>
 
                     {error && <div className="text-red-500 text-sm text-center">{error}</div>}
 
@@ -136,16 +145,21 @@ const AdminSign: React.FC<SigninProps> = ({ opened, close}) => {
                             color: '#454545',
                           },}}
                           onClick={handleSignIn}
-                          >Login Account
-                    </Button>
-          </div>
-            
-                   
+                          disabled={loading}
+                          >Login Account</Button>
 
-   
+                    <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
+                    Don't Have An Account ?  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/CustomerSignup'}>Sign Up</Link>
+                    </div>
+
+                    <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
+                     <span onClick={() => open()} className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500 cursor-pointer' >Forgot Password ?</span>
+                    </div>
     
-    </Modal>
-  )
+                    {<ForgotPassword  opened={opened} close={close} user={'Customer'} />}
+                    
+          </div>           
+  </div>
 }
 
-export default AdminSign
+export default Signin

@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
-
+import PaginatedList from "../../Services/JobCards/Pagetable";
 import { Button, Divider } from "@mantine/core";
+
 import axios from "axios";
 
-import PaginatedList from "../../Services/JobCards/Pagetable";
-
-import { Loader } from '@mantine/core';
-
+import { useCart } from "../../../Context/CartContext";
+import { useStat } from "../../../Context/StatsProvider";
 
 interface Profile{
   name: string,
@@ -30,23 +29,24 @@ const PaymentPendingProfessional = () => {
   const [professionalPendingpayment, setProfessionalPendingpayment] = useState<professionalPendingPayment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProfessional, setFilteredProfessional] = useState<professionalPendingPayment[]>([]);
-  const [loader, setLoader] = useState(true);
+  const {loading,setLoading } = useCart()
   const token = localStorage.getItem("authToken");
-
+  const { fetchStatsAdmin } = useStat()
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/adminsDashboard/professional/professionalPendingPayment", {
+      setLoading(true)
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/adminsDashboard/professional/professionalPendingPayment", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
  
-      setLoader(false);
       setProfessionalPendingpayment(response.data.professional);
       setFilteredProfessional(response.data.professional);
     } catch (error) {
       console.error("Error fetching services:", error);
-      setLoader(false);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -62,7 +62,6 @@ const PaymentPendingProfessional = () => {
 
     const filtered = professionalPendingpayment.filter(
       (customer) =>
-    
       customer.profile.name.toLowerCase().includes(term) ||
       customer.wallet.Pending >= Number(term) // Compare numerically
     );
@@ -70,13 +69,14 @@ const PaymentPendingProfessional = () => {
   };
 
 
-  const handlePayment = async (amount: number, professionalId: number) => {
+  const handlePayment = async (amount: number, professionalId: number, email: string, name: string) => {
     if (window.confirm("Are you sure you want to pay the due?")) {
-      setLoader(true); // Ensure the loader is set before API call
+   
       try {
+        setLoading(true)
         await axios.post(
-          "http://localhost:3000/adminsDashboard/professional/professionalPayment",
-          { amount, professionalId }, 
+          "https://service-sphere-j7vd.onrender.com/adminsDashboard/professional/professionalPayment",
+          { amount, professionalId, email,name }, 
           {
             headers: { Authorization: `Bearer ${token}` }, 
             withCredentials: true,
@@ -84,11 +84,13 @@ const PaymentPendingProfessional = () => {
         );
   
         await fetchData(); 
+        fetchStatsAdmin() ;
         alert('Payment Successfull')
+       
       } catch (error) {
         console.error("Error in Payment:", error);
       } finally {
-        setLoader(false); 
+        setLoading(false); 
       }
     }
   };
@@ -102,13 +104,6 @@ const PaymentPendingProfessional = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      {/* Full-Screen Loader with Blur */}
-      {loader && (
-        <div className="fixed inset-0 flex items-center justify-center bg-mine-shaft-950 bg-opacity-50 backdrop-blur-lg z-50">
-          <Loader color="blue" size="xl" />
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-100">Professional Balances</h2>
@@ -125,7 +120,7 @@ const PaymentPendingProfessional = () => {
       </div>
 
       {/* Table */}
-      {professionalPendingpayment.length === 0 && !loader ? (
+      {professionalPendingpayment.length === 0 && !loading ? (
         <div className="flex justify-center items-center min-h-[20vh] text-2xl text-mine-shaft-300">
           No Professional Balance Available
         </div>
@@ -179,7 +174,7 @@ const PaymentPendingProfessional = () => {
                   <td className="px-6 py-4  whitespace-nowrap text-md text-gray-300 font-semibold">₹  {product.wallet.Pending}</td>
 
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <Button onClick={() => handlePayment(product.wallet.Pending, product.id)} variant="light" color="orange" >Payment</Button></td>
+                  <Button onClick={() => handlePayment(product.wallet.Pending, product.id,product.username,product.profile.name)} disabled={loading} variant="light" color="orange" >Payment</Button></td>
                   
                 </motion.tr>
              )}
@@ -190,8 +185,6 @@ const PaymentPendingProfessional = () => {
           <Divider mx="md" mb="xl" />
         </div>
       )}
-
-
     </motion.div>
   );
 };

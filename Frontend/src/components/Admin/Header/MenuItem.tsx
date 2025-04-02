@@ -1,17 +1,7 @@
 
-import { Menu,  rem } from '@mantine/core';
-import { Avatar } from '@mantine/core';
-import { Link } from 'react-router-dom';
-import { useDisclosure } from '@mantine/hooks';
+import { Menu,  rem, Avatar } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-
-import {
-  IconInfoSquare,
-  IconLogout2,
-  IconUserCircle,
-
-} from '@tabler/icons-react';
-import Feedback from '../../Customer/Header/Feedback';
+import { IconLogout2} from '@tabler/icons-react';
 
 
 const MenuItem = () =>  {
@@ -26,12 +16,9 @@ const MenuItem = () =>  {
     }
   }
 
-  const [opened, { open, close }] = useDisclosure(false);
-
   return ( 
    
     <div>
-     
       <Menu trigger="hover" openDelay={100} closeDelay={400} shadow="md" width={200} >
       <Menu.Target>
       <Avatar src="Home/avatar-9.png" alt="it's me" />
@@ -53,7 +40,6 @@ const MenuItem = () =>  {
       </Menu.Dropdown>
     </Menu>
 
-    { <Feedback opened={opened} close={close} /> }
     </div>
 
   );

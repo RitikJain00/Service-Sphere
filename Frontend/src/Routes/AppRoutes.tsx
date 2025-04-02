@@ -20,7 +20,7 @@ import Explore from "../pages/Customer/Explore";
 import CustomerProfile from "../pages/Customer/CustomerProfile";
 import CartPage from "../pages/Customer/CartPage";
 import Favorite from "../pages/Customer/Favorates";
-import CustomerProtected from "../components/Customer/CustomerProtected";
+import CustomerProtected from "../components/Customer/Sign/CustomerProtected";
 import MyOrders from "../pages/Customer/MyOrders";
 import CustomerBookings from "../pages/Customer/Bookings";
 
@@ -31,7 +31,7 @@ import Services from "../pages/Partner/Services";
 import Bookings from "../pages/Partner/Booking";
 import History from "../pages/Partner/History";
 import ProfessionalProfile from "../pages/Partner/ProfessionalProfile";
-import ProfessionalProtected from "../components/Professional/ProfessionalProtected";
+import ProfessionalProtected from "../components/Professional/Sign/ProfessionalProtected";
 
 
 
@@ -40,7 +40,7 @@ import Customers from "../pages/Admin/Customers";
 import Professionals from "../pages/Admin/Professionals";
 import Accounts from "../pages/Admin/Accounts"
 import Messages from "../pages/Admin/Message";
-import AdminProtected from "../components/Admin/AdminProtected";
+import AdminProtected from "../components/Admin/Sign/AdminProtected";
 
 
 const AppRoutes = () => {

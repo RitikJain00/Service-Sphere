@@ -1,7 +1,7 @@
 import Header from "../../components/Admin/Header/Header"
-import SideBar from "../../components/Admin/Sidebar"
+import SideBar from "../../components/Admin/Header/Sidebar"
 import { Divider } from "@mantine/core"
-import StateCard from '../../components/Professional/StateCard'
+import StateCard from '../../components/Professional/Services/StateCard'
 import { motion } from "framer-motion";
 import { TrendingUp, Package, IndianRupee, AlertTriangle, Zap} from "lucide-react";
 import CategoryDistributionChart from "../../components/Admin/DashBoard/PiChart";

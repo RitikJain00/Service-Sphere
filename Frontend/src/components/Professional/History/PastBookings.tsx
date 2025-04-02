@@ -2,17 +2,12 @@ import { motion } from "framer-motion";
 import { Search} from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Button, Divider } from "@mantine/core";
+import { Button, Divider, Loader } from "@mantine/core";
+
 import axios from "axios";
 import CustomerDetails from "../Bookings/CustomerDetails";
 import { pastBookingService } from "../../../Type/Type";
-
-import { Loader } from '@mantine/core';
 import PaginatedList from "../../Services/JobCards/Pagetable";
-
-
-
-
 
 
 
@@ -28,7 +23,7 @@ const PastBooking = () => {
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/service/pastBookings", {
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/service/pastBookings", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
@@ -150,7 +145,7 @@ const PastBooking = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.slotdate}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{product.completionDate}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.service.price}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">₹{product.service.price + (product.service.price*0.18) - (product.service.price*0.10) }</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                      ₹{product.status === "Completed" ? product.amount || 0 : 0}
                       </td>

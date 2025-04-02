@@ -3,14 +3,14 @@ import { Edit, Search, } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { Button, Divider } from "@mantine/core";
+
 import axios from "axios";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconCaretUpDown } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
 import ServiceHandler from "./Service";
-import { Loader } from '@mantine/core';
-import { IconCaretUpDown } from '@tabler/icons-react';
-import { useStat } from "../../../Context/StatsProvider";
 
+import { useStat } from "../../../Context/StatsProvider";
+import { useCart } from "../../../Context/CartContext";
 import PaginatedList from "../../Services/JobCards/Pagetable";
 
 interface Service {
@@ -32,23 +32,23 @@ const ProductsTable = () => {
   const [productData, setProductData] = useState<Service[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<Service[]>([]);
-  const [loader, setLoader] = useState(true);
   const token = localStorage.getItem("authToken");
   const {fetchStatsProfessional } = useStat()
+  const {loading,setLoading } = useCart()
 
   // Fetch Data
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/service/allService", {
+      const response = await axios.get("https://service-sphere-j7vd.onrender.com/service/allService", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       });
-      setLoader(false);
+      setLoading(false);
       setProductData(response.data.service);
       setFilteredProducts(response.data.service);
     } catch (error) {
       console.error("Error fetching services:", error);
-      setLoader(false);
+      setLoading(false);
     }
   };
 
@@ -84,7 +84,7 @@ const ProductsTable = () => {
     if (window.confirm("Are you sure you want to Change the Status of the service")) {
     try {
       await axios.put(
-        "http://localhost:3000/service/statusChange",
+        "https://service-sphere-j7vd.onrender.com/service/statusChange",
         { id: service.id, status: service.isActive }, // ✅ Send data correctly
         {
           headers: { Authorization: `Bearer ${token}` }, // ✅ Headers should be in the 3rd parameter
@@ -112,12 +112,7 @@ const ProductsTable = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      {/* Full-Screen Loader with Blur */}
-      {loader && (
-        <div className="fixed inset-0 flex items-center justify-center bg-mine-shaft-950 bg-opacity-50 backdrop-blur-lg z-50">
-          <Loader color="blue" size="xl" />
-        </div>
-      )}
+   
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
@@ -135,7 +130,7 @@ const ProductsTable = () => {
       </div>
 
       {/* Table */}
-      {productData.length === 0 && !loader ? (
+      {productData.length === 0 && !loading ? (
         <div className="flex justify-center items-center min-h-[20vh] text-2xl text-mine-shaft-300">
           No Service Available
         </div>
@@ -208,7 +203,7 @@ const ProductsTable = () => {
       )}
 
       <div className="w-full flex justify-center">
-        <Button onClick={handleAdd} variant="light" color="lime">
+        <Button disabled={loading} onClick={handleAdd} variant="light" color="lime">
           Add Service
         </Button>
       </div>

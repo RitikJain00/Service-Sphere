@@ -2,8 +2,8 @@ import Header from "../../components/Customer/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { useCart } from "../../Context/CartContext";
 import ServiceCard from "../../components/Services/JobCards/ServiceCard";
-import { Divider } from "@mantine/core"
-import { Grid } from '@mantine/core';
+import { Divider,Grid  } from "@mantine/core"
+
 
 
 const Favorite = () => {
@@ -20,7 +20,7 @@ const Favorite = () => {
             {Favorate.map((job) => (
               <Grid.Col key={job.id} span={{ 
                  sm: 9, md: 6, xl: 4 }} className="flex">
-                <ServiceCard job={job} className="w-full" />
+                <ServiceCard job={job} />
               </Grid.Col>
             ))}
           </Grid>

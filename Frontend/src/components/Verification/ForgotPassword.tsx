@@ -39,8 +39,8 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ opened, close, user }) 
     try {
       const apiUrl =
       user === "Customer"
-        ? "http://localhost:3000/customersign/forgotPassword"
-        : "http://localhost:3000/professionalsign/forgotPassword";
+        ? "https://service-sphere-j7vd.onrender.com/customersign/forgotPassword"
+        : "https://service-sphere-j7vd.onrender.com/professionalsign/forgotPassword";
       setLoading(true);
       await axios.post( apiUrl, {
         email, // Send email in request body

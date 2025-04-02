@@ -1,8 +1,7 @@
 import Header from "../../components/Customer/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import { Button } from '@mantine/core';
+import { Button, Divider  } from '@mantine/core';
 import { contactUsSchema } from "../../../../Shared/Validation/AuthSchema";
-import { Divider } from "@mantine/core";
 
 import { useCart } from "../../Context/CartContext";
 import { useState } from 'react';
@@ -28,7 +27,7 @@ const Contact = () => {
 
     try {
       setLoading(true);
-      await axios.post(`http://localhost:3000/adminContact/contactUsMessage`, 
+      await axios.post(`https://service-sphere-j7vd.onrender.com/adminContact/contactUsMessage`, 
       data,
        {
         headers: {

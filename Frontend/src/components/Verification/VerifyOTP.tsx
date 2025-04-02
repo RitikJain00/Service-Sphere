@@ -4,7 +4,6 @@ import { useCart } from "../../Context/CartContext";
 import { useProfile } from "../../Context/ProfileContext";
 import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
-
 import PasswordChange from "./PasswordChange";
 
 interface VerifyOtpProps {
@@ -53,8 +52,8 @@ const VerifyOTP: React.FC<VerifyOtpProps> = ({ opened, close, type, email, close
     try {
       const apiUrl =
       user === "Customer"
-        ? `http://localhost:3000/customersign/VerifyOtp${type}`
-        : `http://localhost:3000/professionalsign/VerifyOtp${type}`;
+        ? `https://service-sphere-j7vd.onrender.com/customersign/VerifyOtp${type}`
+        : `https://service-sphere-j7vd.onrender.com/professionalsign/VerifyOtp${type}`;
       setLoading(true);
       await axios.post(
         apiUrl, 
@@ -88,7 +87,7 @@ const VerifyOTP: React.FC<VerifyOtpProps> = ({ opened, close, type, email, close
           {type === 'forgotPassword'? `Reset Password OTP` : `${type} Verify OTP`}
         </div>
         <div className="text-red-500 text-sm text-center">
-        {type === 'Phone'? `Enter 6-digit code sent to your {type}` : `Enter 6-digit code sent to your Email`} 
+        {type === 'Phone'? `Enter 6-digit code sent to your ${type}` : `Enter 6-digit code sent to your Email`} 
         </div>
       </div>
 

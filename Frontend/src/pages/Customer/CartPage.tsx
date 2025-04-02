@@ -5,7 +5,7 @@ import { useCart } from "../../Context/CartContext"
 import { Table } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button } from '@mantine/core';
-import CheckOut from "../../Booking/Checkout";
+import CheckOut from "../../components/Booking/Checkout";
 
 
 
@@ -14,7 +14,7 @@ const CartPage = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { cart ,total,gst,discount, removeFromCart } = useCart();
- 
+
 
 
   return <div  className=" flex flex-col min-h-[100vh] bg-mine-shaft-950">
@@ -48,7 +48,7 @@ const CartPage = () => {
         <Table.Tbody> 
           { cart.map((job,index) =>  
             <Table.Tr key={index} className="text-lg md:text-xl font-bold text-center">
-            <Table.Td className="flex items-center justify-center"> <img className="w-24 h-24 " src={job.image} alt="" /> </Table.Td>
+            <Table.Td className="flex items-center justify-center"> <img className="w-24 h-24 " src={`ServicePages/${job.category.toLowerCase()}.png`} alt="" /> </Table.Td>
             <Table.Td>{job.name}</Table.Td>
             <Table.Td>{job.company}</Table.Td>
             <Table.Td>&#8377; {job.price}</Table.Td>
@@ -60,7 +60,7 @@ const CartPage = () => {
         </div>
          
             
-            <div className="w-80 h-[360px] flex flex-col gap-2 bg-mine-shaft-900 p-4 rounded-lg sticky top-8 hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300">
+            <div className="w-96 h-[360px] flex flex-col gap-2 bg-mine-shaft-900 p-4 rounded-lg sticky top-8 hover:scale-105 hover:shadow-[0_0_5px_2px_black] transition duration-300 !shadow-bright-sun-300">
         <div className="text-3xl font-bold text-bright-sun-400 text-center">Summary</div>
 
         <div className="text-xl mt-5 flex justify-between">
@@ -72,7 +72,7 @@ const CartPage = () => {
         </div>
 
         <div className=" text-xl  mt-3 flex justify-between">
-          <div >GST </div>
+          <div >GST (18%)</div>
           <div className="w-2/6 flex justify-between items-center">
           <div>&#8377;</div>
           <div>{gst}</div>
@@ -80,7 +80,7 @@ const CartPage = () => {
         </div>
 
         <div className=" text-xl my-3 flex justify-between">
-          <div>Discount</div>
+          <div>Discount (10%)</div>
           <div className="w-2/6 flex justify-between items-center">
           <div>&#8377;</div>
           <div>{-discount}</div>

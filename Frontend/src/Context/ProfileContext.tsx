@@ -39,8 +39,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
 
     const apiUrl =
       type === "Customer"
-        ? "http://localhost:3000/customerprofile/profile"
-        : "http://localhost:3000/professionalprofile/profile";
+        ? "https://service-sphere-j7vd.onrender.com/customerprofile/profile"
+        : "https://service-sphere-j7vd.onrender.com/professionalprofile/profile";
   
       axios({
         method: 'get',
@@ -49,7 +49,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
       })
         .then(response => {
           const data = response.data.userProfile;
-          console.log(data)
+         
           
           setImage(data.profile.image)
           setBasic({ name: data.profile.name, about: data.profile.description});
@@ -84,7 +84,7 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
   const handleWalletMoney = async (amount: number) => {
     try {
       const response = await axios.put(
-        'http://localhost:3000/customerprofile/wallet',
+        'https://service-sphere-j7vd.onrender.com/customerprofile/wallet',
         { amount },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -112,23 +112,24 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
 
   const saveProfile = (change: number) => {
 
-    let checkSchema
+  
+
     if(change === 0){
-      checkSchema =  BasicDetail.safeParse(basic)
+      let  checkSchema =  BasicDetail.safeParse(basic)
       if(!checkSchema.success){
       setErrorBasic(checkSchema.error.errors[0].message);
       return;
      }
     }
     else if(change === 1){
-      checkSchema =  Contact.safeParse(contact)
+      let  checkSchema =  Contact.safeParse(contact)
       if(!checkSchema.success){
       setErrorContact(checkSchema.error.errors[0].message);
       return;
       }
     }
-    else{
-      checkSchema =  Address.safeParse(address)
+    else if(change === 2){
+    let  checkSchema =  Address.safeParse(address)
       if(!checkSchema.success){
       setErrorAddress(checkSchema.error.errors[0].message);
       return;
@@ -139,8 +140,8 @@ export const ProfileProvider: React.FC<ProfileProviderProps> = ({ children }) =>
     if (!token || !type) return;
       const apiUrl =
       type === "Customer"
-      ? "http://localhost:3000/customerprofile/profile"
-      : "http://localhost:3000/professionalprofile/profile";
+      ? "https://service-sphere-j7vd.onrender.com/customerprofile/profile"
+      : "https://service-sphere-j7vd.onrender.com/professionalprofile/profile";
     axios({
       method: 'put',
       url: apiUrl,

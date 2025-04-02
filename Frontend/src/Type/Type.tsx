@@ -136,7 +136,7 @@ export interface CartContextType {
 export interface BasicInfo { name: string; about: string; }
 export interface ContactInfo { email: string, phone: string; }
 export interface AddressInfo { home: string; city: string; pin: string; country: string; }
-export interface verificationInfo {email: Boolean; phone: Boolean}
+export interface verificationInfo {email: boolean; phone: boolean}
 
 export interface ProfileContextType {
   edit: boolean[];

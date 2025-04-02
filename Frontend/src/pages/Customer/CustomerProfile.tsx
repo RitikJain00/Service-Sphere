@@ -1,14 +1,12 @@
 import Header from "../../components/Customer/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import Wallet from "../../components/Customer/Wallet";
+import Wallet from "../../components/Customer/wallet/Wallet";
 import VerifyOTP from "../../components/Verification/VerifyOTP";
 
 import { useState } from 'react'
 import { useCart } from '../../Context/CartContext';
 import { useProfile } from '../../Context/ProfileContext';
 import axios from 'axios';
-
-
 
 
 import { IconPhone, IconHome, IconBuildings, IconFlag, IconMapPinCode, IconUser, IconMail, IconPencil  } from '@tabler/icons-react';
@@ -32,15 +30,18 @@ const CustomerProfile = () => {
     formData.append('image', file); // 🔥 Ensure the field name is exactly 'image'
     formData.append("type", 'Customer');
     try {
-      const { data } = await axios.post('http://localhost:3000/uploadImage/upload', formData, {
+      setLoading(true)
+     await axios.post('https://service-sphere-j7vd.onrender.com/uploadImage/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${localStorage.getItem("authToken")}` },
         
       });
       Detail.fetchProfile()
-      console.log("Uploaded Image URL:", data.imageUrl);
+
     } catch (err) {
       console.error('Error uploading image', err);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -51,7 +52,7 @@ const CustomerProfile = () => {
     try {
       setLoading(true)
       await axios.post(
-        "http://localhost:3000/customersign/sendOtp",
+        "https://service-sphere-j7vd.onrender.com/customersign/sendOtp",
         { emailOrphone: verify },
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
@@ -64,9 +65,6 @@ const CustomerProfile = () => {
     }
   }
 
- 
-
- 
     return  <div className="min-h-[100vh] font-['poppins'] bg-mine-shaft-950 ">
 
         <Header></Header>
@@ -193,7 +191,8 @@ const CustomerProfile = () => {
               label="Mobile No"
               leftSection={<IconPhone style={{ width: rem(16), height: rem(16) }} />}
               withAsterisk
-              placeholder="Mobile"
+              disabled={Detail.verify.phone}
+              placeholder="7836086508"
               value={`${Detail.contact.phone}`}
               onChange={(e) => Detail.handleContactChange("phone", e.target.value)}
             />
@@ -224,7 +223,7 @@ const CustomerProfile = () => {
                 {Detail.contact.phone}</div>
               </div>
            
-            {Detail.verify.phone===false &&Detail.contact.phone !== '' && 
+            {Detail.verify.phone===false &&Detail.contact.phone !== null && 
             <Button className='max-w-28' variant="light" color="orange" onClick={() => { 
               handleSendOTP("Phone")
             }}>Verify</Button>}
@@ -362,8 +361,6 @@ const CustomerProfile = () => {
         </div>
 
         <Divider mx="md" my='xl' />
-
-    
 
         {<Wallet opened={opened} close={close} />}
 

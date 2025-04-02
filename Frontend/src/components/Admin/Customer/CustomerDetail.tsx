@@ -10,9 +10,7 @@ interface CheckOutProps {
 }
 
 
-
 const CustomerDetails: React.FC<CheckOutProps>  = ({ opened, close, booking }) => {
-
 
   return <>
   <div className='flex'>
@@ -70,10 +68,7 @@ const CustomerDetails: React.FC<CheckOutProps>  = ({ opened, close, booking }) =
                        />
                    
                     </div>
-
-              
-
-    </div>
+        </div>
     </Modal>
 
   </div>

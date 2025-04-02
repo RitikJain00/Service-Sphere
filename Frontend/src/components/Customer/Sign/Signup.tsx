@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import { TextInput, rem } from '@mantine/core';
-import { IconAt, IconUserCircle } from '@tabler/icons-react';
-
-import { PasswordInput} from '@mantine/core';
-import { IconLock } from '@tabler/icons-react';
-
-import { Button } from '@mantine/core';
+import { TextInput, rem, PasswordInput,Button } from '@mantine/core';
+import { IconAt, IconUserCircle, IconLock } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import axios from "axios";
-import { signupSchema } from "../../../../Shared/Validation/AuthSchema";
-import { useProfile } from '../../Context/ProfileContext';
+import { signupSchema } from "../../../../../Shared/Validation/AuthSchema";
+import { useProfile } from '../../../Context/ProfileContext';
+import { useCart } from '../../../Context/CartContext';
 
 const Signup = () => {
   
@@ -18,7 +15,7 @@ const Signup = () => {
   const [data , setData] = useState({name: '', username: '', password: '', confirmPassword: ''});
   const [error, setError] = useState<string | null>(null);
   const {updateAuth} = useProfile()
-
+  const {fetchCartItem, fetchFavorateItem, fetchUpcommingOrders,fetchPastOrders, fetchOrders, loading,setLoading } = useCart()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({...data, [e.target.name]: e.target.value})
@@ -40,19 +37,29 @@ const Signup = () => {
       }
       
       try{
+        setLoading(true)
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:3000/customersign/signup',
+          url: 'https://service-sphere-j7vd.onrender.com/customersign/signup',
           data: data,
           withCredentials: true,
         });
         localStorage.setItem("authToken", response.data.token)
         localStorage.setItem("Type" , 'Customer')
-     
+
         navigate('/home')
         updateAuth(response.data.token,"Customer")
+
+        fetchCartItem(),
+        fetchFavorateItem(),
+        fetchUpcommingOrders()
+        fetchPastOrders(),
+        fetchOrders()
+
       } catch(err : any) {
         setError(err.response?.data.msg || "Something went wrong!");
+      }finally{
+        setLoading(false)
       }
 
   }
@@ -201,17 +208,13 @@ const Signup = () => {
                             color: '#454545',
                           },}}
                           onClick={handleSignUp}
+                          disabled={loading}
                           >Create Account</Button>
 
                       <div className='text-mine-shaft-400 text-center text-lg  hover:scale-110 transition-all duration-300'>
                         Have An Account  <Link className='text-bright-sun-400 ml-2 hover:border-b-2 border-bright-sun-500' to={'/CustomerLogin'}>Login</Link>
-                      </div>
-                      
-
-                      
-                      
-            </div>
-                                     
+                      </div>                       
+            </div>                              
     </div>
   
 }

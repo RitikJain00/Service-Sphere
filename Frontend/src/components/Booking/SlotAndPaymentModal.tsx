@@ -1,12 +1,12 @@
-import { Modal, Button,  Radio,Group  } from '@mantine/core';
 import { useState } from 'react';
+import { Modal, Button,  Radio,Group, Loader  } from '@mantine/core';
 import dayjs from 'dayjs';
 import { DateInput } from '@mantine/dates';
-import { useCart } from '../Context/CartContext';
-import { useProfile } from '../Context/ProfileContext';
-import axios from 'axios';
-import { Loader } from '@mantine/core';
 
+import { useCart } from '../../Context/CartContext';
+import { useProfile } from '../../Context/ProfileContext';
+
+import axios from 'axios';
 
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
@@ -22,7 +22,7 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
   const [selectedDate, setSelecteddate] = useState<{ [key: number]: Date | null }>({})
   const [paymentMode, setPaymentMode] = useState<'Online' | 'COD' |'Wallet' | ''>('');
   const [loader, setLoader] = useState(false);
-  const { cart,total,gst,discount, BookServices, setLoading } = useCart()
+  const { cart,total,gst,discount, BookServices, setLoading,loading } = useCart()
   const {basic, contact, walletAmount, fetchProfile} = useProfile()
   const token = localStorage.getItem('authToken')
 
@@ -30,13 +30,13 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
   const handleOnlinePayment = async () => {
     try {
       // Get Razorpay key
-      const { data } = await axios.get("http://localhost:3000/payment/getKey");
+      const { data } = await axios.get("https://service-sphere-j7vd.onrender.com/payment/getKey");
       const key = data.key;
      
 
       // Create an order in the backend
       const { data: orderData } = await axios.post(
-        "http://localhost:3000/payment/process",
+        "https://service-sphere-j7vd.onrender.com/payment/process",
         { Grandtotal: total + gst - discount },
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
@@ -48,7 +48,7 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
       }
 
       const { order } = orderData;
-      console.log(order)
+   
 
       // Configure Razorpay payment
       const options = {
@@ -93,7 +93,7 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
     try {
       setLoader(true)
       await axios.put(
-        "http://localhost:3000/customerprofile/walletOrder",
+        "https://service-sphere-j7vd.onrender.com/customerprofile/walletOrder",
         { Grandtotal: (total + gst - discount) },
         { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
       );
@@ -197,7 +197,7 @@ const SlotAndPaymentModal: React.FC<SlotAndPaymentProps> = ({ opened, close, clo
        
 
         {/* Confirm Payment Button */}
-        <Button className='mt-2' fullWidth size='md' variant="filled" color="lime" onClick={handlePayment}>
+        <Button className='mt-2' fullWidth size='md' variant="filled" color="lime" disabled={loading} onClick={handlePayment}>
           Confirm Booking &#8377;{total + gst - discount}
         </Button>
       </div>

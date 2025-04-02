@@ -1,7 +1,7 @@
 import { IconPlant2 } from '@tabler/icons-react';
 import { Avatar } from '@mantine/core';
-import Navlinks from './Header/NavLinks';
-import { useProfile } from '../../Context/ProfileContext';
+import Navlinks from './NavLinks';
+import { useProfile } from '../../../Context/ProfileContext';
 
 
 const SideBar = () => {

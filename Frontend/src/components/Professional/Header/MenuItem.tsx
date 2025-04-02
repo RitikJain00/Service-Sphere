@@ -1,16 +1,14 @@
 
 import { Menu,  rem } from '@mantine/core';
 import { Avatar } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
-import { useNavigate } from 'react-router-dom';
-
 import {
   IconInfoSquare,
   IconLogout2,
   IconUserCircle,
-
 } from '@tabler/icons-react';
+
 import Feedback from '../../Customer/Header/Feedback';
 import { useProfile } from '../../../Context/ProfileContext';
 
@@ -46,14 +44,10 @@ const MenuItem = () =>  {
         </Menu.Item>
         </Link>
               
-
-      
         <Menu.Item  onClick={open}  leftSection={<IconInfoSquare style={{ width: rem(14), height: rem(14) }} />}>
           Send Feedback
         </Menu.Item>
 
-        
-       
 
         <Menu.Divider />
 

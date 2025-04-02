@@ -99,7 +99,7 @@ const CustomerBookings = () => {
                       />
                     </Table.Td>
                     <Table.Td>{job.service.name}</Table.Td>
-                    <Table.Td>&#8377; {job.amount}</Table.Td>
+                    <Table.Td>&#8377; {job.service.price + job.service.price * 0.08}</Table.Td>
                     <Table.Td>{job.payment}</Table.Td>
                     <Table.Td className={job.status === "Completed" ? "text-green-500" : "text-red-500"}>
                       {job.status}
