@@ -78,24 +78,28 @@ router.post(
       const mailOptions = {
         from: process.env.SENDER_EMAIL,
         to: username,
-        subject: 'Welcome to Service Sphere – Your One-Stop Solution for Home Services!',
+        subject: 'Welcome to Service Sphere! 🎉 We are excited to have you on board as a trusted service professiona',
         text: `Dear ${name},
 
-        Welcome to Service Sphere! 🎊 We're thrilled to have you on board.
-        
-        At Service Sphere, we make it easy for you to find and book trusted electricians, plumbers, carpenters, pest control experts, painters, house cleaners, and many other professionals—all in one place.
-        
-        What's Next?
-        ✅ Explore Services - Browse and book services tailored to your needs.
-        ✅ Manage Bookings - Track your orders and upcoming appointments seamlessly.
-        ✅ Secure Payments - Enjoy hassle-free transactions with multiple payment options.
-        
-        💡 Need help? Our support team is here for you! Contact us anytime at ${process.env.SENDER_EMAIL}.
-        
-        Thank you for choosing Service Sphere! We look forward to making your life easier.
-        
-        Best regards,
-        The Service Sphere Team`
+        At Service Sphere, we connect skilled professionals like you with customers looking for reliable and high-quality services. Whether you're an electrician, plumber, carpenter, painter, house cleaner, or pest control expert, we provide you with a platform to grow your business and reach more clients effortlessly.
+
+          Getting Started:
+          ✅ Set Up Your Profile – Ensure your details are updated to attract potential customers.
+          ✅ Manage Bookings – Accept and schedule appointments with ease.
+          ✅ Get Paid Securely – Receive payments directly into your account through our secure system.
+
+          Why Service Sphere?
+          🚀 Increased Visibility – Expand your reach and get more job opportunities.
+          💼 Flexible Work – Choose your preferred working hours and locations.
+          💰 Timely Payments – Get paid on time for the services you provide.
+
+          Need Assistance?
+          Our support team is here to help you with any queries. Feel free to reach out to us at ${process.env.SENDER_EMAIL} for any assistance.
+
+          We look forward to a successful partnership and helping you grow your business with Service Sphere!
+
+          Best regards,
+          The Service Sphere Team`
       }
 
       await transporter.sendMail(mailOptions)    // send the mail

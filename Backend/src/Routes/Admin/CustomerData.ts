@@ -5,6 +5,7 @@ import LoginStatus from "../../Middleware/CheckLoginStatus";
 const router = express.Router();
 const prisma = new PrismaClient();
 
+import { transporter } from '../../Verification/Verification';
 
 router.get("/allCustomers",LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
@@ -117,7 +118,7 @@ router.get("/customersPendingPayment",LoginStatus, async (req: Request, res: Res
 
 
 router.post("/customersPayment", LoginStatus, async (req: Request, res: Response): Promise<void> => {
-  const { amount, customerId } = req.body;
+  const { amount, customerId,email,name } = req.body;
 
   try {
     await prisma.$transaction(async (prisma) => {
@@ -153,6 +154,32 @@ router.post("/customersPayment", LoginStatus, async (req: Request, res: Response
         },
       });
     });
+
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: ' Your Refund Has Been Added to Your Service Sphere Wallet!',
+      text: `Dear ${name},
+
+      We wanted to let you know that your refund has been successfully processed and added to your Service Sphere Wallet. 🎉
+      
+      Refund Details:
+      Amount Refunded: ₹${amount + amount * 0.18 - amount * 0.10}
+      
+      Expected Reflection Time: Within 24 hours
+      
+      You can use this balance for future bookings on our platform. To check your wallet balance, simply log in to your account and navigate to the Profile section where you find balance in your wallet.
+      
+      💡 Need Assistance? Our support team is here to help! If you have any questions, feel free to contact us at ${process.env.SENDER_EMAIL}.
+      
+      Thank you for choosing Service Sphere! We look forward to serving you again.
+      
+      Best regards,
+      The Service Sphere Team`
+    }
+
+    await transporter.sendMail(mailOptions)    // send the mail
 
  
     res.json({ success: true, msg: "Payment processed successfully!" });

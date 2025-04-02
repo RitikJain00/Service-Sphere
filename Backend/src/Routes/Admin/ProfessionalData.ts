@@ -5,6 +5,7 @@ import LoginStatus from "../../Middleware/CheckLoginStatus";
 const router = express.Router();
 const prisma = new PrismaClient();
 
+import { transporter } from '../../Verification/Verification';
 
 router.get("/allProfessionals",LoginStatus, async (req: Request, res: Response): Promise<void> => {
   try {
@@ -123,7 +124,7 @@ router.get("/professionalPendingPayment",LoginStatus, async (req: Request, res: 
 
 
 router.post("/professionalPayment", LoginStatus, async (req: Request, res: Response): Promise<void> => {
-  const { amount, professionalId } = req.body;
+  const { amount, professionalId, email,name } = req.body;
 
   try {
     await prisma.$transaction(async (prisma) => {
@@ -158,6 +159,32 @@ router.post("/professionalPayment", LoginStatus, async (req: Request, res: Respo
       });
     });
 
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: ' Your Payment Has Been Processed Successfully!',
+      text: `Dear ${name},
+
+      
+      We’re pleased to inform you that your payment has been successfully processed and transferred to your account. 💰🎉
+      
+      Payment Details:
+      Amount Transferred: ₹${amount}
+
+      
+      Expected Reflection Time: Within 24 hours
+      
+      You can check your account for the credited amount. If you face any delays, please contact your bank or payment provider.
+      
+      💡 Need Assistance? Our support team is always here to help! If you have any questions, feel free to reach out at ${process.env.SENDER_EMAIL}.
+      
+      Thank you for being a valued professional on Service Sphere! We appreciate your dedication and look forward to working with you.
+      
+      Best regards,
+      The Service Sphere Team`
+    }
+
+    await transporter.sendMail(mailOptions)    // send the mail
  
     res.json({ success: true, msg: "Payment processed successfully!" });
 
