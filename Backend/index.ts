@@ -33,7 +33,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: ['http://localhost:5173','http://localhost:5174', 'https://service-sphere-git-main-ritikjain00s-projects.vercel.app'], // Allow requests from your frontend
+    origin: ['http://localhost:5173','http://localhost:5174', 'https://service-sphere-gamma.vercel.app/'], // Allow requests from your frontend
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
     credentials: true, // Allow cookies/auth headers
