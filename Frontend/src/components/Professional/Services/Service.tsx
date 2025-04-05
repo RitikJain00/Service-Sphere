@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Modal, Button,TextInput, Select} from '@mantine/core';
 import axios from 'axios';
-import { createService } from '../../../../../Shared/Validation/ServiceSchema'
+import { createService } from '@craiber/servicesphere-common';;
 import { showNotification } from '@mantine/notifications';
 import { useStat } from '../../../Context/StatsProvider';
 import { useCart } from "../../../Context/CartContext";

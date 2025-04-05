@@ -8,7 +8,8 @@ import { transporter } from '../../Verification/Verification';
 import { sendOTPPhone } from '../../Verification/Verification';
 
 
-import { signinSchema, signupSchema} from "../../../../Shared/Validation/AuthSchema";
+import { signinSchema, signupSchema } from '@craiber/servicesphere-common';
+
 
 const router = express.Router();
 const prisma = new PrismaClient();

@@ -1,7 +1,8 @@
 import Header from "../../components/Customer/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { Button, Divider  } from '@mantine/core';
-import { contactUsSchema } from "../../../../Shared/Validation/AuthSchema";
+import { contactUsSchema } from '@craiber/servicesphere-common';
+
 
 import { useCart } from "../../Context/CartContext";
 import { useState } from 'react';

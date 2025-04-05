@@ -1,0 +1,17 @@
+{
+  "name": "@craiber/servicesphere-common",
+  "version": "1.0.5",
+  "main": "dist/Validation/index.js",
+  "types": "dist/Validation/index.d.ts",
+  "exports": {
+    ".": "./dist/Validation/index.js",
+    "./validation": "./dist/Validation/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublish": "npm run build"
+  }
+}

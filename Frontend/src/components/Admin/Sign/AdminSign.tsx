@@ -5,8 +5,7 @@ import { IconAt, IconLock } from '@tabler/icons-react';
 import { Modal,Button, TextInput,rem, PasswordInput} from '@mantine/core';
 
 import axios from "axios";
-
-import { signinSchema } from "../../../../../Shared/Validation/AuthSchema";
+import { signinSchema } from '@craiber/servicesphere-common';
 import { useStat } from '../../../Context/StatsProvider';
 import { useCart } from '../../../Context/CartContext';
 

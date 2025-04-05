@@ -1,8 +1,7 @@
 import nodemailer from 'nodemailer'
 import twilio from "twilio";
 import dotenv from "dotenv";
-import firebase from "firebase/compat/app";
-import "firebase/compat/auth";
+
 
 
 dotenv.config();

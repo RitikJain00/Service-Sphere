@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import axios from 'axios';
 import {BasicInfo,ContactInfo,AddressInfo,verificationInfo, ProfileContextType } from '../Type/Type';
-import { BasicDetail, Contact, Address } from "../../../Shared/Validation/ProfileSchema";
+import { BasicDetail,Contact, Address} from '@craiber/servicesphere-common';;
 import { Loader } from "@mantine/core";
 
 

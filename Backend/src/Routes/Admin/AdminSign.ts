@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 
 
-import { signinSchema, signupSchema } from "../../../../Shared/Validation/AuthSchema";
+import { signinSchema, signupSchema } from '@craiber/servicesphere-common';
+;
 
 const router = express.Router();
 const prisma = new PrismaClient();

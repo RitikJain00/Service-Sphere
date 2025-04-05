@@ -5,7 +5,7 @@ import { IconAt, IconLock } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-import { signinSchema } from "../../../../../Shared/Validation/AuthSchema";
+import { signinSchema } from '@craiber/servicesphere-common';;
 import { useProfile } from '../../../Context/ProfileContext';
 import { useStat } from '../../../Context/StatsProvider';
 import { useCart } from '../../../Context/CartContext';

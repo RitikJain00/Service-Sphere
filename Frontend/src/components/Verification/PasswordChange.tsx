@@ -3,7 +3,7 @@ import { Modal, Button, TextInput, rem, PasswordInput } from "@mantine/core";
 import { useCart } from "../../Context/CartContext";
 import axios from "axios";
 import { IconAt, IconLock } from "@tabler/icons-react";
-import { passwordChangeSchema } from "../../../../Shared/Validation/AuthSchema";
+import { passwordChangeSchema } from '@craiber/servicesphere-common';;
 
 interface PasswordChangeProps {
   opened: boolean;

@@ -2,7 +2,8 @@ import express, { Request, Response }  from 'express'
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
-import { signupSchema, signinSchema} from "../../../../Shared/Validation/AuthSchema";
+import { signinSchema, signupSchema } from '@craiber/servicesphere-common';
+
 import LoginStatus from '../../Middleware/CheckLoginStatus';
 import { transporter } from '../../Verification/Verification';
 import { sendOTPPhone } from '../../Verification/Verification';

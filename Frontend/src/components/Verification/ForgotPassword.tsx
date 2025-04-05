@@ -4,7 +4,7 @@ import { useCart } from "../../Context/CartContext";
 import axios from "axios";
 import { useDisclosure } from "@mantine/hooks";
 import { IconAt } from "@tabler/icons-react";
-import { emailSchema } from "../../../../Shared/Validation/AuthSchema";
+import { emailSchema } from '@craiber/servicesphere-common';;
 import VerifyOTP from "./VerifyOTP";
 
 

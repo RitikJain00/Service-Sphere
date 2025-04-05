@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal, Button, Radio, Group  } from '@mantine/core';
 
-import { contactUsSchema } from "../../../../../Shared/Validation/AuthSchema";
+import { contactUsSchema } from '@craiber/servicesphere-common';;
 import { useCart } from "../../../Context/CartContext";
 
 import axios from "axios";
